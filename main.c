@@ -1,4 +1,13 @@
-// SDL antoine.dray
+/*
+
+  OCR by team 404
+
+  * Antoine Dray
+  * Thibaut Benefice
+  * Celian Gossec
+  * Stannislas Sokolov
+
+*/
 
 #include <err.h>
 #include <SDL/SDL.h>
@@ -78,7 +87,7 @@ int main(int argc, char *argv[])
   SDL_Surface* image = load_image(argv[argc - 1]);
   SDL_Surface* screen;
   screen = display_image(image);
-	image = Grayscale(image);
+	image = Preproc(image);
 	screen = display_image(image);
   SDL_FreeSurface(screen);
   SDL_Quit();

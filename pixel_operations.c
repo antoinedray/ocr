@@ -1,9 +1,12 @@
-// pixel_operations.c
- 
-// Simple get/put pixel for SDL
-// Inspired by code from SDL documentation
-// (http://www.libsdl.org/release/SDL-1.2.15/docs/html/guidevideo.html)
- 
+/*
+
+  PIXEL OPERATIONS
+
+  pixel_operations.c
+  In this file we'll put all the preprocessing of the image
+
+*/ 
+
 # include "pixel_operations.h"
  
 static inline
@@ -56,7 +59,13 @@ void putpixel(SDL_Surface *surface, unsigned x, unsigned y, Uint32 pixel) {
   }
 }
 
-SDL_Surface* Grayscale(SDL_Surface* img)
+/***************** OUR FUNCTIONS ********************/
+
+/*
+  Grayscale & Black N White
+*/
+
+SDL_Surface* Preproc(SDL_Surface* img)
 {
 	Uint32 pixl;
 	Uint8 r;
@@ -69,7 +78,16 @@ SDL_Surface* Grayscale(SDL_Surface* img)
 		{
 			pixl = getpixel(img, i, j);
 			SDL_GetRGB(pixl, img->format, &r, &g, &b);
+
+      /* Grayscale formula */
 			avg = (r*0.3) + (g*0.59) + (b*0.11);
+
+      /* Black N White */
+      if(avg >= 127.5) // 255 / 2 = 127,5
+        avg = 255;
+      else
+        avg = 0;
+
 			putpixel(img, i, j, SDL_MapRGB(img->format, (Uint8)avg, (Uint8)avg, (Uint8)avg));	
 		}
 	}
