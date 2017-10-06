@@ -86,8 +86,14 @@ int main(int argc, char *argv[])
 	init_sdl();
   SDL_Surface* image = load_image(argv[argc - 1]);
   SDL_Surface* screen;
+
+  // Dummy for Mac (doesn't display the first image)
   screen = display_image(image);
-	image = Preproc(image);
+
+  // Pre-processing
+	image = Grayscale(image);
+  image = BlackNWhite(image);
+
 	screen = display_image(image);
   SDL_FreeSurface(screen);
   SDL_Quit();

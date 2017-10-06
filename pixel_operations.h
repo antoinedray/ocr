@@ -9,6 +9,7 @@
 Uint32 getpixel(SDL_Surface *surface, unsigned x, unsigned y);
 void putpixel(SDL_Surface *surface, unsigned x, unsigned y, Uint32 pixel);
 
-SDL_Surface* Preproc(SDL_Surface* image);
+SDL_Surface* Grayscale(SDL_Surface* image);
+SDL_Surface* BlackNWhite(SDL_Surface* image);
 
 # endif
