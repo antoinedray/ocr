@@ -11,6 +11,4 @@
 Both UIs and image processing are done with GTK / GDK and not SDL.
 
 ### Presentation report
-Report must be 25 pages long.
-
-[Overleaf Link](https://www.overleaf.com/11590034ngnvhzczpsmr)
+Report must be 25 pages long. [Overleaf Link](https://www.overleaf.com/11590034ngnvhzczpsmr)
