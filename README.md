@@ -7,10 +7,8 @@
 * Antoine: UIs & Image Preprocessing
 * Thibaut: Neural network
 
----
 # PLEASE NOTE !
 Both UIs and image processing are done with GTK / GDK and not SDL.
----
 
 # Presentation report
 Report must be 25 pages long.
