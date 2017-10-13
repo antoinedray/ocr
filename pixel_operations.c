@@ -65,6 +65,11 @@ void putpixel(SDL_Surface *surface, unsigned x, unsigned y, Uint32 pixel) {
   Grayscale & Black N White
 */
 
+int comdiv(int w, int h)
+{
+    //
+}
+
 SDL_Surface* Grayscale(SDL_Surface* img)
 {
 	Uint32 pixl;
@@ -90,25 +95,25 @@ SDL_Surface* Grayscale(SDL_Surface* img)
 
 SDL_Surface* BlackNWhite(SDL_Surface* img)
 {
-  Uint32 pixl;
-  Uint8 r;
-  Uint8 g;
-  Uint8 b;
-  for(int i = 0; i < img->w; i++)
-  {
-    for(int j = 0; j < img->h; j++)
+    Uint32 pixl;
+    Uint8 r;
+    Uint8 g;
+    Uint8 b;
+    for(int i = 0; i < img->w; i++)
     {
-      pixl = getpixel(img, i, j);
-      SDL_GetRGB(pixl, img->format, &r, &g, &b);
+        for(int j = 0; j < img->h; j++)
+        {
+            pixl = getpixel(img, i, j);
+            SDL_GetRGB(pixl, img->format, &r, &g, &b);
 
-      /* Black N White */
-      if(r > 255 / 2) // We compare here the variable r but could be g or b also
-        r = 255;
-      else
-        r = 0;
+            /* Black N White */
+            if(r > 255 / 2) // We compare here the variable r but could be g or b also
+                r = 255;
+            else
+                r = 0;
 
-      putpixel(img, i, j, SDL_MapRGB(img->format, r, r, r)); 
+            putpixel(img, i, j, SDL_MapRGB(img->format, r, r, r)); 
+        }
     }
-  }
-  return img;
+    return img;
 }
