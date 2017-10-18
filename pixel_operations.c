@@ -187,23 +187,24 @@ SDL_Surface* Line_Detection(SDL_Surface* img)
     Uint32 pxl;
     Uint8 pxlcolor;
     img = BlackNWhite(img);
-    int list_lines[img->h];
+    int list_lines[img->h];             //img->BnW(img) + init list line
     for (int x = 0; x < img->h; x++)
         list_lines[x] = -1;
     int i = 0; //list index
-    //Settle optimization after finishing line detection. int sum; //Will allow easier malloc usage
-    int prev_pxl = 0; //true or false depending on if the previous pixel was black. (No letters are 1 pixel wide)
+    int prev_pxl = 0; //true or false depending on if the previous pixel was black
+
+
     for (int y = 0; y < img->h; y++)
     {
         for (int x = 0; x < img->w; x++)
         {
             pxl = getpixel(img, x, y);
             SDL_GetRGB(pxl, img->format, &pxlcolor, &pxlcolor, &pxlcolor);
-            if (pxlcolor != 0) //current pixel is black
+            if (pxlcolor == 0)
             {
                 if(prev_pxl == 1) //is previous pixel black?
                 {
-                    list_lines[i] = y; //consider curr line to be a line written on if at least two pixels follow each other
+                    list_lines[y] = 1; //consider curr line to be a line written on if at least two pixels follow each other
                     i++;
                     break;
                 }
@@ -212,86 +213,85 @@ SDL_Surface* Line_Detection(SDL_Surface* img)
                     prev_pxl = 1;
                 }
             }
-            else    //Move aside a pxl, and change so previous pixel (the one we're looking at currently) is white.
+            else
             {
                 prev_pxl = 0;
             }
         }
     }
-    *list_lines = checklines(list_lines, img->h);
-    return(DisplayLines(img,topbotlines(list_lines, img->h),img->h));
+    int list[img->h];
+    *list = checklines(list_lines, img->h);
+    for (int x = 0; x < img->h; x++)
+        printf("%d\n", &list[x]);
+    return(DisplayLines(img, list, img->h));
 }
+
+
 
 int checklines(int l[], int nb_elts) //removes lines from list when less than 5 consecutive lines
 {
-    //Add second check over list_lines tk if two lines follow each other. If yes, => Line. Else noise.
-
     int res[nb_elts];
     for (int x = 0; x < nb_elts; x++)
         res[x] = -1;
     int consecutive_lines = 0;
+    int top = 0;
+    int bot = 0;
     for (int index = 0; index < nb_elts; index++)
     {
-        if (l[index] == l[index+1] && consecutive_lines < 6)
-            consecutive_lines++;
-        else if (l[index] == l[index+1])
+        if (l[index] == 1)
         {
-            for (int x = index - 6; x < index; x++)
-                res[x]= 1;
-        }
-        else // line is not followed by any other
-        {
-            if (l[index] == l[index-1]) //it's the last of a sequence (bot of letter)
+            if (l[index] == l[index+1] && top == 0)
+            {
+                top = index;
                 consecutive_lines++;
-            else
-                continue; //ignores line for res (line is noise.)
+            }
+            else if (l[index] == l[index+1] && top != 0) //top already found, continue onwards to find bot
+            { 
+                consecutive_lines++;
+                continue;
+            }
+            else // line is not followed by any other
+            {
+                if (l[index] == l[index-1] && bot == 0) //it's the last of a sequence (bot of letter)
+                {
+                    bot = index;
+                    consecutive_lines++;
+                }
+                else if (l[index] == l[index-1] && bot != 0) //it's the last of a sequence (bot of letter)
+                {
+                    consecutive_lines++;
+                    continue;
+                }
+                else
+                {
+                    consecutive_lines = 0;
+                    continue; //ignores line for res (line is noise.)
+                }
+            }
+            
+            if (consecutive_lines >= 6)
+            {
+                res[top] = 1;
+                res[bot] = 2;
+                top = 0;
+                bot = 0;
+                consecutive_lines = 0;
+            }
         }
     }
     return *res;
 }
 
-int topbotlines(int l[], int nb_elts)
-{
-    int top = 0;
-    int bot = 0;
-    int res[nb_elts];
-    for (int x = 0; x < nb_elts; x++)
-        res[x] = -1;
-    for (int x = 0; x < nb_elts; x++)
-    {
-        if (top == 0)
-        {   
-            if (l[x] != -1)
-            {   
-                top = 1;
-                bot = 0;
-                res[x] = 1;               
-                continue;
-            }
-        }
-        else
-        {
-            if (l[x+1] == -1 && l[x] != -1)
-            {
-                bot = 1;
-                top = 0;
-                res[x] = 1;
-                continue; 
-            }
-        }
-    }
-    return *res;
-}
 
 
 SDL_Surface* DisplayLines (SDL_Surface* img, int y[], int nb_elts)
 {
     for (int i = 0; i < nb_elts; i++)
     {
-        if (y[i] == 1)
+        if (y[i] == 2 || y[i] == 1)
         {
             for (int x = 0; x < img->w; x++)
-                putpixel(img, x, y[i], SDL_MapRGB(img->format, 255, 0, 0));
+                putpixel(img, x, i, SDL_MapRGB(img->format, 255, 0, 0));
         }
     }
     return img;
