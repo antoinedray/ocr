@@ -171,7 +171,7 @@ SDL_Surface* BlackNWhite(SDL_Surface* img)
             SDL_GetRGB(pixl, img->format, &r, &g, &b);
 
             /* Black N White */
-            if(r > 255 / 2) // Black and white Threshold
+            if(r > 200) // Black and white Threshold
                 r = 255;
             else
                 r = 0;
