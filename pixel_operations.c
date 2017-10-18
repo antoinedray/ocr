@@ -3,7 +3,7 @@
    PIXEL OPERATIONS
    pixel_operations.c
    In this file we'll put all the preprocessing of the image & necessary fonctions for sdl
-*/
+   */
 
 # include <stdio.h>
 # include <math.h>
@@ -219,18 +219,18 @@ SDL_Surface* Line_Detection(SDL_Surface* img)
         }
     }
     *list_lines = checklines(list_lines, img->h);
-    return(DisplayLines(img, list_lines));
+    return(DisplayLines(img,topbotlines(list_lines, img->h),img->h));
 }
 
 int checklines(int l[], int nb_elts) //removes lines from list when less than 5 consecutive lines
 {
     //Add second check over list_lines tk if two lines follow each other. If yes, => Line. Else noise.
 
-    int res[sizeof(l)];
+    int res[nb_elts];
     for (int x = 0; x < nb_elts; x++)
         res[x] = -1;
     int consecutive_lines = 0;
-    for (int index = 0; index < sizeof(l); index++)
+    for (int index = 0; index < nb_elts; index++)
     {
         if (l[index] == l[index+1] && consecutive_lines < 6)
             consecutive_lines++;
@@ -247,8 +247,42 @@ int checklines(int l[], int nb_elts) //removes lines from list when less than 5 
                 continue; //ignores line for res (line is noise.)
         }
     }
-    return res;
+    return *res;
 }
+
+int topbotlines(int l[], int nb_elts)
+{
+    int top = 0;
+    int bot = 0;
+    int res[nb_elts];
+    for (int x = 0; x < nb_elts; x++)
+        res[x] = -1;
+    for (int x = 0; x < nb_elts; x++)
+    {
+        if (top == 0)
+        {   
+            if (l[x] != -1)
+            {   
+                top = 1;
+                bot = 0;
+                res[x] = 1;               
+                continue;
+            }
+        }
+        else
+        {
+            if (l[x+1] == -1 && l[x] != -1)
+            {
+                bot = 1;
+                top = 0;
+                res[x] = 1;
+                continue; 
+            }
+        }
+    }
+    return *res;
+}
+
 
 SDL_Surface* DisplayLines (SDL_Surface* img, int y[], int nb_elts)
 {
@@ -257,8 +291,8 @@ SDL_Surface* DisplayLines (SDL_Surface* img, int y[], int nb_elts)
         if (y[i] == 1)
         {
             for (int x = 0; x < img->w; x++)
-                putpixel(img, x, y, SDL_MapRGB(img->format, 255, 0, 0));
-            return img;
+                putpixel(img, x, y[i], SDL_MapRGB(img->format, 255, 0, 0));
         }
     }
+    return img;
 }
