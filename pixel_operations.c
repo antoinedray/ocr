@@ -249,11 +249,15 @@ int checklines(int l[], int nb_elts) //removes lines from list when less than 5 
     return res;
 }
 
-SDL_Surface* DisplayLines (SDL_Surface* img, int y)
+SDL_Surface* DisplayLines (SDL_Surface* img, int y[], int nb_elts)
 {
-    for (int x = 0; x < img->w; x++)
+    for (int i = 0; i < nb_elts; i++)
     {
-        putpixel(img, x, y, SDL_MapRGB(img->format, 255, 0, 0)); 
+        if (y[i] == 1)
+        {
+            for (int x = 0; x < img->w; x++)
+                putpixel(img, x, y, SDL_MapRGB(img->format, 255, 0, 0));
+            return img;
+        }
     }
-    return img;
 }
