@@ -220,17 +220,14 @@ SDL_Surface* Line_Detection(SDL_Surface* img)
         }
     }
     int list[img->h];
-    *list = checklines(list_lines, img->h);
-    for (int x = 0; x < img->h; x++)
-        printf("%d\n", &list[x]);
+    checklines(list_lines, img->h, list);
     return(DisplayLines(img, list, img->h));
 }
 
 
 
-int checklines(int l[], int nb_elts) //removes lines from list when less than 5 consecutive lines
+int checklines(int l[], int nb_elts, int res[]) //removes lines from list when less than 5 consecutive lines
 {
-    int res[nb_elts];
     for (int x = 0; x < nb_elts; x++)
         res[x] = -1;
     int consecutive_lines = 0;
