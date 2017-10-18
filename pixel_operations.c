@@ -3,7 +3,8 @@
    PIXEL OPERATIONS
    pixel_operations.c
    In this file we'll put all the preprocessing of the image & necessary fonctions for sdl
-   */
+*/
+
 # include <stdio.h>
 # include <math.h>
 # include <stdlib.h>
@@ -246,4 +247,13 @@ int checklines(int l[], int nb_elts) //removes lines from list when less than 5 
         }
     }
     return res;
+}
+
+SDL_Surface* DisplayLines (SDL_Surface* img, int y)
+{
+    for (int x = 0; x < img->w; x++)
+    {
+        putpixel(img, x, y, SDL_MapRGB(img->format, 255, 0, 0)); 
+    }
+    return img;
 }
