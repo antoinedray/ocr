@@ -27,7 +27,7 @@ void run_convert(GtkButton* convert)
 	// Pre-processing
 	image = Grayscale(image);
 	image = BlackNWhite(image);
-
+    image = Line_Detection(image);
 	screen = display_image(image);
 	SDL_FreeSurface(screen);
 	SDL_Quit();

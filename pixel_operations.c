@@ -219,6 +219,7 @@ SDL_Surface* Line_Detection(SDL_Surface* img)
         }
     }
     *list_lines = checklines(list_lines, img->h);
+    return(DisplayLines(img, list_lines));
 }
 
 int checklines(int l[], int nb_elts) //removes lines from list when less than 5 consecutive lines
