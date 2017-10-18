@@ -12,10 +12,12 @@
 
 GtkWidget *window;
 
-void run_convert(GtkButton* convert, gpointer user_data)
+void run_convert(GtkButton* convert)
 {
 	// We close the file-choser window
-	gtk_widget_destroy (window);
+    gtk_button_set_label (convert,
+                      "CONVERTING...");
+    gtk_widget_destroy (window);
 
 	init_sdl();
 	gchar* file = get_filename();
