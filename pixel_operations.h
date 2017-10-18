@@ -18,5 +18,6 @@ void putpixel(SDL_Surface *surface, unsigned x, unsigned y, Uint32 pixel);
 
 SDL_Surface* Grayscale(SDL_Surface* image);
 SDL_Surface* BlackNWhite(SDL_Surface* image);
-
+SDL_Surface* Line_Detection(SDL_Surface* img);
+int checklines(int l[], int nb_elts);
 # endif
