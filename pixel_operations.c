@@ -183,9 +183,14 @@ SDL_Surface* BlackNWhite(SDL_Surface* img)
 }
 
 // Opus method
-/*
 SDL_Surface* BlackNWhite(SDL_Surface* img)
 {
+    Uint32 pixl;
+    Uint8 r;
+    Uint8 g;
+    Uint8 b;
+
+    int sigsq;
     int N = img->h * img->w;
     int threshold=0, var_max=0, sum=0, sumB=0, q1=0, q2=0, m1=0, m2 = 0;
     int max_intensity = 255;
@@ -196,8 +201,42 @@ SDL_Surface* BlackNWhite(SDL_Surface* img)
         histogram[i] = 0;
     }
 
+    for(int i=0;i<img->w;i++)
+    {
+        for(int j=0;j<img->h;j++)
+        {
+            pixl = getpixel(img, i, j);
+            SDL_GetRGB(pixl, img->format, &r, &g, &b);
+
+            histogram[(int)r]++;
+        }
+    }
+
+    // auxiliary value for computing μ2
+    for(int i=0; i<max_intensity;i++)
+        sum += i * histogram[i];
+
+    // update qi(t)
+    for(int t=0;t<=max_intensity;t++)
+    {
+        q1 += histogram[t];
+        q2 = N - q1;
+
+        sumB += t * histogram[i];
+        m1 = sumB / q1;
+        m2 = (sum - sumB) / q2;
+
+        sigsq = q1 * q2 * (m1 - m2) * (m1 - m2);
+
+        if(sigsq > var_max)
+        {
+            threshold = t;
+            var_max = sigsq;
+        }
+    }
+    
+    // Stan
 }
-*/
 
 SDL_Surface* Line_Detection(SDL_Surface* img)
 {
