@@ -183,7 +183,7 @@ SDL_Surface* BlackNWhite(SDL_Surface* img)
 }
 
 // Opus method
-SDL_Surface* BlackNWhite(SDL_Surface* img)
+struct BIN_Matrix *BlackNWhite(SDL_Surface* img)
 {
     Uint32 pixl;
     Uint8 r;
@@ -235,7 +235,25 @@ SDL_Surface* BlackNWhite(SDL_Surface* img)
         }
     }
     
-    // Stan
+    int height = img->h;
+    int width = img->w;
+    int *mat = calloc(width*height, sizeof(int));
+    for(int h = 0; height > h; h++)
+    {
+        for (int w = 0; width > w; w++)
+        {
+            SDL_GetRGB(getpixel(img,w,h),img->format,&r,&g,&b);
+            if (r <= threshold)
+                mat[w + h * width] = 0;
+            else
+                mat[w + h * width] = 1;
+        }
+    }
+    struct BIN_Matrix *bin = malloc(sizeof(struct BIN_Matrix));
+    bin->mat = mat;
+    bin->lines = height;
+    bin->cols = width;
+    return bin;
 }
 
 SDL_Surface* Line_Detection(SDL_Surface* img)
