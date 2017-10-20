@@ -12,6 +12,19 @@
 
 GtkWidget *window;
 
+/*void print_matrix(int mat[], int lines, int cols) //To test binarization
+{
+
+    for(int l = 0; l < lines ; l++)
+    {
+        for(int c = 0; c < cols ; c++)
+        {
+            printf("%i", mat[c + l * cols]);
+        }
+        printf("\n");
+    }
+} */
+
 void run_convert(GtkButton* convert)
 {
 	// We close the file-choser window
@@ -27,6 +40,9 @@ void run_convert(GtkButton* convert)
 	// Pre-processing
 	image = Grayscale(image);
 	image = BlackNWhite(image);
+		// Binariztion (order not determined yet)
+    struct BIN_Matrix *bin = IMGtoBIN(image);
+    //print_matrix(bin->mat,bin->lines,bin->cols); // For testing purposes
     image = Line_Detection(image);
 	screen = display_image(image);
 	SDL_FreeSurface(screen);

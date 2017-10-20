@@ -20,5 +20,7 @@ SDL_Surface* Grayscale(SDL_Surface* image);
 SDL_Surface* BlackNWhite(SDL_Surface* image);
 SDL_Surface* Line_Detection(SDL_Surface* img);
 SDL_Surface* DisplayLines (SDL_Surface* img, int y[], int nb_elts);
+struct BIN_Matrix{int lines; int cols; int *mat;};
+struct BIN_Matrix *IMGtoBIN(SDL_Surface* img);
 int checklines(int l[], int nb_elts, int res[]);
 # endif
