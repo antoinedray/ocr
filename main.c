@@ -3,6 +3,8 @@
 	main.c
 */
 
+#include <stdio.h>
+#include <stdlib.h>
 #include <gtk/gtk.h>
 #include <err.h>
 #include <SDL/SDL.h>
@@ -11,6 +13,18 @@
 #include "pixel_operations.h"
 
 GtkWidget *window;
+
+void print_matrix(int mat[], int lines, int cols)
+{
+    for(int l = 0; l < lines; l++)
+    {
+        for(int c = 0; c < cols; c++)
+            printf("%i", mat[c+l*cols]);
+        printf("\n");
+    
+    }
+
+}
 
 void run_convert(GtkButton* convert, gpointer user_data)
 {
@@ -25,6 +39,8 @@ void run_convert(GtkButton* convert, gpointer user_data)
 	// Pre-processing
 	image = Grayscale(image);
 	image = BlackNWhite(image);
+    struct BIN_Matrix *bin = IMGtoBIN(image);
+    print_matrix(bin->mat,bin->lines,bin->cols);    
 
 	screen = display_image(image);
 	SDL_FreeSurface(screen);

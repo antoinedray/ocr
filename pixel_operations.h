@@ -18,5 +18,7 @@ void putpixel(SDL_Surface *surface, unsigned x, unsigned y, Uint32 pixel);
 
 SDL_Surface* Grayscale(SDL_Surface* image);
 SDL_Surface* BlackNWhite(SDL_Surface* image);
+struct BIN_Matrix{int lines; int cols; int *mat;};
+struct BIN_Matrix *IMGtoBIN(SDL_Surface* img);
 
 # endif
