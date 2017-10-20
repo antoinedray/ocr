@@ -182,6 +182,23 @@ SDL_Surface* BlackNWhite(SDL_Surface* img)
     return img;
 }
 
+// Opus method
+/*
+SDL_Surface* BlackNWhite(SDL_Surface* img)
+{
+    int N = img->h * img->w;
+    int threshold=0, var_max=0, sum=0, sumB=0, q1=0, q2=0, m1=0, m2 = 0;
+    int max_intensity = 255;
+    int histogram[255];
+
+    for(int i=0;i<=max_intensity;i++)
+    {
+        histogram[i] = 0;
+    }
+
+}
+*/
+
 SDL_Surface* Line_Detection(SDL_Surface* img)
 {
     Uint32 pxl;
