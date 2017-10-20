@@ -157,7 +157,7 @@ SDL_Surface* Grayscale(SDL_Surface* img)
     return img;
 }
 
-SDL_Surface* BlackNWhite(SDL_Surface* img)
+SDL_Surface* BlackNWhite(SDL_Surface* img) // plz do not delete aur shange zis plzplz
 {
     Uint32 pixl;
     Uint8 r;
@@ -237,7 +237,7 @@ struct BIN_Matrix *Otzu(SDL_Surface* img)
             var_max = sigsq;
         }
     }
-    
+
     int height = img->h;
     int width = img->w;
     int *mat = calloc(width*height, sizeof(int));
@@ -342,7 +342,7 @@ int checklines(int l[], int nb_elts, int res[]) //removes lines from list when l
                     continue; //ignores line for res (line is noise.)
                 }
             }
-            
+
             if (consecutive_lines >= 6)
             {
                 res[top] = 1;
@@ -356,7 +356,74 @@ int checklines(int l[], int nb_elts, int res[]) //removes lines from list when l
     return *res;
 }
 
+int char_detection(SDL_Surface* img, int list_lines[] /*FIXME*/)
+{
+    img = BlackNWhite(img);
+    int height = img->h;
+    int width = img->w;
+    int list[width];
+    int column_list_index = 0;
+    int startchar = 0; //set to 1 if 2 consecutive vertical pxl are found
+    int endchar = 0; //set to 1 if whole white column is found
+    for (int i = 0; i < height; i++)
+    {
+        if (list_lines[i] == 1)
+        {
+            for (int x = 0; x < img->w; x++)
+            {
+                for (int y = 0; lines[i + y] != 2; y++) 
+                {
+                    if (getpixel(img,x,y) == 0 && //if pxl is black
+                            getpixel(img,x,y) == getpixel(img, x, y+1))//and next vertical pxl is black too
+                    {
+                        if (startchar != 0) //if startchar isnt registered
+                        {
+                            if (getpixel(img, x-1, y) != getpixel(img, x, y)) //should never happen
+                            {
+                                list[column_list_index] = x-1; //if a pxl was black before, it should be startchar
+                                startchar = 1;
+                                column_list_index++;
+                                endchar = 0;
+                            }
+                            else // current pxl is leftmost pxl of char
+                            {
+                                list[column_list_index] = x;
+                                startchar = 1;
+                                column_list_index++;
+                                endchar = 0;
+                            }
+                        }
+                        else //startchar is found. aka we're looking for a final end char
+                        {
+                            if (endchar == 0) //we have no endchar yet, this one will do
+                            {
+                                if (getpixel(img, x+1, y) != getpixel(img, x, y)) //iff nxt pxl is white
+                                {
+                                    endchar = 1;
+                                    list[column_list_index] = x;
+                                    // Since there might be another further endchar
+                                    // startchar is still 1 until we're sure
+                                }
+                            }
+                            else //endchar has been found
+                            {
+                                if (x > list[column_list_index]) //if x of this endchar is bigger than previous'
+                                {
+                                    column_list_index--; //go back to previous endchar and change it
+                                    list[column_list_index] = x;
+                                }
+                            }
+                            column_list_index++; 
+                        }
 
+                    }
+                }
+            }
+            list[column_list_index] = -1; //we reached end of char line, signaling it to the list.
+        }
+    }
+    return *list;
+}
 
 SDL_Surface* DisplayLines (SDL_Surface* img, int y[], int nb_elts)
 {
