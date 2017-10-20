@@ -23,7 +23,6 @@ void print_matrix(int mat[], int lines, int cols)
         printf("\n");
     
     }
-
 }
 
 void run_convert(GtkButton* convert, gpointer user_data)
@@ -39,8 +38,9 @@ void run_convert(GtkButton* convert, gpointer user_data)
 	// Pre-processing
 	image = Grayscale(image);
 	image = BlackNWhite(image);
+		// Binariztion
     struct BIN_Matrix *bin = IMGtoBIN(image);
-    print_matrix(bin->mat,bin->lines,bin->cols);    
+    //print_matrix(bin->mat,bin->lines,bin->cols); // For testing purposes    
 
 	screen = display_image(image);
 	SDL_FreeSurface(screen);
