@@ -37,7 +37,8 @@ void on_open_image(GtkButton* openf, gpointer user_data)
 			filename = 
 				gtk_file_chooser_get_filename (GTK_FILE_CHOOSER (dialog));
 			gtk_image_set_from_file (GTK_IMAGE (image), filename);
-			break;
+			gtk_button_set_label (openf, "REOPEN IMAGE");
+            break;
 		}
 		default:
 			break;
