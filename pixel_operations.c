@@ -387,7 +387,7 @@ struct BIN_Matrix *IMGtoBIN(SDL_Surface* img)
         for (int w = 0; width > w; w++)
         {
             SDL_GetRGB(getpixel(img,w,h),img->format,&r,&g,&b);
-            if (r ==255)
+            if (r ==255) //threshold
                 mat[w + h * width] = 0;
             else
                 mat[w + h * width] = 1;
