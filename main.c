@@ -12,7 +12,7 @@
 
 GtkWidget *window;
 
-/*void print_matrix(int mat[], int lines, int cols) //To test binarization
+void print_matrix(int mat[], int lines, int cols) //To test binarization
 {
 
     for(int l = 0; l < lines ; l++)
@@ -23,7 +23,7 @@ GtkWidget *window;
         }
         printf("\n");
     }
-} */
+}
 
 void run_convert(GtkButton* convert)
 {
@@ -39,9 +39,9 @@ void run_convert(GtkButton* convert)
 
 	// Pre-processing
 	image = Grayscale(image);
-	image = BlackNWhite(image);
+	struct BIN_Matrix *bin = Otzu(image); // Binarization by Otsu
 		// Binariztion (order not determined yet)
-    struct BIN_Matrix *bin = IMGtoBIN(image);
+    //struct BIN_Matrix *bin = IMGtoBIN(image);
     //print_matrix(bin->mat,bin->lines,bin->cols); // For testing purposes
     image = Line_Detection(image);
 	screen = display_image(image);

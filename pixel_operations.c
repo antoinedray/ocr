@@ -182,8 +182,8 @@ SDL_Surface* BlackNWhite(SDL_Surface* img)
     return img;
 }
 
-// Opus method
-struct BIN_Matrix *BlackNWhite(SDL_Surface* img)
+// Otzu method
+struct BIN_Matrix *Otzu(SDL_Surface* img)
 {
     Uint32 pixl;
     Uint8 r;
@@ -222,9 +222,12 @@ struct BIN_Matrix *BlackNWhite(SDL_Surface* img)
         q1 += histogram[t];
         q2 = N - q1;
 
-        sumB += t * histogram[i];
-        m1 = sumB / q1;
-        m2 = (sum - sumB) / q2;
+        sumB += t * histogram[t];
+
+        if (q1 != 0)
+            m1 = sumB / q1;
+        if (q2 != 0)
+            m2 = (sum - sumB) / q2;
 
         sigsq = q1 * q2 * (m1 - m2) * (m1 - m2);
 
