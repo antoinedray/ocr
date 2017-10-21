@@ -358,68 +358,105 @@ int checklines(int l[], int nb_elts, int res[]) //removes lines from list when l
 
 int char_detection(SDL_Surface* img, int list_lines[] /*FIXME*/)
 {
-    img = BlackNWhite(img);
+    img = BlackNWhite(img); 
     int height = img->h;
     int width = img->w;
     int list[width];
     int column_list_index = 0;
+    int white_column = 0; //char has ended only if white_column >= 2
+    int white = 1; //line might be white. Is changed upon black pxl encounter
     int startchar = 0; //set to 1 if 2 consecutive vertical pxl are found
     int endchar = 0; //set to 1 if whole white column is found
-    for (int i = 0; i < height; i++)
+    for (int i = 0; i < height; i++) //Goes through the line list
     {
-        if (list_lines[i] == 1)
+        if (list_lines[i] == 1) //We found the top of a char line
         {
-            for (int x = 0; x < img->w; x++)
+            for (int x = 0; x < img->w; x++) //goes through the whole char line
+                // Deserves a FIXME to implement not going past last char 
+                // (aka having white columns at the end of text)
             {
-                for (int y = 0; lines[i + y] != 2; y++) 
+                for (int y = 0; list_lines[i + y] != 2; y++) //goes from the top of char line to its bottom
+                    // Since bot of a char line is 2 in the line list we're going through.
                 {
+                    white = 1; //This might be a white column.
                     if (getpixel(img,x,y) == 0 && //if pxl is black
                             getpixel(img,x,y) == getpixel(img, x, y+1))//and next vertical pxl is black too
                     {
-                        if (startchar != 0) //if startchar isnt registered
+                        white = 0; //This isn't a white column (aka not end of a char)
+                        if (startchar == 0) //if startchar isnt registered
                         {
-                            if (getpixel(img, x-1, y) != getpixel(img, x, y)) //should never happen
+                            if (getpixel(img, x-1, y) == getpixel(img, x, y)) //should never happen
+                                // It would mean there was a black pxl left of ours, 
+                                // and that said black pxl isn't startchar yet. Abnormal.
                             {
                                 list[column_list_index] = x-1; //if a pxl was black before, it should be startchar
                                 startchar = 1;
                                 column_list_index++;
-                                endchar = 0;
+                                endchar = 0; //if startchar is found, it means we have a new char to check
+                                    //hence the need to reset endchar in order to find its new value
                             }
                             else // current pxl is leftmost pxl of char
                             {
                                 list[column_list_index] = x;
                                 startchar = 1;
                                 column_list_index++;
-                                endchar = 0;
+                                endchar = 0;                                                                                                //FIXME, no need to go through whole column after setting startchar
+                                                                                                                                            //no char is 1 pxl wide. nor 2 actually, so next column can also be
+                                                                                                                                            //skipped (theoritically)
                             }
                         }
                         else //startchar is found. aka we're looking for a final end char
                         {
                             if (endchar == 0) //we have no endchar yet, this one will do
                             {
-                                if (getpixel(img, x+1, y) != getpixel(img, x, y)) //iff nxt pxl is white
+                                if (getpixel(img, x+1, y) != getpixel(img, x, y)) //iff right pxl is white
                                 {
                                     endchar = 1;
                                     list[column_list_index] = x;
-                                    // Since there might be another further endchar
-                                    // startchar is still 1 until we're sure
+                                    // Since there might be another further endcha
+                                    // startchar is still 1 until we're sure this is the final one
                                 }
                             }
                             else //endchar has been found
                             {
-                                if (x > list[column_list_index]) //if x of this endchar is bigger than previous'
+                                if (x >= list[column_list_index-1]) //if x of this endchar is bigger than previous'
+                                                                    // (this pxl is left of our previous endchar)
+                                                                    // or if it's equal (in that case, this pxl is lower
+                                                                    // than our previous endchar, which is a
+                                                                    // valid cause for being replaced too)
                                 {
                                     column_list_index--; //go back to previous endchar and change it
                                     list[column_list_index] = x;
                                 }
                             }
-                            column_list_index++; 
+                            column_list_index++;
                         }
 
                     }
+                    /*
+                       else (pxl is white)
+                       {
+                       white indicator doesn't change : whole column might be white, in which case default value of
+                       " white = 1 " is good. If the column isn't white, it should already have been changed earlier
+                       }
+                    */
+                }
+                if (white == 1) //if the whole column is white (exiting the for with lines[i+y])
+                    white_column++;
+                else
+                    white_column = 0; //consecutive white columns is reset
+                if (white_column >= 2)
+                {
+                    startchar = 0;
+                    //Scenarios at this point :
+                    // - if startchar was 1 and we found two consecutive white columns, that startchar was noise/a bug
+                    // - if startchar is not found... well, still haven't met a black pxl, so resetting it doesn't matter.
+                    // - if we're in the middle of a char, there's no way we'll have two white pxl columns
+                    // - if startchar = 1, and endchar = 1, and we reach here, it means we found two white columns after a
+                    //          last pxl. Hence, this pxl was the true endchar, and we start looking for the next char
                 }
             }
-            list[column_list_index] = -1; //we reached end of char line, signaling it to the list.
+            list[column_list_index] = -1; //we reached end of text line, signaling it to the list.
         }
     }
     return *list;
