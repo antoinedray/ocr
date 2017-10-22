@@ -300,19 +300,11 @@ SDL_Surface* Line_Detection(SDL_Surface* img)
     int list[height];
     checklines(list_lines, height, list);
     
-    int columns[img->w];
-    for (int x = 0; x < height; x++)
-    {
-        printf("%d\n", list[x]);
-    }
+    int columns[(img->w)*3];
     for (int x = 0; x < img->w; x++)
         columns[x] = -1;
     char_detection(img, list, columns);
-    for (int x = 0; x < img->h; x++)
-    {
-        printf("new : %d\n", list[x]);
-    }
-    return(DisplayLines(img, list, img->h));
+    return(Display_Character_Boxes(img, list,columns, list_lines));
 }
 
 
@@ -399,14 +391,14 @@ void char_detection(SDL_Surface* img, int list[], int res[])
                 }
                 if (black == 1 && letter == 0)
                 {
-                    Warnx("column_list_index is :%d\n",column_list_index);
+                   // Warnx("column_list_index is :%d\n",column_list_index);
                     letter = 1;
                     res[column_list_index] = x;
                     column_list_index++;
                 }
                 else if (black == 0 && letter == 1)
                 {
-                    Warnx("column_list_index is :%d\n",column_list_index); 
+                   // Warnx("column_list_index is :%d\n",column_list_index); 
                     letter = 0;
                     res[column_list_index] = x;
                     column_list_index++;
@@ -447,11 +439,20 @@ SDL_Surface* Display_Character_Boxes(SDL_Surface* img, int startlines[],
         }
     }
     //All red lines are drawn, now we look for the characters
+    int index = 0;
+    int draw = 0; 
     for (int h = 0; h < img->h; h++)
     {
-        if (textlines[h] != -1)
+        if (startlines[h] == 1)//(textlines[h] != -1)
+            draw = 1;
+        if (startlines[h] == 2)
         {
-            for (int index = 0; columns[index] != -1; index++)
+            draw = 0;
+            index++;
+        }
+        if (draw == 1)
+        {
+            while (index < img->w && columns[index]<columns[index+1])
             {
                 putpixel(img, columns[index], h, SDL_MapRGB(img->format,
                            255,0,0)); 
