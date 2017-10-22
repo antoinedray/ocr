@@ -171,7 +171,7 @@ SDL_Surface* BlackNWhite(SDL_Surface* img) // plz do not delete aur shange zis p
             SDL_GetRGB(pixl, img->format, &r, &g, &b);
 
             /* Black N White */
-            if(r > 200) // Black and white Threshold
+            if(r > 190) // Black and white Threshold
                 r = 255;
             else
                 r = 0;
@@ -299,12 +299,11 @@ SDL_Surface* Line_Detection(SDL_Surface* img)
     int height = img->h;
     int list[height];
     checklines(list_lines, height, list);
-    
     int columns[(img->w)*3];
     for (int x = 0; x < img->w; x++)
         columns[x] = -1;
     char_detection(img, list, columns);
-    return(Display_Character_Boxes(img, list,columns, list_lines));
+    return(Display_Character_Boxes(img, list,columns));
 }
 
 
@@ -363,7 +362,6 @@ int checklines(int l[], int nb_elts, int res[]) //removes lines from list when l
 
 void char_detection(SDL_Surface* img, int list[], int res[])
 {
-    img = BlackNWhite(img);
     int black = 0;
     Uint8 pxlcolor;
     Uint32 pxl;
@@ -425,7 +423,7 @@ SDL_Surface* DisplayLines (SDL_Surface* img, int y[], int nb_elts)
 
 
 SDL_Surface* Display_Character_Boxes(SDL_Surface* img, int startlines[],
-        int columns[], int textlines[])
+        int columns[])
 //Display the lines and the columns at the same time, using the two lists
 //As a reminder, lines is filled with -1 (nothing), 1 (top of char line) and 2 (end of char line)
 //columns is filled with the index (in pxl) of the leftmost/rightmost pxl of a letter, and -1
@@ -435,39 +433,40 @@ SDL_Surface* Display_Character_Boxes(SDL_Surface* img, int startlines[],
         if (startlines[l] == 1 || startlines[l] == 2)
         {
             for (int x = 0; x < img->w; x++)
-                putpixel(img, x, l, SDL_MapRGB(img->format,255, 0, 0));         
+                putpixel(img, x, l, SDL_MapRGB(img->format,255, 0, 0));
         }
     }
     //All red lines are drawn, now we look for the characters
     int index = 0;
-    int draw = 0; 
+    int draw = 0;
+    int tmp = 0;
     for (int h = 0; h < img->h; h++)
     {
         if (startlines[h] == 1)//(textlines[h] != -1)
             draw = 1;
+        if (draw == 1)
+        {
+            for(;columns[index] < columns[index+1];index++)
+            {
+                putpixel(img, columns[index], h, SDL_MapRGB(img->format,
+                           255,0,0));
+            }
+            putpixel(img, columns[index], h, SDL_MapRGB(img->format,255,0,0));
+        }
         if (startlines[h] == 2)
         {
             draw = 0;
-            index++;
+            tmp = index+1;
         }
-        if (draw == 1)
-        {
-            while (index < img->w && columns[index]<columns[index+1])
-            {
-                putpixel(img, columns[index], h, SDL_MapRGB(img->format,
-                           255,0,0)); 
-            }
-        }
+        index = tmp;
     }
     return img;
 }
 
-
-        
 //BINARIZATION
 
 struct BIN_Matrix *IMGtoBIN(SDL_Surface* img)
-{   
+{
     Uint8 r;
     Uint8 g;
     Uint8 b;
