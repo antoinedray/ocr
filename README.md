@@ -15,10 +15,10 @@ Report must be 25 pages long. [Overleaf Link](https://www.overleaf.com/11590034n
 
 **No presentation of the subject**
 
-## About what we've done so far
-### mysdl/
+## The structure of the project
+### mysdl/ [COMPLETE]
 Contains basic functions for mysdl given in the practical on SDL
-### ui/
+### ui/ [COMPLETE]
 Contains all the gtk+3 function for the ui
 ### preproc/
 Contains functions for the preprocessing:
