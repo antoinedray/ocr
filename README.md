@@ -1,24 +1,17 @@
 # OCR 404
 ### Projet S3 EPITA Promo 2021
 
-### Responsabilities Repartition
-* Celian: Presentation report (Writing skills)
-* Stan: Presentation report (LaTeX skills) & Image Preprocessing
+### Responsabilities Repartition for final presentation
+* Celian: Character recongnition
+* Stan: Neural Network
 * Antoine: UIs & Image Preprocessing
-* Thibaut: Neural network
+* Thibaut: Neural Network
 
 ## PLEASE NOTE !
 UIs and image processing are done with GTK / SDL.
 
 ### Presentation report
 Report must be 25 pages long. [Overleaf Link](https://www.overleaf.com/11590034ngnvhzczpsmr)
-
-##### Report must be made of:
-* Group
-* The progress
-* Researches
-* Tools used
-* Implementations
 
 **No presentation of the subject**
 
