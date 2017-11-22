@@ -23,17 +23,17 @@ Report must be 25 pages long. [Overleaf Link](https://www.overleaf.com/11590034n
 **No presentation of the subject**
 
 ## About what we've done so far
-#### mysdl/
+### mysdl/
 Contains basic functions for mysdl given in the practical on SDL
-#### ui/
+### ui/
 Contains all the gtk+3 function for the ui
-#### preproc/
+### preproc/
 Contains functions for the preprocessing:
 * Grayscale
 * Otzu (black and white)
-#### segmentation/
+### segmentation/
 Contains all the functions for segmentation and character recognition
-#### neuralnet/
+### neuralnet/
 Neural network
 
 ## Requirements to run the project
