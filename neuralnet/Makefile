@@ -1,26 +1,22 @@
-# Simple OCR Makefile
+CPPFLAGS = -MMD
+CC = gcc
+CFLAGS = -Wall -Wextra -std=c99 -O2
+LDFLAGS =
+LDLIBS = -lm
 
-CC= gcc #-fsanitize=address
+SRC = main.c newneural.c loaderNN.c
+OBJ = ${SRC:.c=.o}
+DEP = ${SRC:.c=.d}
 
-CPPFLAGS= -MMD
-CFLAGS= -Wall -Wextra -std=c99 -O0 -g
-LDFLAGS=
-LDLIBS= -lm
+all: main
 
-SRC= neural.c main_pres.c
-OBJ= ${SRC:.c=.o}
-DEP= ${SRC:.c=.d}
-
-all: main_pres
-main_pres: ${OBJ}
+main: ${OBJ}
 
 .PHONY: clean
 
 clean:
-	rm -f ${OBJ} ${DEP} main_pres neural.h.gch
+		${RM} ${OBJ}
+		${RM} ${DEP}
+		${RM} main
 
-#-include ${DEP}
-# include dependency files
-#-include ${DEP}
- 
-# END
+-include ${DEP}

@@ -4,14 +4,14 @@
  * description: link all the parts together and run everything
  */
 
-#include<gtk/gtk.h>
-#include<err.h>
-#include<SDL/SDL.h>
-#include<SDL/SDL_image.h>
-#include"ui/ui.h"
-#include"mysdl/mysdl.h"
-#include"preproc/preproc.h"
-#include"segmentation/segmentation.h"
+#include <gtk/gtk.h>
+#include <err.h>
+#include <SDL/SDL.h>
+#include <SDL/SDL_image.h>
+#include "ui/ui.h"
+#include "mysdl/mysdl.h"
+#include "preproc/preproc.h"
+#include "segmentation/segmentation.h"
 
 
 GtkWidget *window;
@@ -28,9 +28,13 @@ void run_convert(GtkButton* convert)
   SDL_Surface* image = load_image(file);
   SDL_Surface* screen;
 
-  // Pre-processing
+  /* Pre-processing
+   * The 2nd arg of BnW is the multiplier of the split
+   * If split set to 0 then img not splited
+   */
   image = grayscale(image);
-  image = split(image);
+  //image = contrast(image);
+  image = blackAndWhite(image, 0);
 
   // For testing purposes
   image = Line_Detection(image);

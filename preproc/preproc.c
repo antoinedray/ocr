@@ -5,7 +5,7 @@
  * & necessary fonctions for sdl
  */
 
-#include"preproc.h"
+#include "preproc.h"
 
 // Grayscale
 SDL_Surface* grayscale(SDL_Surface* img) {
@@ -31,13 +31,8 @@ SDL_Surface* grayscale(SDL_Surface* img) {
 SDL_Surface* contrast(SDL_Surface* img) {
   Uint32 pixl;
   Uint8 r, g, b;
-
-  int height = img->h;
-  int width = img->w;
-  int sum = 0;
-  int max_intensity = 255;
-  int histogram[256];
-  int lut[256];
+  int height = img->h, width = img->w, sum = 0, max_intensity = 255;
+  int histogram[256], lut[256];
 
   for(int i = 0; i <= max_intensity; i++)
     histogram[i] = 0;
@@ -53,8 +48,7 @@ SDL_Surface* contrast(SDL_Surface* img) {
   }
 
   // build a LUT containing scale factor
-  for (int i = 0; i <= max_intensity; i++)
-  {
+  for (int i = 0; i <= max_intensity; i++) {
     sum += histogram[i];
     lut[i] = sum * max_intensity / (height * width);
   }
@@ -64,58 +58,50 @@ SDL_Surface* contrast(SDL_Surface* img) {
    for(int h = 0; height > h; h++) {
     for (int w = 0; width > w; w++) {
       SDL_GetRGB(getpixel(img,w,h),img->format,&r,&g,&b);
-
       putpixel(img, w, h, SDL_MapRGB(img->format, lut[r], lut[r], lut[r]));
     }
   }
   return img;
 }
 
-SDL_Surface* split(SDL_Surface* img) {
-  // We cut in 4
-  SDL_Surface *tmp[4];
-  for(int p = 0; p < 4; p++)
-    tmp[p] = malloc(sizeof(SDL_Surface*));
-  SDL_Rect crop;
-  int w = img->w;
-  int h = img->h;
-  int k = 0;
-
-  crop.w = img->w/2;
-  crop.h = img->h/2;
-
-  for(int i = 0; i <= w/2+1; i += w/2+1) {
-    for(int j = 0; j <= h/2+1; j += h/2+1) {
-        crop.x = i;
-        crop.y = j;
-        SDL_BlitSurface(img, &crop, tmp[k], NULL);
-        tmp[k] = otzu(tmp[k]);
-        SDL_BlitSurface((tmp[k]), NULL, img, &crop);
-	printf("In da loop");
-	k++;
-    }
+SDL_Surface* blackAndWhite(SDL_Surface* img, int split) {
+  if(!split)
+    return otzu(img, 0, img->w, 0, img->h);
+  int w = img->w, h = img->h, w_sp = 0, h_sp = 0;
+  if(w > h) {
+    w_sp = 3 * split;
+    h_sp = 2 * split;
   }
-  printf("here");
+  else if(w < h) {
+    w_sp = 2 * split;
+    h_sp = 3 * split;
+  }
+  else {
+    w_sp = 2 * split;
+    h_sp = 2 * split;
+  }
+  int w_r = w/w_sp, h_r = h/h_sp;
+  for(int i = 0; i < w_sp; i++)
+    for(int j = 0; j < h_sp; j++)
+      img = otzu(img, i * w_r, (i+1) * w_r, j * h_r, (j+1) * h_r);
   return img;
 }
 
 // Otzu method for Black and White
-SDL_Surface* otzu(SDL_Surface* img) {
+SDL_Surface* otzu(SDL_Surface* img, int w_min, int w_max, int h_min, int h_max)
+{
   Uint32 pixl;
   Uint8 r, g, b;
-
-  int sigsq;
-  int N = img->h * img->w;
-  int threshold = 0, var_max= 0, sum= 0, sumB= 0, q1= 0, q2= 0, m1= 0, m2 = 0;
-  int max_intensity = 255;
-  int histogram[256];
+  int sigsq, max_intensity = 255, histogram[256];
+  int N = (h_max - h_min) * (w_max - w_min); // img->h * img->w;
+  int threshold=0, var_max=0, sum=0, sumB=0, q1=0, q2=0, m1=0, m2=0;
 
   for(int i = 0; i <= max_intensity; i++)
     histogram[i] = 0;
 
   // We build the histogram
-  for(int i=0;i<img->w;i++) {
-    for(int j=0;j<img->h;j++) {
+  for(int i = w_min; i < w_max; i++) {
+    for(int j = h_min; j < h_max; j++) {
       pixl = getpixel(img, i, j);
       SDL_GetRGB(pixl, img->format, &r, &g, &b);
 
@@ -124,40 +110,33 @@ SDL_Surface* otzu(SDL_Surface* img) {
   }
 
   // auxiliary value for computing μ2
-  for(int i=0; i<=max_intensity;i++)
+  for(int i = 0; i <= max_intensity; i++)
     sum += i * histogram[i];
 
   // update qi(t)
-  for(int t=0;t<=max_intensity;t++)
-  {
+  for(int t = 0; t <= max_intensity; t++) {
     q1 += histogram[t];
     q2 = N - q1;
-
     sumB += t * histogram[t];
 
-    if (q1 != 0)
+    if(q1 != 0)
       m1 = sumB / q1;
-    if (q2 != 0)
+    if(q2 != 0)
       m2 = (sum - sumB) / q2;
 
     sigsq = q1 * q2 * (m1 - m2) * (m1 - m2);
 
-    if(sigsq > var_max)
-    {
+    if(sigsq > var_max) {
       threshold = t;
       var_max = sigsq;
     }
   }
 
   // We apply the changes
-  int height = img->h;
-  int width = img->w;
-  for(int h = 0; height > h; h++)
-  {
-    for (int w = 0; width > w; w++)
-    {
-      SDL_GetRGB(getpixel(img,w,h),img->format,&r,&g,&b);
-      if (r <= threshold)
+  for(int h = h_min; h < h_max; h++) {
+    for(int w = w_min; w < w_max; w++) {
+      SDL_GetRGB(getpixel(img, w, h),img->format, &r, &g, &b);
+      if(r <= threshold)
         putpixel(img, w, h, SDL_MapRGB(img->format, 0, 0, 0));
       else
         putpixel(img, w, h, SDL_MapRGB(img->format, 255, 255, 255));
