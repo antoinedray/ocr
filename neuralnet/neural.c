@@ -49,7 +49,7 @@ struct NN *init_NN(size_t *layersize,size_t size){
 	MyNet->layersize = layersize;
 	MyNet->mat = malloc(sizeof(struct *N)*size);
 	for(size_t i = 0; i < size;i++){
-		sizelayer = layersize[i];
+		size_t = sizelayer = layersize[i];
 		MyNet->mat[i] = malloc(sizeof(struct N)*sizelayer);
 		if(i==0){
 			for(size_t j = 0; j < sizelayer; j++){ //layer inputs 
@@ -106,8 +106,8 @@ void _backprop(struct NN *MyNet, double *input_t, double *output_t){
 	//back proping errors
 	double *deltas = malloc(sizeof(double)*layersize[size-1]); //MyNet size >=2; 
 	for(size_t i = 0; i < MyNet->layersize[size-1];i++){
-		node=mat[size-1][i];
-		delta = (output_t[i] - node->value)*(node->value)*(1 - node->value);
+		struct N *node = mat[size-1][i];
+		double delta = (output_t[i] - node->value)*(node->value)*(1 - node->value);
 		for(size_t j = 0; j < node->nb_inputs; j++){
 			node->weights[j] += v * delta * node->inputs[j]->value;
 		}
@@ -116,9 +116,23 @@ void _backprop(struct NN *MyNet, double *input_t, double *output_t){
 	}
 	//backprop hidden layers
 	//deltaj = oj(1-oj)sum(deltak*wjk)
-	double *deltaprev = deltas;
-	double *deltacurr = malloc(sizeof(double)*
-	for(size_t i = size - 2; i>=0 ; i--){
-		delta1 = 
+	//here the algo is going backwards, e.g layerprev = output
+	double *delta_prev = deltas;
+	double *delta_cur = malloc(sizeof(double)*MyNet->layersize[size - 2]);
+	for(size_t i = size - 2; i>=0 ; i-=1){
+		double *layer_cur = MyNet->mat[i];
+		double *layer_prev = MyNet->mat[i+1];
+		for(size_t j = 0; j<MyNet->layersize[i]; j++){
+			double delta = 0;
+			double act_v = 0;
+			struct N *node_cur = layer_prev[j]
+			for(size_t k = 0; k<MyNet->layersize[i+1]; k++){
+				struct N *node_prev = layer_prev[k];
+				act_v += delta_prev[k] * node_prev->weights[j]; 
+			}
+			delta = node_cur->value * (1 - node->value) * (act_v);
+			delta_cur[j] = delta;
+			for(size_t k = 0; k<
+		}
 	}	
 }
