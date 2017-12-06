@@ -13,3 +13,5 @@ struct NN{
 };
 
 struct NN *init_NN(size_t *layersize);
+
+double* feedforward(struct NN *MyNet, double *inputs);

@@ -7,7 +7,7 @@
 
 int main(){
 	size_t *size;
-	size_t sizer[4] ={2,2,1,0};
+	size_t sizer[4] ={2,2,1};
 	size =sizer;
 	printf("Creating NN: \n");
 	struct NN *MyNet = init_NN(size);
@@ -17,8 +17,15 @@ int main(){
 		printf("Succes! \n");
 	save_NN(MyNet);
 	printf("NN saved \n");
-	printf("Loading NN \n");
-	struct NN *loaded = load_NN("NNsave.txt");
-	printf("%lu",loaded->size);
+	double inputs[2] ={1,1};
+	double *output = feedforward(MyNet,inputs);
+	int i = 0;
+	while(output[i]){	
+		printf("%lf|",output[i]);
+		i++;
+	}
+	//printf("Loading NN \n");
+	//struct NN *loaded = load_NN("NNsave.txt");
+	//printf("%lu",loaded->size);
 	return 1;
 }
