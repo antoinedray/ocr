@@ -1,19 +1,8 @@
 # OCR 404
 ### Projet S3 EPITA Promo 2021
 
-### Responsabilities Repartition for final presentation
-* Celian: Character recongnition
-* Stan: Neural Network
-* Antoine: UIs & Image Preprocessing
-* Thibaut: Neural Network
-
-## PLEASE NOTE !
-UIs and image processing are done with GTK / SDL.
-
 ### Presentation report
-Report must be 50 pages long. [Shared Latex](https://www.sharelatex.com/project/59ee01a22735735582e8b1b3)
-
-**No presentation of the subject**
+Report must be 50 pages long. [Shared Latex](https://www.sharelatex.com/7144692721ntkmzppcsmnk)
 
 ## The structure of the project
 ### mysdl/ [COMPLETE]
@@ -28,13 +17,3 @@ Contains functions for the preprocessing:
 Contains all the functions for segmentation and character recognition
 ### neuralnet/
 Neural network
-
-## Requirements to run the project
-
-#### Install sdl
-* sudo apt-get install sdl
-* sudo apt-get install sdl_image
-
-#### Install GTK
-* sudo apt-get install libgtk2.0-dev
-* sudo apt-get install libgtk3.0-dev

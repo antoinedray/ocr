@@ -7,7 +7,6 @@
 #include "ui.h"
 
 gchar *filename;
-int fileLoaded = 0;
 
 gchar* get_filename() {
   return filename;
@@ -33,7 +32,6 @@ void on_open_image(GtkButton* openf, gpointer user_data) {
       filename = gtk_file_chooser_get_filename(GTK_FILE_CHOOSER (dialog));
       gtk_image_set_from_file(GTK_IMAGE (image), filename);
       gtk_button_set_label(openf, "REOPEN IMAGE");
-      fileLoaded = 1;
       break;
     }
     default:
