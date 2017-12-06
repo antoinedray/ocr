@@ -69,7 +69,8 @@ GtkWidget* create_window() {
   /* Show open dialog when opening a file */
   g_signal_connect(openf, "clicked", G_CALLBACK(on_open_image), image);
   /* Run convert functions */
-  g_signal_connect(convert, "clicked", G_CALLBACK(run_convert), NULL);
+  if(fileLoaded)
+    g_signal_connect(convert, "clicked", G_CALLBACK(run_convert), NULL);
   /* Exit when the window is closed */
   g_signal_connect(window, "destroy", G_CALLBACK(gtk_main_quit), NULL);
 
