@@ -7,7 +7,6 @@
 #include "ui.h"
 
 gchar *filename;
-int fileLoaded = 0;
 
 gchar* get_filename() {
   return filename;
@@ -33,7 +32,6 @@ void on_open_image(GtkButton* openf, gpointer user_data) {
       filename = gtk_file_chooser_get_filename(GTK_FILE_CHOOSER (dialog));
       gtk_image_set_from_file(GTK_IMAGE (image), filename);
       gtk_button_set_label(openf, "REOPEN IMAGE");
-      fileLoaded = 1;
       break;
     }
     default:
@@ -48,7 +46,6 @@ GtkWidget* create_window() {
   /* Set up the UI */
   window = gtk_window_new(GTK_WINDOW_TOPLEVEL);
   gtk_window_set_title(GTK_WINDOW (window), "OCR");
-  gtk_window_set_default_size (GTK_WINDOW (window), 500, 500);
 
   box = gtk_box_new(GTK_ORIENTATION_VERTICAL, 5);
   openf = gtk_button_new_with_label("OPEN IMAGE");
@@ -70,8 +67,7 @@ GtkWidget* create_window() {
   /* Show open dialog when opening a file */
   g_signal_connect(openf, "clicked", G_CALLBACK(on_open_image), image);
   /* Run convert functions */
-  if(fileLoaded)
-    g_signal_connect(convert, "clicked", G_CALLBACK(run_convert), NULL);
+  g_signal_connect(convert, "clicked", G_CALLBACK(run_convert), NULL);
   /* Exit when the window is closed */
   g_signal_connect(window, "destroy", G_CALLBACK(gtk_main_quit), NULL);
 
