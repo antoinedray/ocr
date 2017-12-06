@@ -15,4 +15,9 @@ void on_open_image(GtkButton* openf, gpointer user_data);
 GtkWidget* create_window ();
 GdkPixbuf *create_pixbuf();
 
+struct pair {
+  GtkWidget             *image;
+  GtkWidget             *convert;
+};
+
 #endif

@@ -4,6 +4,7 @@
  *  Description: Contains all conde to display the UI using gtk
  */
 
+#include <stdlib.h>
 #include "ui.h"
 
 gchar *filename;
@@ -13,7 +14,9 @@ gchar* get_filename() {
 }
 
 void on_open_image(GtkButton* openf, gpointer user_data) {
-  GtkWidget *image = GTK_WIDGET(user_data);
+  struct pair *p = user_data;
+  GtkWidget *convert = p->convert;
+  GtkWidget *image = p->image;
   GtkWidget *toplevel = gtk_widget_get_toplevel(image);
   GtkFileFilter *filter = gtk_file_filter_new();
 
@@ -32,6 +35,9 @@ void on_open_image(GtkButton* openf, gpointer user_data) {
       filename = gtk_file_chooser_get_filename(GTK_FILE_CHOOSER (dialog));
       gtk_image_set_from_file(GTK_IMAGE (image), filename);
       gtk_button_set_label(openf, "REOPEN IMAGE");
+
+      /* Enable callback to convert functions */
+      g_signal_connect(convert, "clicked", G_CALLBACK(run_convert), NULL);
       break;
     }
     default:
@@ -63,11 +69,14 @@ GtkWidget* create_window() {
 
   gtk_container_add(GTK_CONTAINER (window), box);
 
+  struct pair *p = malloc(sizeof(struct pair));
+  p->convert = convert;
+  p->image = image;
+
   /* Connect signals */
   /* Show open dialog when opening a file */
-  g_signal_connect(openf, "clicked", G_CALLBACK(on_open_image), image);
-  /* Run convert functions */
-  g_signal_connect(convert, "clicked", G_CALLBACK(run_convert), NULL);
+  g_signal_connect(openf, "clicked", G_CALLBACK(on_open_image), p);
+  /* Callback to convert functions is set after successfully loading image */
   /* Exit when the window is closed */
   g_signal_connect(window, "destroy", G_CALLBACK(gtk_main_quit), NULL);
 
