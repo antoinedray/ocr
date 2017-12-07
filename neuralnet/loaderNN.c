@@ -2,9 +2,9 @@
 #include<stdio.h>
 #include<err.h>
 #include<string.h>
-#include"newneural.h"
+#include"neural.h"
 #include"loaderNN.h"
-
+/*
 void save_NN(struct NN *MyNet){
 	FILE *f = fopen("NNsave.txt","w");
 	if(!f){warn("Not able to create save file");return;}
@@ -31,7 +31,37 @@ void save_NN(struct NN *MyNet){
 	fclose(f);
 	return;
 }
+*/
+void save_NN(struct NN *mynet, char * name)
+{
+	FILE * myfile;
+	myfile = fopen(name,"w");
+	for(size_t i = 0; i < mynet->size; i++)
+	{
+		for (size_t j = 0; j < mynet->layersize[i]; j++)
+		{
+			for(size_t k = 0; k < mynet->mat[i][j]->nb_inputs;k++)
+			{
+				fprintf(myfile,"[%lu][%lu]#%lf\n",i-1,k,mynet->mat[i][j]->weights[k]);
+			}
+			fprintf(myfile,"b %lf\n",mynet->mat[i][j]->bias);
+		}
+		fprintf(myfile,"$\n");
+	}
+	fprintf(myfile,"E");
+	fclose(myfile);
+}
 
+/*struct NN * load_NN(char *name)
+{
+	FILE * myfile;
+	myfile = fopen(name,"r");
+	char* line = NULL
+	struct NN *mynet = malloc(sizeof(struct NN));
+
+
+}
+*/
 struct NN *load_NN(char *filename){
 	FILE *f = fopen(filename,"r");
 	char *line = NULL;

@@ -5,30 +5,26 @@
 
 #include "neural.h"
 
-static struct N { //Neurones
+static double v = 0.1;
+
+void set_learning_rate(double x){v=x;};
+/*
+struct N {
 	double *weights;
 	size_t nb_inputs;
 	struct N **inputs;
-	//struct N *outputs;
 	double bias;
-	double value; //sum(w[i]inputs[i]) + bias
+	double value;
 };
-
-/*struct NN { //Neural Network
-	size_t size; //nb of layers
-	size_t *layersize;
-	struct N **mat; //representation of NN threw a matrix
-};*/
+*/
 
 static double random(void){
 	double random_value;
-    srand (time( NULL));
     random_value = (double)rand()/RAND_MAX*2.0-1.0;
     return random_value;
 }
 
 static double sigmoid(double x){return 1.0/(1.0+exp(-x));}
-static double sigmoid_d(double x){return sigmoid(x)*(1.0-sigmoid(x));}
 
 static struct N *init_N(struct N **inputs,size_t nb_inputs){
 	struct N *Neu = malloc(sizeof(struct N));
@@ -52,6 +48,7 @@ struct NN *init_NN(size_t *layersize,size_t size){
 		size_t sizelayer = layersize[i];
 		MyNet->mat[i] = malloc(sizeof(struct N*)*sizelayer);
 		if(i==0){
+			srand(time(NULL));
 			for(size_t j = 0; j < sizelayer; j++){ //layer inputs 
 				struct N *Neu = init_N(NULL,0);
 				MyNet->mat[i][j] = Neu;
@@ -100,7 +97,6 @@ void backprop(struct NN *MyNet, double *input_t, double *output_t){
 	// deltak = (tk - ok)ok(1-ok)
 	// Dwjk = v*deltak*oj
 	// Dbk = v*deltak*1
-	double v = 0.1;
 	// v = learning rate
 	// wjk = wjk + Dwjk
 	// bjk = bk + Dbk
@@ -141,3 +137,15 @@ void backprop(struct NN *MyNet, double *input_t, double *output_t){
 		}
 	}	
 }
+
+int *get_outputs(struct NN *MyNet, double *out){
+	int *outputs = malloc(sizeof(int)*MyNet->layersize[MyNet->size-1]);
+	for(size_t i = 0; out[i] ;i++){
+		if(out[i] < 0.5)
+			outputs[i] = 0;
+		else
+			outputs[i] = 1;
+	}
+	return outputs;
+}
+
