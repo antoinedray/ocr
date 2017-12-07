@@ -3,11 +3,11 @@
 #include "../mysdl/mysdl.h"
 
 struct BIN_Matrix *IMGtoBIN(SDL_Surface* img)
-{  
-	Uint8 r;
-	Uint8 g;
-	Uint8 b;
-	int height = img->h;
+{
+  Uint8 r;
+  Uint8 g;
+  Uint8 b;
+  int height = img->h;
     int width = img->w;
     int *mat = calloc(width*height, sizeof(int));
     for(int h = 0; height > h; h++)
@@ -29,10 +29,10 @@ struct BIN_Matrix *IMGtoBIN(SDL_Surface* img)
 }
 
 struct *letter_bin(struct BIN_Matrix *mat){
-	struct letter_bin *l = malloc(sizeof(struct letter_bin));
-	l->len = mat->height*mat->width;
-	l->inputs = mat->mat;
+  struct letter_bin *l = malloc(sizeof(struct letter_bin));
+  l->len = mat->height*mat->width;
+  l->inputs = mat->mat;
 }
 struct *letter_bin get_letter(SDL_Surface* img){
-	
+  
 }
