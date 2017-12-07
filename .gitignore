@@ -1,2 +1,11 @@
+# Ignore swap file created by vim
 *.swp
+
+# Ignore mac .DS_Store
 .DS_Store
+
+# Ignore all files created when building project
+*.o
+*.d
+main
+/neuralnet/main
