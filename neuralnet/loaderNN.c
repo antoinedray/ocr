@@ -4,34 +4,7 @@
 #include<string.h>
 #include"neural.h"
 #include"loaderNN.h"
-/*
-void save_NN(struct NN *MyNet){
-	FILE *f = fopen("NNsave.txt","w");
-	if(!f){warn("Not able to create save file");return;}
-	fprintf(f,"%lu \n",MyNet->size);
-	size_t h = 0;
-	while(MyNet->layersize[h]){
-		fprintf(f,"%lu|",MyNet->layersize[h]);
-		h++;
-	}
-	fprintf(f,"\n \n");
-	for(size_t i =0;MyNet->biases[i];i++){
-		for(size_t j=0;j<MyNet->layersize[i+1];j++){
-			fprintf(f,"%lf|",MyNet->biases[i][j]);
-		}
-		fprintf(f,"\n");
-	}
-	fprintf(f,"\n");
-	for(size_t i =0;MyNet->weights[i];i++){
-		for(size_t j=0;j<MyNet->layersize[i];j++){
-			fprintf(f,"%lf|",MyNet->weights[i][j]);
-		}
-		fprintf(f,"\n");
-	}
-	fclose(f);
-	return;
-}
-*/
+
 void save_NN(struct NN *mynet, char * name)
 {
 	FILE * myfile;
@@ -52,16 +25,6 @@ void save_NN(struct NN *mynet, char * name)
 	fclose(myfile);
 }
 
-/*struct NN * load_NN(char *name)
-{
-	FILE * myfile;
-	myfile = fopen(name,"r");
-	char* line = NULL
-	struct NN *mynet = malloc(sizeof(struct NN));
-
-
-}
-*/
 struct NN *load_NN(char *filename){
 	FILE *f = fopen(filename,"r");
 	char *line = NULL;
