@@ -2,7 +2,7 @@
 #include <stdio.h>
 #include <time.h>
 #include <math.h>
-#include "newneural.h"
+#include "neural.h"
 #include "loaderNN.h"
 
 int main(){
@@ -10,7 +10,7 @@ int main(){
 	size_t sizer[4] ={2,2,1};
 	size =sizer;
 	printf("Creating NN: \n");
-	struct NN *MyNet = init_NN(size);
+	struct NN *MyNet = init_NN(size,3);
 	if(!MyNet)
 		printf("Failed! \n");
 	else
