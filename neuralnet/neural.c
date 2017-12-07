@@ -8,7 +8,7 @@
 static double v = 0.1;
 
 void set_learning_rate(double x){v=x;};
-
+/*
 struct N {
 	double *weights;
 	size_t nb_inputs;
@@ -16,6 +16,7 @@ struct N {
 	double bias;
 	double value;
 };
+*/
 
 static double random(void){
 	double random_value;

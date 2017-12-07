@@ -9,6 +9,14 @@ struct NN {
 	struct N ***mat;
 };
 
+struct N{
+	double *weights;
+	size_t nb_inputs;
+	struct N **inputs;
+	double bias;
+	double value;
+};
+
 void set_learning_rate(double x);
 
 struct NN *init_NN(size_t *layersize, size_t size);
