@@ -28,7 +28,7 @@ void XOR_NN(struct NN *MyNet,size_t iter, double learning_rate){
 int main(){
 	size_t layers[3] = {2,2,1};
 	struct NN *MyNet = init_NN(layers,3);
-	XOR_NN(MyNet,1000000,0.1);	
+	XOR_NN(MyNet,10000000,0.01);	
 	double input1[2] = {1,1};
 	double input2[2] = {1,0};
 	double input3[2] = {0,1};

@@ -9,30 +9,21 @@ static double v = 0.1;
 
 void set_learning_rate(double x){v=x;};
 
-static struct N { //Neurones
+struct N {
 	double *weights;
 	size_t nb_inputs;
 	struct N **inputs;
-	//struct N *outputs;
 	double bias;
-	double value; //sum(w[i]inputs[i]) + bias
+	double value;
 };
-
-/*struct NN { //Neural Network
-	size_t size; //nb of layers
-	size_t *layersize;
-	struct N **mat; //representation of NN threw a matrix
-};*/
 
 static double random(void){
 	double random_value;
-    //srand (time( NULL));
     random_value = (double)rand()/RAND_MAX*2.0-1.0;
     return random_value;
 }
 
 static double sigmoid(double x){return 1.0/(1.0+exp(-x));}
-static double sigmoid_d(double x){return sigmoid(x)*(1.0-sigmoid(x));}
 
 static struct N *init_N(struct N **inputs,size_t nb_inputs){
 	struct N *Neu = malloc(sizeof(struct N));
@@ -41,7 +32,6 @@ static struct N *init_N(struct N **inputs,size_t nb_inputs){
 	Neu->weights = malloc(sizeof(double)*nb_inputs);
 	for(size_t i = 0; i<nb_inputs;i++){
 		Neu->weights[i] = random();
-		printf("%lf",Neu->weights[i]);
 	}
 	Neu->value = 0;
 	Neu->bias = random();
