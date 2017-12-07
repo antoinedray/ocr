@@ -39,3 +39,10 @@ etc...
 The nodes are defined by their coordinates in the Neural Network matrix.
 :
 
+### How to use the database generator
+To use the generator, run `./gen.sh <command>`
+There are 3 commands:
+* `-h` for help
+* `-gen` to generate the database
+* `-clean` to clean the database
+To add more fonts, just add .ttf fonts in the fonts folder
