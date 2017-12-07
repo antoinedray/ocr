@@ -5,6 +5,10 @@
 
 #include "neural.h"
 
+static double v = 0.1;
+
+void set_learning_rate(double x){v=x;};
+
 static struct N { //Neurones
 	double *weights;
 	size_t nb_inputs;
@@ -22,7 +26,7 @@ static struct N { //Neurones
 
 static double random(void){
 	double random_value;
-    srand (time( NULL));
+    //srand (time( NULL));
     random_value = (double)rand()/RAND_MAX*2.0-1.0;
     return random_value;
 }
@@ -37,6 +41,7 @@ static struct N *init_N(struct N **inputs,size_t nb_inputs){
 	Neu->weights = malloc(sizeof(double)*nb_inputs);
 	for(size_t i = 0; i<nb_inputs;i++){
 		Neu->weights[i] = random();
+		printf("%lf",Neu->weights[i]);
 	}
 	Neu->value = 0;
 	Neu->bias = random();
@@ -52,6 +57,7 @@ struct NN *init_NN(size_t *layersize,size_t size){
 		size_t sizelayer = layersize[i];
 		MyNet->mat[i] = malloc(sizeof(struct N*)*sizelayer);
 		if(i==0){
+			srand(time(NULL));
 			for(size_t j = 0; j < sizelayer; j++){ //layer inputs 
 				struct N *Neu = init_N(NULL,0);
 				MyNet->mat[i][j] = Neu;
@@ -100,7 +106,6 @@ void backprop(struct NN *MyNet, double *input_t, double *output_t){
 	// deltak = (tk - ok)ok(1-ok)
 	// Dwjk = v*deltak*oj
 	// Dbk = v*deltak*1
-	double v = 0.1;
 	// v = learning rate
 	// wjk = wjk + Dwjk
 	// bjk = bk + Dbk
@@ -141,3 +146,15 @@ void backprop(struct NN *MyNet, double *input_t, double *output_t){
 		}
 	}	
 }
+
+int *get_outputs(struct NN *MyNet, double *out){
+	int *outputs = malloc(sizeof(int)*MyNet->layersize[MyNet->size-1]);
+	for(size_t i = 0; out[i] ;i++){
+		if(out[i] < 0.5)
+			outputs[i] = 0;
+		else
+			outputs[i] = 1;
+	}
+	return outputs;
+}
+
