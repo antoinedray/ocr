@@ -206,3 +206,99 @@ of the leftmost/rightmost pxl of a letter, and -1
   return img;
 }
 
+SDL_Surface* text_blocks(SDL_Surface* img, int scale)
+/*
+** Displays text blocks, depending on scale.
+** 1: boxes around each letter
+** 2: boxes around each word
+** 3: boxes around each paragraph
+*/
+{
+  if (scale == 1)
+    return box_letters(img, /*FIXME, FIXME*/);
+}
+
+SDL_Surface* box_letters(SDL_Surface* img, int lines[], int cols[])
+{ //FIXME Only boxes one letter FIXME FIXME FIXME FIXME FIXME
+  int y;
+  int x;
+  int tmp;
+  int index = 0;
+  int draw = 0;
+  int top_line_drawn = 0;
+  int bot_line_drawn = 0;
+  Uint8 pxlcolor;
+  for (y = 0; y < img->h; y++)
+  {
+    if (lines[y] == 1)
+    {
+      tmp = index;
+      while (cols[tmp] < cols[tmp + 1])
+      {
+        int stop_checking = 0;
+        for (int tmp_y = y; stop_checking != 1; tmp_y++)
+        {
+          for (int check_x = cols[tmp]; check_x < cols[tmp + 1]; check_x++)
+          {
+            pxl = getpixel(img, check_x, tmp_y);
+            SDL_GetRGB(pxl, img->format, &pxlcolor, &pxlcolor, &pxlcolor);
+            if (pxlcolor == 0)
+            {
+              draw_line(img, cols[tmp], cols[tmp + 1], tmp_y - 1);
+              stop_checking = 1;
+            }
+          }
+        }
+        tmp += 2;
+      }
+    }
+    if (lines[y] == 2)
+    {
+      while (cols[index] < cols[index + 1])
+      {
+        int stop_checking = 0;
+        for (int tmp_y = y; stop_checking != 1; tmp_y--)
+        {
+          for (int check_x = cols[index]; check_x < cols[index + 1]; check_x++)
+          {
+            pxl = getpixel(img, check_x, tmp_y);
+            SDL_GetRGB(pxl, img->format, &pxlcolor, &pxlcolor, &pxlcolor);
+            if (pxlcolor == 0)
+            {
+              draw_line(img, cols[index], cols[index+1], tmp_y + 1)
+            }
+          }
+        }
+      }
+      /*int tmp_y = y;
+      do
+      {
+        for (int check_x = columns[index];
+               check_x < columns[index+1]; check_x++)
+        {
+          pxl = getpixel(img,check_x,tmp_y);
+          SDL_GetRGB(pxl, img->format, &pxlcolor, &pxlcolor, &pxlcolor);
+          if (pxlcolor == 0)
+          {
+            draw_line(img, columns[index], columns[index+1],tmp_y+1);
+            bot_line_drawn = 1;
+          }
+        }
+        tmp_y--;
+      }
+      while (bot_line_drawn != 1);
+      draw = 0;
+    }*/
+  }
+  return img;
+}
+
+SDL_Surface* draw_line(SDL_Surface* img, int start_x, int end_x, int y)
+{ //Draws a line on img, at height y, between points s_x and end_x
+  //FIXME
+}
+
+SDL_Surface* draw_column(SDL_Surface* img, start_y, end_y, x)
+{ //Draws a column on img, at width x, between points s_y and end_y
+  //FIXME
+}
