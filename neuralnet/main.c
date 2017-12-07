@@ -15,8 +15,8 @@ int main(){
 		printf("Failed! \n");
 	else
 		printf("Succes! \n");
-	save_NN(MyNet);
-	printf("NN saved \n");
+	//save_NN(MyNet);
+	//printf("NN saved \n");
 	double inputs[2] ={1,1};
 	double *output = feedforward(MyNet,inputs);
 	int i = 0;
@@ -24,6 +24,8 @@ int main(){
 		printf("%lf|",output[i]);
 		i++;
 	}
+	double outputs[1] = {1};
+	backprop(MyNet,inputs,outputs);
 	//printf("Loading NN \n");
 	//struct NN *loaded = load_NN("NNsave.txt");
 	//printf("%lu",loaded->size);
