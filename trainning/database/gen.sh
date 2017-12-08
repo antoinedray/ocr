@@ -54,7 +54,7 @@ if [ "$#" -eq 1 ]; then
         rm -f *${FORMAT}
         echo "[${GREEN}SUCCESS${NC}] Deleting all images previously generated"
 
-    elif [ $1 == "-h" ]; then
+    else
         echo "\n=== HELP ==="
         echo "-gen : Generate the database"
         echo "-clean : Clean the database\n"
