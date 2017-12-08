@@ -69,6 +69,7 @@ struct text* init_text(SDL_Surface* img)
   {
     for (j = 0; j < t->nb_letters; j++)
     {
+      //FIXME
     }
   }
 }
@@ -79,8 +80,5 @@ int get_number_lines(SDL_Surface* img)
   int cols [img->w];
   //FIXME
 }
-
-
-
 
 //size of "n" for " " recognition
