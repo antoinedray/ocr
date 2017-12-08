@@ -1,12 +1,12 @@
 # include "../segmentation/segmentation.h"
 # include "../mysdl/mysdl.h"
 
-struct text
+/*struct text
 {
   struct letter* **mat;
   int lines_nb;
   int nb_letters;
-}
+}*/
 
 int* line_detection(SDL_Surface* img)
 {
@@ -38,14 +38,18 @@ int* line_detection(SDL_Surface* img)
 int* clean_lines(int* lines)
 {
   int index;
+  int index_clean = 1;
   int* lines_cleaned = malloc(sizeof(int));
   lines_cleaned[0] = lines[0];
-  for (index = 0; lines[index + 1] != NULL; index++)
-  {
-    if (lines[index + 1] != lines[index] + 1)
-      lines[clean
-  }
-  return lines;
+  for (index = 1; lines[index + 1] != NULL; index++)
+    if (lines[index] + 1 != lines[index + 1])
+    {
+      lines_cleaned[index_clean] = lines[index];
+      index++;
+      index_clean++;
+      lines_cleaned[index_clean] = lines[index];
+    }
+  return lines_cleaned;
 }
 
 int* column_detection(SDL_Surface* img, int* lines)
