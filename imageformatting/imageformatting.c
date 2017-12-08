@@ -4,6 +4,7 @@
 # include <stdlib.h>
 # include "../mysdl/mysdl.h"
 # include "imageformatting.h"
+# include "../segmentation/segmentation.h"
 
 struct text
 {
@@ -22,7 +23,7 @@ struct letter
   double **mat; //Contains the binarized height*width letter in 0 and 1s
 }
 
-struct letter* initLetter(int topleft_x, int topleft_y,
+struct letter* init_letter(int topleft_x, int topleft_y,
                           int botright_x, int botright_y, SDL_Surface* img)
 {
   struct letter* l = malloc(sizeof(struct letter));
@@ -33,6 +34,7 @@ struct letter* initLetter(int topleft_x, int topleft_y,
   l->height = botright_x - topleft_x;
   l->width = botright_y - topleft_y;
   binarize_letter(img, l);
+  return l;
 }
 
 void binarize_letter(SDL_Surface* img, struct letter* l)
@@ -56,4 +58,10 @@ void binarize_letter(SDL_Surface* img, struct letter* l)
   }
 }
 
-struct 
+struct text* init_text(SDL_Surface* img)
+{
+  struct text* t = calloc(sizeof(struct text));
+  t->lines_nb = get_number_lines(img);
+}
+
+int get_number_lines(SDL_Surface* img
