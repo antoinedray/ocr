@@ -5,7 +5,7 @@
 struct BIN_Matrix{
 	int lines;
 	int cols;
-	int *mat;
+	double *mat;
 };
 
 struct letter_bin{
@@ -13,4 +13,4 @@ struct letter_bin{
 	int *inputs;
 };
 
-struct letter_bin get_letter(SDL_image *img);
+double* get_inputs_NN(struct letter_bin *l);
