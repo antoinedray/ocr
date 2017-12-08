@@ -23,7 +23,7 @@ struct letter
 }
 
 struct letter* initLetter(int topleft_x, int topleft_y,
-                          int botright_x, int botright_y)
+                          int botright_x, int botright_y, SDL_Surface* img)
 {
   struct letter* l = malloc(sizeof(struct letter));
   l->coord_x[0] = topleft_x;
@@ -32,8 +32,7 @@ struct letter* initLetter(int topleft_x, int topleft_y,
   l->coord_y[1] = botright_y;
   l->height = botright_x - topleft_x;
   l->width = botright_y - topleft_y;
-  binarize_letter(int topleft_x, int topleft_y, int botright_x, int botright_y);
-
+  binarize_letter(img, l);
 }
 
 void binarize_letter(SDL_Surface* img, struct letter* l)
@@ -57,3 +56,4 @@ void binarize_letter(SDL_Surface* img, struct letter* l)
   }
 }
 
+struct 
