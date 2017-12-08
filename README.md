@@ -5,16 +5,21 @@
 Report must be 50 pages long. [Shared Latex](https://www.sharelatex.com/7144692721ntkmzppcsmnk)
 
 ## The structure of the project
+
 ### MySDL/ [COMPLETE]
 Contains basic functions for mysdl given in the practical on SDL
+
 ### UI/ [COMPLETE]
 Contains all the gtk+3 function for the ui
+
 ### Preproc/
 Contains functions for the preprocessing:
 * Grayscale
 * Otzu (black and white)
+
 ### Segmentation/
 Contains all the functions for segmentation and character recognition
+
 ### Neuralnet/
 The Neural Network has the following struct : It is a matrix of Nodes(see below).
 A node is constituted of a set of inputs (previous layer) and a set of weights(vertices connecting nodes between them).
@@ -37,5 +42,14 @@ x.x
 etc...
 ```
 The nodes are defined by their coordinates in the Neural Network matrix.
-:
+#### Data Base/
 
+
+### How to use the database generator
+To use the generator, run `./gen.sh <command>`
+There are 3 commands:
+* `-h` for help
+* `-gen` to generate the database
+* `-clean` to clean the database
+
+To add more fonts, just add .ttf fonts in the fonts folder

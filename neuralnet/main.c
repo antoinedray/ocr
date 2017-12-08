@@ -3,8 +3,10 @@
 #include <time.h>
 #include <math.h>
 #include <assert.h>
+
 #include "neural.h"
 #include "loaderNN.h"
+#include "data_base.h"
 
 void XOR_NN(struct NN *MyNet,size_t iter, double learning_rate){
 	set_learning_rate(learning_rate);
@@ -22,24 +24,47 @@ void XOR_NN(struct NN *MyNet,size_t iter, double learning_rate){
 		backprop(MyNet,input3,output3);
 		backprop(MyNet,input4,output4);
 	}
-	//save the NN
 }
 
-int main(){
-	size_t layers[3] = {2,2,1};
-	struct NN *MyNet = init_NN(layers,3);
-	XOR_NN(MyNet,10000000,0.01);	
-	double input1[2] = {1,1};
-	double input2[2] = {1,0};
-	double input3[2] = {0,1};
-	double input4[2] = {0,0};
-	double *output = feedforward(MyNet,input1);
-	printf("1 XOR 1 : %lf \n",output[0]);
-	output = feedforward(MyNet,input2);
-	printf("1 XOR 0 : %lf \n",output[0]);
-	output = feedforward(MyNet,input3);
-	printf("0 XOR 1 : %lf \n",output[0]);
-	output = feedforward(MyNet,input4);
-	printf("0 XOR 0 : %lf \n",output[0]);
+void OCR_NN(struct NN *MyNet, size_t iter, double learning_rate){
+	set_learning_rate(learning_rate);
+	//maybe we should add a function to generate letters
+	double **inputs = 0 //double get **inputs (matrix of all inputs)
+	double **outputs = 0 //double get **ouputs (matrix of all outputs)
+	size_t size_DB = 0; //set the data_base size(nb of lines of DB)
+	for(size_t i = 0; i < iter; i++){
+		for(size_t j = 0; j < size_DB; j++){
+			backprop(MyNet,inputs[j], outputs[j]);
+		}
+	}
+}
+
+int main(int argc,char* argv){
+	if (argv == "XOR"){
+		size_t layers[3] = {2,2,1};
+		struct NN *MyNet = init_NN(layers,3);
+		XOR_NN(MyNet,10000000,0.01);
+		save_NN(MyNet,"XOR_NN");	
+		double input1[2] = {1,1};
+		double input2[2] = {1,0};
+		double input3[2] = {0,1};
+		double input4[2] = {0,0};
+		double *output = feedforward(MyNet,input1);
+		printf("1 XOR 1 : %lf \n",output[0]);
+		output = feedforward(MyNet,input2);
+		printf("1 XOR 0 : %lf \n",output[0]);
+		output = feedforward(MyNet,input3);
+		printf("0 XOR 1 : %lf \n",output[0]);
+		output = feedforward(MyNet,input4);
+		printf("0 XOR 0 : %lf \n",output[0]);
+	}
+	else if (argv == "OCR"){
+		size_t layers[3] = {1024,512,62};
+		struct NN *MyNet = init_NN(layers,3);
+		OCR_NN(MyNet,10000,0.2);
+		save_NN(MyNet,"OCR_NN");
+	}
+	else
+		warn("Incorrect arguments");
 	return 1;
 }
