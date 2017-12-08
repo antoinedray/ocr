@@ -9,6 +9,14 @@ void save_NN(struct NN *mynet, char * name)
 {
 	FILE * myfile;
 	myfile = fopen(name,"w");
+	fprintf(myfile, "%lu\n[",mynet->size);
+	for(size_t i = 0; i < mynet->size;i++)
+	{
+		fprintf(myfile,"%lu");
+		if (i < mynet->size-1)
+			frprintf(myfile,",");
+	}
+	fprintf(myfile,"]\n");
 	for(size_t i = 0; i < mynet->size; i++)
 	{
 		for (size_t j = 0; j < mynet->layersize[i]; j++)
@@ -21,10 +29,67 @@ void save_NN(struct NN *mynet, char * name)
 		}
 		fprintf(myfile,"$\n");
 	}
+
 	fprintf(myfile,"E");
 	fclose(myfile);
 }
 
+struct NN * load_NN(char *name)
+{
+	FILE *file = fopen(fileName,r)
+	char prev = "";
+	char c = ""
+	size_t s = 0;
+	struct NN *mynet = malloc(sizeof(struct NN));
+	double = 
+	while ((c = fgetc(file)) != EOF)
+
+
+
+
+
+	FILE * myfile;
+	myfile = fopen(name,"r");
+	char* line = NULL
+	struct NN *mynet = malloc(sizeof(struct NN));
+	size_t mynet_size = 0;
+	mynet_size = (size_t)fgetc(file);
+	size_t s = 0;
+	char c = "";
+	
+	for (int i = 0; i < 2; i++)
+		fgetc(file);
+	
+	size_t * mynet_layers = malloc(mynet_size);
+	
+	for (size_t i =0; i < mynet_size; i++)
+	{
+		s = 0;
+		c = "";
+		while((c = fgetc(myfile) != "," && c != "]")
+			s = 10 * s + (size_t)c;
+		mynet_layers[i] = s;
+	}
+	fgetc(myfile);
+	fgetc(myfile);
+
+	size
+	for (size_t i = 0; i < mynet_size; i++)
+	{
+		for (size_t j = 0; j < mynet_layers[i]; j++)
+		{
+			struct mynn = 
+			s = 0;
+			s = "";
+			while((c = fgetc(myfile) != "#" && c != "\n" && c != "]")
+				s = 10 * s + (size_t)s;
+			if
+		}
+	}
+
+}
+
+/*
 struct NN *load_NN(char *filename){
 	FILE *f = fopen(filename,"r");
 	char *line = NULL;
@@ -49,3 +114,4 @@ struct NN *load_NN(char *filename){
 	}	
 	return MyNet;
 }
+*/
