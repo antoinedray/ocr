@@ -8,7 +8,7 @@
 
 struct text
 {
-  struct letter* **mat;
+  struct letter* **text;
   int lines_nb;
   int nb_letters;
 }
@@ -60,14 +60,24 @@ void binarize_letter(SDL_Surface* img, struct letter* l)
 struct text* init_text(SDL_Surface* img)
 {
   struct text* t = calloc(sizeof(struct text));
-  t->lines_nb = get_number_lines(img);
+  t->lines_nb = get_number_lines(img); //FIXME
+  t->nb_letters = get_number_letters(img); //FIXME
+  //FIXME add letters in the mat
+  int i;
+  int j;
+  for (i = 0; i < t->lines_nb; i++)
+  {
+    for (j = 0; j < t->nb_letters; j++)
+    {
+    }
+  }
 }
 
 int get_number_lines(SDL_Surface* img)
 {
   int lines [img->h];
   int cols [img->w];
-
+  //FIXME
 }
 
 

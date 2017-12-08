@@ -12,5 +12,5 @@ SDL_Surface* line_detection(SDL_Surface* img)
 {
   Uint8 pxlcolor;
   Uint32 pxl;
-
+  for (int
 }
