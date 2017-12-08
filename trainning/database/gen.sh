@@ -55,9 +55,9 @@ if [ "$#" -eq 1 ]; then
         echo "[${GREEN}SUCCESS${NC}] Deleting all images previously generated"
 
     else
-        echo "\n=== HELP ==="
-        echo "-gen : Generate the database"
-        echo "-clean : Clean the database\n"
+        echo "\n=========== HELP ============="
+        echo "-gen : Generate the database ="
+        echo "-clean : Clean the database  =\n"
     fi
 
 else
