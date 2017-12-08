@@ -18,7 +18,7 @@ if len(sys.argv) != 2:
 else:
     if sys.argv[1] == "-gen":
         subprocess.run(['./gen.sh'])
-    if sys.argv[1] == "-clean":
+    elif sys.argv[1] == "-clean":
         for root, dirs, files in os.walk(DIR):
             for f in files:
                 if f.endswith(FORMAT):
