@@ -20,4 +20,7 @@ SDL_Surface* draw_line(SDL_Surface* img, int start_x, int end_x, int y);
 SDL_Surface* draw_column(SDL_Surface* img, int start_y, int end_y, int x);
 int checklines(int l[], int nb_elts, int res[]);
 SDL_Surface* whole_segmentation(SDL_Surface* img);
+int get_number_letters(int cols[]);
+int get_number_lines(int lines[]);
+
 #endif

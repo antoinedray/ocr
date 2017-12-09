@@ -237,10 +237,10 @@ SDL_Surface* box_letters(SDL_Surface* img, int lines[], int cols[])
  **  name: box_fit
  **  desc: take the box containing the letter and fit it in an optimal box
  */
-struct letter* box_fit(struct letter* img) 
+/*struct letter* box_fit(struct letter* img) 
 {
   //FIXME
-}
+}*/
 
 SDL_Surface* draw_line(SDL_Surface* img, int start_x, int end_x, int y)
 { //Draws a line on img, at height y, between points s_x and end_x
@@ -257,16 +257,18 @@ SDL_Surface* draw_column(SDL_Surface* img, int start_y, int end_y, int x)
 }
 
 
-struct text* image_to_struct_text(SDL_Surface* img, int lines[], int cols[])
-{ //
+/*struct text* image_to_struct_text(SDL_Surface* img, int lines[], int cols[])
+{ //FIXME
   struct text *t = malloc(sizeof(struct text));
-}
+}*/
 
 int get_number_letters(int cols[])
 {
   int count_letters = 0;
-  for (int tmp = 0, int count_it = 1;
-      tmp < sizeof(cols)/sizeof(int);
+  size_t tmp;
+  int count_it;
+  for (tmp = 0, count_it = 1;
+      tmp < sizeof(*cols)/sizeof(int);
       tmp++, count_it = !count_it)
   {
     if (cols[tmp] == -1 || cols[tmp] == -42)
@@ -279,18 +281,23 @@ int get_number_letters(int cols[])
     else
       count_it = 1;
   }
+  return count_letters;
 }
 
 int get_number_lines(int lines[])
 {
   int count_lines = 0;
-  for (int tmp = 0; tmp < sizeof(lines)/sizeof(int); tmp++)
+  size_t tmp;
+  for (tmp = 0; tmp < sizeof(*lines)/sizeof(int); tmp++)
     if (lines[tmp] == 2)
       count_lines++;
-  return count_lines
+  return count_lines;
 }
 
-
+/*struct letter* box_to_letter(SDL_Surface* img, int lines[], int cols[])
+{
+//FIXME
+}*/
 /*
   int y;
   int tmp;
@@ -351,11 +358,11 @@ int get_number_lines(int lines[])
 */
 //Compute width of an "n" 
 
-
+/*
 int space_threshold(int cols[])
 {
   int max_sp = 0;
-  for (size_t i = 1; i < sizeof(cols)/sizeof(int); i++)
+  for (size_t i = 1; i < sizeof(*cols)/sizeof(int); i++)
     if (cols[i] - cols[i-1] > maxsp)
       max_sp = cols[i] - cols[i-1];
   return max_sp;
@@ -366,4 +373,4 @@ int is_space(int pos1, int pos2, int threshold)
   if (pos2 - pos1 < threshold)
     return 0;
   return 1;
-}
+}*/
