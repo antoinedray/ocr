@@ -2,15 +2,11 @@
 #include <stdlib.h>
 #include "../mysdl/mysdl.h"
 
-struct BIN_Matrix{
-	int lines;
-	int cols;
-	int *mat;
-};
-
 struct letter_bin{
-	size_t len;
-	int *inputs;
+    size_t len; //height*width
+    double *inputs; //Black == 1 , White == 0
 };
 
-struct letter_bin get_letter(SDL_image *img);
+double **get_database_in(size_t nb_fonts, size_t nb_characters);
+
+double **get_database_out(size_t nb_characters);

@@ -51,7 +51,7 @@ GtkWidget* create_window() {
 
   /* Set up the UI */
   window = gtk_window_new(GTK_WINDOW_TOPLEVEL);
-  gtk_window_set_title(GTK_WINDOW (window), "OCR");
+  gtk_window_set_title(GTK_WINDOW (window), "OCR by OCR404");
 
   box = gtk_box_new(GTK_ORIENTATION_VERTICAL, 5);
   openf = gtk_button_new_with_label("OPEN IMAGE");

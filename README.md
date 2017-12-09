@@ -42,7 +42,8 @@ x.x
 etc...
 ```
 The nodes are defined by their coordinates in the Neural Network matrix.
-:
+#### Data Base/
+
 
 ### How to use the database generator
 To use the generator, run `./gen.sh <command>`
