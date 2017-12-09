@@ -28,10 +28,9 @@ void XOR_NN(struct NN *MyNet,size_t iter, double learning_rate){
 
 void OCR_NN(struct NN *MyNet, size_t iter, double learning_rate, size_t nb_fonts){
 	set_learning_rate(learning_rate);
-	//maybe we should add a function to generate letters
 	double **inputs = get_database_in(nb_fonts, 62);
-	double **outputs = 0 //double get **ouputs (matrix of all outputs)
-	size_t size_DB = 0; //set the data_base size(nb of lines of DB)
+	double **outputs = get_database_out(62);
+	size_t size_DB = nb_fonts*62;
 	for(size_t i = 0; i < iter; i++){
 		for(size_t j = 0; j < size_DB; j++){
 			backprop(MyNet,inputs[j], outputs[j]);
@@ -61,7 +60,7 @@ int main(int argc,char* argv){
 	else if (argv == "OCR"){
 		size_t layers[3] = {1024,512,62};
 		struct NN *MyNet = init_NN(layers,3);
-		OCR_NN(MyNet,10000,0.2);
+		OCR_NN(MyNet,10000,0.2,60); //get nb_fonts
 		save_NN(MyNet,"OCR_NN");
 	}
 	else
