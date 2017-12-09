@@ -8,7 +8,7 @@ Report must be 50 pages long. [Shared Latex](https://www.sharelatex.com/71446927
 ## The structure of the project
 
 | Parts         | State        | Possible upgrades ?  |
-| ------------- |:------------:| --------------------:|
+| ------------- | ------------ | -------------------- |
 | MySDL         | Finished     | NO                   |
 | UI            | Finished     | YES (priority 4)     |
 | Preprocessing | Finished     | YES (priority 3)     |
