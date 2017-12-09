@@ -5,17 +5,33 @@
  *  process
  */
 
-#include"segmentation.h"
+# include"segmentation.h"
 
-SDL_Surface* Line_Detection(SDL_Surface* img)
+
+static SDL_Surface* whole_segmentation(SDL_Surface* img)
 {
-  Uint32 pxl;
-  Uint8 pxlcolor;
-  int list_lines[img->h];             //img->BnW(img) + init list line
+  int lines[img->h];
+  Line_Detection(img, lines);
+  int height = img->h;
+  int lines[height];
+  checklines(list_lines, height, lines);
+  int columns[(img->w)*3];
+  for (int x = 0; x < img->w; x++)
+    columns[x] = -1;
+  char_detection(img, lines, columns);
+  return(Display_Character_Boxes(img, lines,columns)/*text_blocks(img, 1, lines, columns)*/);
+}
+
+
+int  Line_Detection(SDL_Surface* img, int list_lines)
+{
+  Uint32      pxl;
+  Uint8       pxlcolor;
+  int         list_lines[img->h];
   for (int x = 0; x < img->h; x++)
     list_lines[x] = -1;
-  int i = 0; //list index
-  int prev_pxl = 0; //true or false depending on if the prev pixel was black
+  int         i = 0; //list index
+  int         prev_pxl = 0;
   for (int y = 0; y < img->h; y++)
   {
     for (int x = 0; x < img->w; x++)
@@ -39,15 +55,9 @@ SDL_Surface* Line_Detection(SDL_Surface* img)
         prev_pxl = 0;
     }
   }
-  int height = img->h;
-  int lines[height];
-  checklines(list_lines, height, lines);
-  int columns[(img->w)*3];
-  for (int x = 0; x < img->w; x++)
-    columns[x] = -1;
-  char_detection(img, lines, columns);
-  return(Display_Character_Boxes(img, lines,columns)/*text_blocks(img, 1, lines, columns)*/);
+  return list_lines[img->h];
 }
+
 
 //removes lines from list when less than 5 consecutive line
 int checklines(int l[], int nb_elts, int res[])
@@ -163,12 +173,12 @@ SDL_Surface* DisplayLines (SDL_Surface* img, int y[], int nb_elts)
 SDL_Surface* Display_Character_Boxes(SDL_Surface* img, int startlines[],
     int columns[])
   /*
-     Display the lines and the columns at the same time, using the two lists
-     Reminder: lines is filled with -1 (nothing),
-     1 (top char line), 2 (end char line)
-     columns is filled with the index (in pxl)
-     of the leftmost/rightmost pxl of a letter, and -1
-     */
+  **   Display the lines and the columns at the same time, using the two lists
+  **   Reminder: lines is filled with -1 (nothing),
+  **   1 (top char line), 2 (end char line)
+  **   columns is filled with the index (in pxl)
+  **   of the leftmost/rightmost pxl of a letter, and -1
+  */
 {
   for (int l = 0; l < img->h; l++)
     if (startlines[l] == 1 || startlines[l] == 2)
@@ -272,7 +282,7 @@ SDL_Surface* box_letters(SDL_Surface* img, int lines[], int cols[])
     }
   }
   return (img);
-}
+}*/
 
 SDL_Surface* draw_line(SDL_Surface* img, int start_x, int end_x, int y)
 { //Draws a line on img, at height y, between points s_x and end_x
@@ -287,5 +297,3 @@ SDL_Surface* draw_column(SDL_Surface* img, int start_y, int end_y, int x)
     putpixel(img, x, start_y, SDL_MapRGB(img->format, 255, 0, 0));
   return (img);
 }
-
-*/

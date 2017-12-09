@@ -8,50 +8,69 @@
   int nb_letters;
 }*/
 
-int* line_detection(SDL_Surface* img)
+int       line_detection(SDL_Surface* img)
 {
-  Uint8 pxlcolor;
-  Uint32 pxl;
-  int index;
-  int x;
-  int y;
-  int black_pixels_on_line;
-  int* lines = malloc(sizeof(int));
+  Uint8   pxlcolor;
+  Uint32  pxl;
+  int     index = 0;
+  int     x;
+  int     y;
+  int     prev_pxl_black = 0;
+  int     lines [img->h];
   for (y = 0; y < img->h; y++)
   {
-    black_pixels_on_line = 0;
-    for (x = 0; x < img->w; x++)
+    for (x = 0, prev_pxl_black = 0; x < img->w; x++)
     {
       pxl = getpixel(img, x, y);
       SDL_GetRGB(pxl, img->format, &pxlcolor, &pxlcolor, &pxlcolor);
-      if (black_pixels_on_line >= 100)
+      if (pxlcolor == 0)
       {
-        lines[index] = y;
-        index++;
-        break;
+        if (prev_pxl_black == 1)
+        {
+          printf("lines[%i] = %i.\n",index,y);
+          lines[index] = y;
+          index++;
+          break;
+        }
+        else
+          prev_pxl_black = 1;
       }
+      else
+        prev_pxl_black = 0;
     }
   }
-  return lines;
+  printf("I beg you please reach this point.");
+  index++;
+  lines[index] = -42;
+  return lines[img->h];
 }
 
-int* clean_lines(int* lines)
+int    *clean_lines(int* lines)
 {
-  int index;
-  int index_clean = 1;
-  int* lines_cleaned = malloc(sizeof(int));
+  int   index;
+  int   index_clean     = 1;
+  int  *lines_cleaned   = malloc(sizeof(int));
   lines_cleaned[0] = lines[0];
-  for (index = 1; lines[index + 1] != NULL; index++)
+  for (index = 1; lines[index + 1] != -42; index++)
+  {
     if (lines[index] + 1 != lines[index + 1])
     {
       lines_cleaned[index_clean] = lines[index];
       index++;
       index_clean++;
+      lines_cleaned[index_clean] = -1;
+      index_clean++;
       lines_cleaned[index_clean] = lines[index];
+      index_clean++;
     }
+  }
+  lines_cleaned[index_clean] = lines[index];
+  lines_cleaned[index_clean + 1] = -1;
+  lines_cleaned[index_clean + 2] = -42;
   return lines_cleaned;
 }
 
+/*
 int* column_detection(SDL_Surface* img, int* lines)
 {
   Uint8 pxlcolor;
@@ -80,3 +99,4 @@ int* column_detection(SDL_Surface* img, int* lines)
 
   return cols;
 }
+*/

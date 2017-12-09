@@ -78,7 +78,7 @@ int get_number_lines(SDL_Surface* img)
 {
   int lines [img->h];
   int cols [img->w];
-  //FIXME
+  //FIXME FIXME
 }
 
 //size of "n" for " " recognition
