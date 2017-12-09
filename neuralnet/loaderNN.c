@@ -61,16 +61,21 @@ static double todouble(char*line, size_t len)
 struct NN * load_NN(char *name)
 {
 	FILE *file = fopen(name,"r");
+    if (file == NULL) {
+        printf("File does not exists");
+        return;
+    }
 	char * line = NULL;
 	size_t len = 0;
 	size_t mynb = 0;
 	double *myw = NULL;
 	size_t lpos = 0;
 	size_t posin = 0;
+    ssize_t linelen;
 
-	getline(&line,&len,file);
+	linelen = getline(&line, &len, file);
 	mynb = (size_t)atoi(line);
-	
+
 	getline(&line,&len, file);
 	size_t index = 0;
 	//size_t s = 0;
@@ -158,26 +163,12 @@ struct NN * load_NN(char *name)
 					}
 					else
 					{
-						
+
 					}
 				}
 			}
 		}
 	}
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
 
 
 
@@ -187,21 +178,35 @@ struct NN * load_NN(char *name)
 
 
 
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 	while ((c = fgetc(file)) != EOF)
 	{
 		if (c=="\n"||c="{"||c=="}"||c=="["||c=="]"||c=="b"||c=="#")
@@ -242,9 +247,9 @@ struct NN * load_NN(char *name)
 	struct
 	for (int i = 0; i < 2; i++)
 		fgetc(file);
-	
+
 	size_t * mynet_layers = malloc(mynet_size);
-	
+
 	for (size_t i =0; i < mynet_size; i++)
 	{
 		s = 0;
@@ -256,7 +261,7 @@ struct NN * load_NN(char *name)
 	fgetc(myfile);
 	fgetc(myfile);
 
-	
+
 	for (size_t i = 0; i < mynet_size; i++)
 	{
 		size_t posx = 0;
@@ -272,7 +277,7 @@ struct NN * load_NN(char *name)
 			posx = s;
 			s = 0;
 			while((c = fgetc(myfile) != "]")
-				s = 
+				s =
 		}
 	}
 }
