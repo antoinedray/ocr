@@ -16,12 +16,12 @@ all: main
 
 main: ${OBJ}
 
-.PHONY: clean
-
 clean:
 	${RM} ${OBJ} # remove object files
 	${RM} ${DEP} # remove dependency files
 	${RM} main # remove main program
+
+.PHONY: clean all main
 
 # include dependency files
 -include ${DEP}

@@ -4,6 +4,9 @@
  * description: link all the parts together and run everything
  */
 
+#include <dirent.h>
+#include <unistd.h>
+
 #include <gtk/gtk.h>
 #include <err.h>
 #include <SDL/SDL.h>
@@ -12,7 +15,6 @@
 #include "mysdl/mysdl.h"
 #include "preproc/preproc.h"
 #include "segmentation/segmentation.h"
-
 
 GtkWidget *window;
 
@@ -44,7 +46,7 @@ void run_convert(GtkButton* convert)
 }
 
 // The main function only run the gtk+3 ui, PLEASE DO NOT MODIFY
-int main (int argc, char *argv[])
+int main (/* int argc, char *argv[] */)
 {
   GdkPixbuf *icon;
   gtk_init (&argc, &argv);
