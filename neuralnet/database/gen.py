@@ -8,6 +8,8 @@ FORMAT = ".jpg"
 # Get the path to the directory
 DIR = os.path.dirname(os.path.realpath(__file__))
 
+DATAFILE="data.txt"
+
 # Custom colors for outputs
 class bcolors:
     GREEN='\033[0;32m'
@@ -15,10 +17,14 @@ class bcolors:
 
 if len(sys.argv) != 2:
     print("Invalid parameter, run 'python3 gen.py -h'")
+
 else:
     if sys.argv[1] == "-gen":
+        os.remove(DATAFILE)
         subprocess.run(['./gen.sh'])
+
     elif sys.argv[1] == "-clean":
+        os.remove(DATAFILE)
         for root, dirs, files in os.walk(DIR):
             for f in files:
                 if f.endswith(FORMAT):

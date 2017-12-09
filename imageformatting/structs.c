@@ -1,29 +1,7 @@
-//Imageformatting.c : New implementation of basically every segmentation func
+# include "structs.h"
+# include "segmentation.h"
 
-# include <stdio.h>
-# include <stdlib.h>
-# include "../mysdl/mysdl.h"
-# include "imageformatting.h"
-# include "../segmentation/segmentation.h"
-
-struct text
-{
-  struct letter* **text;
-  int lines_nb;
-  int nb_letters;
-}
-
-struct letter
-{
-  int coord_x [2];
-  int coord_y [2];
-  int height; //int coord_topleft
-  int width; //int coord_botright
-  double **mat; //Contains the binarized height*width letter in 0 and 1s
-}
-
-struct letter* init_letter(int topleft_x, int topleft_y,
-                          int botright_x, int botright_y, SDL_Surface* img)
+struct letter* init_letter(int topleft_x, int topleft_y, int botright_x, int botright_y, SDL_Surface* img)
 {
   struct letter* l = malloc(sizeof(struct letter));
   l->coord_x[0] = topleft_x;
@@ -48,8 +26,8 @@ void binarize_letter(SDL_Surface* img, struct letter* l)
     for (y = l->coord_y[0]; y < l->coord_y[1]; y++)
     {
       pxl = getpixel(img,x,y);
-      SDL_GetRGB(pxl, img->format, &pxlcolor, &pxlcolor, &pxlcolor);
-      if (pxlcolor == 0)
+      SDL_GetRGB(pxl, img->format, &color, &color, &color);
+      if (color == 0)
         mat[y][x] = 1;
       else
         mat[y][x] = 0;
@@ -59,9 +37,9 @@ void binarize_letter(SDL_Surface* img, struct letter* l)
 
 struct text* init_text(SDL_Surface* img)
 {
-  struct text* t = calloc(sizeof(struct text));
-  t->lines_nb = get_number_lines(img); //FIXME
-  t->nb_letters = get_number_letters(img); //FIXME
+  struct text* t = malloc(sizeof(struct text));
+  t->lines_nb = get_number_lines(img);
+  t->nb_letters = get_number_letters(img);
   //FIXME add letters in the mat
   int i;
   int j;
@@ -73,12 +51,3 @@ struct text* init_text(SDL_Surface* img)
     }
   }
 }
-
-int get_number_lines(SDL_Surface* img)
-{
-  int lines [img->h];
-  int cols [img->w];
-  //FIXME
-}
-
-//size of "n" for " " recognition

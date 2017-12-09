@@ -9,11 +9,13 @@ NC='\033[0m' # No Color
 FONTS='fonts/*' # Path to font folder
 SIZE='32x32' # Size of the image
 FORMAT='.jpg' # Image format
+DATAFILE='data.txt'
 
+touch $DATAFILE
 
 listFonts="Arial Georgia Verdana"
 listMaj="A B C D E F G H I J K L M N O P Q R S T U V W X Y Z"
-listMin="q w e r t y u i o p a s d f g h j k l z x c v b n m"
+listMin="a b c d e f g h i j k l m n o p q r s t u v w x y z"
 listNum="0 1 2 3 4 5 6 7 8 9"
 
 for f in $FONTS
@@ -27,6 +29,7 @@ do
         convert -size ${SIZE}     -gravity center  \
                 -font ${f}        -pointsize 25       label:${c} \
                 ${c}_maj_${ff}${FORMAT}
+        echo "${c}_maj_${ff}${FORMAT}" >> $DATAFILE
     done
     echo "[${GREEN}SUCCESS${NC}] Generating ${ff} Uppercases"
 
@@ -35,6 +38,7 @@ do
         convert -size ${SIZE}     -gravity center  \
                 -font ${f}        -pointsize 25       label:${c} \
                 ${c}_min_${ff}${FORMAT}
+        echo "${c}_min_${ff}${FORMAT}" >> $DATAFILE
     done
     echo "[${GREEN}SUCCESS${NC}] Generating ${ff} Lowercases"
 
@@ -43,6 +47,7 @@ do
         convert -size ${SIZE}     -gravity center  \
                 -font ${f}        -pointsize 25       label:${c} \
                 ${c}_num_${ff}${FORMAT}
+        echo "${c}_num_${ff}${FORMAT}" >> $DATAFILE
     done
     echo "[${GREEN}SUCCESS${NC}] Generating ${ff} numbers"
 done
