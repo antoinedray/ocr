@@ -12,7 +12,7 @@
 # include "mysdl/mysdl.h"
 # include "preproc/preproc.h"
 # include "segmentation/segmentation.h"
-# include "imageformatting/segmentation.c"
+# include "imgformat/segmentation.c"
 
 GtkWidget *window;
 

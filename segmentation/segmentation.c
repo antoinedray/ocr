@@ -6,7 +6,7 @@
 */
 
 #include "segmentation.h"
-#include "../imageformatting/structs.h"
+#include "../imgformat/structs.h"
 
 SDL_Surface* whole_segmentation(SDL_Surface* img)
 {
