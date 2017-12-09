@@ -226,7 +226,8 @@ SDL_Surface* text_blocks(SDL_Surface* img, int scale, int lines[], int cols[])
 }
 */
 
-SDL_Surface* box_letters(SDL_Surface* img, int lines[], int cols[])
+SDL_Surface* box_letters(SDL_Surface* img, int lines[], int cols[]) {
+
 }
 
 /*
@@ -238,7 +239,6 @@ SDL_Surface* box_fit(SDL_Surface* img) {
     for(int h = 0; h < img->h; h++) {
         //
     }
-<<<<<<< HEAD
   }
   return (img);
 }
