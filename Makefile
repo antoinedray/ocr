@@ -21,7 +21,7 @@ clean:
 	${RM} ${DEP} # remove dependency files
 	${RM} main # remove main program
 
-.PHONY: clean all main
+#.PHONY: clean all main
 
 # include dependency files
 -include ${DEP}

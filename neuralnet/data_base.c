@@ -1,5 +1,6 @@
 #include <stdio.h>
 #include "data_base.h"
+#include "neural.h"
 
 static struct letter_bin *IMGtoBIN(SDL_Surface* img)
 {
@@ -37,26 +38,29 @@ the mat will have the following struct: nb_fonts*nb_characters(62 by default) = 
 order : same font -> maj / min / num
 */
 
-double **get_database_in(size_t nb_fonts,size_t nb_characters) {
-    SDL_Surface* letter_sdl;
-    FILE *fp = fopen("database/data.txt", "r");
-    char *line = NULL;
-    size_t linecap = 0;
-    ssize_t linelen;
-    while((linelen = getline(&line, &linecap, fp)) > 0) {
-        letter_sdl = load_image(line);
-        struct letter_bin *letter = IMGtoBIN(letter_sdl);
-        // Plug the struct letter_bin to the program
-    }
-    free(letter_sdl);
+double **get_database_in(char *file) {
+    SDL_Surface* letter_sdl = load_image(file);
+    struct letter_bin *letter = IMGtoBIN(letter_sdl);
+    return letter->text;
 }
 
 double **get_database_out(size_t nb_characters){
     double **outputs = malloc(sizeof(double*)*nb_characters);
     for(size_t i = 0; i < nb_characters;i++){
-        outputs[i] = calloc(nb_characters, sizeof(double));
-        outputs[i][i] = 1.0;
+        outputs[i] = calloc(nb_characters, sizeof(double)); // Why ??????
+        outputs[i][i] = 1.0; // Why ????
     }
     return outputs;
 }
 
+void train(size_t iter) {
+    FILE *fp = fopen("database/data.txt", "r");
+    char *line = NULL;
+    size_t linecap = 0;
+    ssize_t linelen;
+    double **train = malloc(sizeof(double*))
+    while((linelen = getline(&line, &linecap, fp)) > 0) {
+        train = get_database_in(line);
+        // Here it runs the training with one character with one font
+    }
+}

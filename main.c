@@ -50,7 +50,7 @@ void run_convert(GtkButton* convert)
 }
 
 // The main function only run the gtk+3 ui, PLEASE DO NOT MODIFY
-int main (/* int argc, char *argv[] */)
+int main (int argc, char *argv[])
 {
   GdkPixbuf *icon;
   gtk_init (&argc, &argv);

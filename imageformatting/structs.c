@@ -25,8 +25,8 @@ void binarize_letter(SDL_Surface* img, struct letter* l)
     for (y = l->coord_y[0]; y < l->coord_y[1]; y++)
     {
       pxl = getpixel(img,x,y);
-      SDL_GetRGB(pxl, img->format, &pxlcolor, &pxlcolor, &pxlcolor);
-      if (pxlcolor == 0)
+      SDL_GetRGB(pxl, img->format, &color, &color, &color);
+      if (color == 0)
         mat[y][x] = 1;
       else
         mat[y][x] = 0;
