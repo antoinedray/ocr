@@ -38,10 +38,10 @@ the mat will have the following struct: nb_fonts*nb_characters(62 by default) = 
 order : same font -> maj / min / num
 */
 
-double **get_database_in(char *file) {
+double *get_database_in(char *file) {
     SDL_Surface* letter_sdl = load_image(file);
     struct letter_bin *letter = IMGtoBIN(letter_sdl);
-    return letter->text;
+    return letter->inputs;
 }
 
 double **get_database_out(size_t nb_characters){
@@ -53,7 +53,7 @@ double **get_database_out(size_t nb_characters){
     return outputs;
 }
 
-void train(size_t iter) {
+void train(struct NN *MyNet) {
     FILE *fp = fopen("database/data.txt", "r");
     if (fp == NULL) {
         printf("Data file does not exists");
@@ -62,9 +62,15 @@ void train(size_t iter) {
     char *line = NULL;
     size_t linecap = 0;
     ssize_t linelen;
-    double **train = malloc(sizeof(double*))
+	size_t i = 0;
+	double **output_train = get_database_out(62);
     while((linelen = getline(&line, &linecap, fp)) > 0) {
         train = get_database_in(line);
-        // Here it runs the training with one character with one font
+		backprop(MyNet,train,output_train[i]);
+        if (i == 61)
+			i = 0;
+		else
+			i += 1 ;
     }
+	return;
 }
