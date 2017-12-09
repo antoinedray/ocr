@@ -43,8 +43,6 @@ int           Line_Detection(SDL_Surface* img, int list_lines[])
         if(prev_pxl == 1) //is previous pixel black?
         {
           list_lines[y] = 1;
-          //consider curr line to be a line written on
-          //if at least 2 pixels follow each other
           i++;
           break;
         }
@@ -257,3 +255,102 @@ SDL_Surface* draw_column(SDL_Surface* img, int start_y, int end_y, int x)
     putpixel(img, x, start_y, SDL_MapRGB(img->format, 255, 0, 0));
   return (img);
 }
+
+
+
+
+
+
+struct text* image_to_struct_text(SDL_Surface* img, int lines[], int cols[])
+{ //
+  struct text *t = malloc(sizeof(struct text));
+}
+
+int get_number_letters(int cols[])
+{
+  int count_letters = 0;
+  for (int tmp = 0, int count_it = 1;
+      tmp < sizeof(cols)/sizeof(int);
+      tmp++, count_it = !count_it)
+  {
+    if (cols[tmp] == -1 || cols[tmp] == -42)
+      continue;
+    if (count_it)
+    {
+      count_letters++;
+      count_it = 0;
+    }
+    else
+      count_it = 1;
+  }
+}
+
+int get_number_lines(int lines[])
+{
+  int count_lines = 0;
+  for (int tmp = 0; tmp < sizeof(lines)/sizeof(int); tmp++)
+    if (lines[tmp] == 2)
+      count_lines++;
+  return count_lines
+}
+
+
+/*
+  int y;
+  int tmp;
+  int index = 0;
+  Uint8 pxlcolor;
+  Uint32 pxl;
+  for (y = 0; y < img->h; y++)
+  {
+    if (lines[y] == 1)
+    {
+      tmp = index;
+      for (; cols[tmp] != -42; )
+      {
+        int keep_checking = 1;
+        for (int tmp_y = y; keep_checking; tmp_y++)
+        {
+          for (int check_x = cols[tmp]; check_x < cols[tmp + 1]; check_x++)
+          {
+            pxl = getpixel(img, check_x, tmp_y);
+            SDL_GetRGB(pxl, img->format, &pxlcolor, &pxlcolor, &pxlcolor);
+            if (pxlcolor == 0)
+            {
+              draw_line(img, cols[tmp], cols[tmp + 1], tmp_y - 1);
+              keep_checking = 0;
+              tmp += 2;
+              break;
+            }
+          }
+        }
+      }
+    }
+    if (lines[y] == 2)
+    {
+      for (; cols[index] != -42; )
+      {
+        int stop_checking = 0;
+        for (int tmp_y = y; stop_checking != 1; tmp_y--)
+        {
+          for (int check_x = cols[index]; check_x < cols[index + 1]; check_x++)
+          {
+            pxl = getpixel(img, check_x, tmp_y);
+            SDL_GetRGB(pxl, img->format, &pxlcolor, &pxlcolor, &pxlcolor);
+            if (pxlcolor == 0)
+            {
+              draw_line(img, cols[index], cols[index+1], tmp_y);
+              stop_checking = 1;
+              index += 2;
+              break;
+            }
+          }
+        }
+      }
+      index++;
+    }
+  }
+  return img;
+}
+*/
+//Compute width of an "n" 
