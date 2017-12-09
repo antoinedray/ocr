@@ -20,7 +20,7 @@ SDL_Surface* whole_segmentation(SDL_Surface* img)
   for (int x = 0; x < img->w; x++)
     columns[x] = -1;
   char_detection(img, lines_cleaned, columns);
-  return(/*Display_Character_Boxes(img, lines_cleaned,columns)*/text_blocks(img, 1, lines_cleaned, columns));
+  return(text_blocks(img, 1, lines_cleaned, columns));
 }
 
 
@@ -162,56 +162,6 @@ void char_detection(SDL_Surface* img, int list[], int res[])
   }
 }
 
-SDL_Surface* DisplayLines (SDL_Surface* img, int y[], int nb_elts)
-{
-  for (int i = 0; i < nb_elts; i++)
-    if (y[i] == 2 || y[i] == 1)
-      for (int x = 0; x < img->w; x++)
-        putpixel(img, x, i, SDL_MapRGB(img->format, 255, 0, 0));
-  return img;
-}
-
-SDL_Surface* Display_Character_Boxes(SDL_Surface* img, int startlines[],
-    int columns[])
-  /*
-   **   Display the lines and the columns at the same time, using the two lists
-   **   Reminder: lines is filled with -1 (nothing),
-   **   1 (top char line), 2 (end char line)
-   **   columns is filled with the index (in pxl)
-   **   of the leftmost/rightmost pxl of a letter, and -1
-   */
-{
-  for (int l = 0; l < img->h; l++)
-    if (startlines[l] == 1 || startlines[l] == 2)
-      for (int x = 0; x < img->w; x++)
-        putpixel(img, x, l, SDL_MapRGB(img->format,255, 0, 0));
-  //All red lines are drawn, now we look for the characters
-  int index = 0;
-  int draw = 0;
-  int tmp = 0;
-  for (int h = 0; h < img->h; h++)
-  {
-    if (startlines[h] == 1)//(textlines[h] != -1)
-      draw = 1;
-    if (draw == 1)
-    {
-      for(;columns[index] < columns[index+1];index++)
-        putpixel(img, columns[index], h, SDL_MapRGB(img->format,255,0,0));
-      putpixel(img, columns[index], h, SDL_MapRGB(img->format,255,0,0));
-    }
-    if (startlines[h] == 2)
-    {
-      draw = 0;
-      tmp = index+1;
-    }
-    index = tmp;
-  }
-  return img;
-}
-
-
-
-
 SDL_Surface* text_blocks(SDL_Surface* img, int scale, int lines[], int cols[])
 /*
  ** Displays text blocks, depending on scale.
@@ -226,7 +176,6 @@ SDL_Surface* text_blocks(SDL_Surface* img, int scale, int lines[], int cols[])
     return img;
 }
 
-
 SDL_Surface* box_letters(SDL_Surface* img, int lines[], int cols[])
 { //Boxes every letter of the text
   int y;
@@ -238,7 +187,6 @@ SDL_Surface* box_letters(SDL_Surface* img, int lines[], int cols[])
   {
     if (lines[y] == 1)
     {
-  //    draw_line(img, 0, img->w, y);
       tmp = index;
       for (; cols[tmp] != -42; )
       {
@@ -262,7 +210,6 @@ SDL_Surface* box_letters(SDL_Surface* img, int lines[], int cols[])
     }
     if (lines[y] == 2)
     {
-//      draw_line(img, 0, img->w, y);
       for (; cols[index] != -42; )
       {
         int stop_checking = 0;
@@ -290,10 +237,11 @@ SDL_Surface* box_letters(SDL_Surface* img, int lines[], int cols[])
 
 /*
  **  name: box_fit
- **  description: take the box containing the letter and fit it in a optimal box
+ **  desc: take the box containing the letter and fit it in an optimal box
  */
-struct letter* box_fit(struct letter* img) {
-
+struct letter* box_fit(struct letter* img) 
+{
+  //FIXME
 }
 
 SDL_Surface* draw_line(SDL_Surface* img, int start_x, int end_x, int y)
