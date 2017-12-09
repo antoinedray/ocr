@@ -13,7 +13,7 @@ struct N {
 };
 */
 
-static double random(void){
+static double rand_double(void){
 	double random_value;
     random_value = (double)rand()/RAND_MAX*2.0-1.0;
     return random_value;
@@ -27,10 +27,10 @@ static struct N *init_N(struct N **inputs,size_t nb_inputs){
 	Neu->inputs = inputs;
 	Neu->weights = malloc(sizeof(double)*nb_inputs);
 	for(size_t i = 0; i<nb_inputs;i++){
-		Neu->weights[i] = random();
+		Neu->weights[i] = rand_double();
 	}
 	Neu->value = 0;
-	Neu->bias = random();
+	Neu->bias = rand_double();
 	return Neu;
 }
 
