@@ -20,7 +20,7 @@ void save_NN(struct NN *mynet, char * name)
             {
                 fprintf(myfile,"%lf\n",mynet->mat[i][j]->weights[k]);
             }
-            fprintf(myfile,"b\n%lf\ne\n",mynet->mat[i][j]->bias);
+            fprintf(myfile,"b\n%lf\n",mynet->mat[i][j]->bias);
         }
         fprintf(myfile,"$\n");
     }
@@ -64,18 +64,22 @@ struct NN *load_NN(char *name)
         printf("File does not exists");
         return NULL;
     }
-    char * line = NULL;
+    char *line = NULL;
     size_t len = 0;
     size_t mynb = 0;
     double *myw = NULL;
     size_t lpos = 0;
     size_t posin = 0;
-    size_t linelen;
+    int debug;
+    //size_t linelen;
+    debug =1;
+    if(debug==1)
+      debug=2;
 
-    linelen = getline(&line, &len, file);
+    debug = fscanf(file, "%s", line);
     mynb = (size_t)atoi(line);
 
-    getline(&line,&len, file);
+    debug = fscanf(file, "%s", line);
     size_t index = 0;
     //size_t s = 0;
     size_t * layers = malloc(mynb * sizeof(size_t));
@@ -95,9 +99,8 @@ struct NN *load_NN(char *name)
     struct NN *mynet = init_NN(layers, mynb);
     myw = calloc(mynet->layersize[lpos],sizeof(double));
     //handling the weights
-    while(!feof(file))
+    while(fscanf(file, "%s", line) != EOF)
     {
-        getline(&line,&len,file);
         if(line[0] == '$')
         {
             myw = calloc(mynet->layersize[lpos], sizeof(double));
@@ -107,11 +110,10 @@ struct NN *load_NN(char *name)
         else if(line[0]=='b')
         {
             mynet->mat[lpos][posin]->weights = myw;
-            getline(&line, &len, file);
+            debug = fscanf(file, "%s", line);
             mynet->mat[lpos][posin]->bias = todouble(line,len);
             posin += 1;
             index = 0;
-            getline(&line,&len,file);
         }
         else
         {
