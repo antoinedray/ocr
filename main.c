@@ -1,8 +1,8 @@
 /*
- * OCR 404
- * file: main.c
- * description: link all the parts together and run everything
- */
+**  OCR 404
+**  file: main.c
+**  description: link all the parts together and run everything
+*/
 
 # include <gtk/gtk.h>
 # include <err.h>
@@ -16,6 +16,12 @@
 
 GtkWidget *window;
 
+/*
+**  name: run_convert
+**  description: This function is called when the "convert" button is pressed
+**      on the gtk interface, it is the function that will run all the OCR
+**      functions.
+*/
 void run_convert(GtkButton* convert)
 {
   // We close the file-choser window
@@ -49,7 +55,10 @@ void run_convert(GtkButton* convert)
   SDL_Quit();
 }
 
-// The main function only run the gtk+3 ui, PLEASE DO NOT MODIFY
+/*
+**  PLEASE DO NOT MODIFY
+**  description: The main function only run the gtk+3 ui
+*/
 int main (int argc, char *argv[])
 {
   GdkPixbuf *icon;

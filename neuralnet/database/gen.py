@@ -20,7 +20,8 @@ if len(sys.argv) != 2:
 
 else:
     if sys.argv[1] == "-gen":
-        os.remove(DATAFILE)
+        if os.path.exists(DATAFILE):
+            os.remove(DATAFILE)
         subprocess.run(['./gen.sh'])
 
     elif sys.argv[1] == "-clean":

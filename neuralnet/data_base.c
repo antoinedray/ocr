@@ -55,6 +55,10 @@ double **get_database_out(size_t nb_characters){
 
 void train(size_t iter) {
     FILE *fp = fopen("database/data.txt", "r");
+    if (fp == NULL) {
+        printf("Data file does not exists");
+        return;
+    }
     char *line = NULL;
     size_t linecap = 0;
     ssize_t linelen;
