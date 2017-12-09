@@ -1,29 +1,6 @@
-//Imageformatting.c : New implementation of basically every segmentation func
+#include "structs.h"
 
-# include <stdio.h>
-# include <stdlib.h>
-# include "../mysdl/mysdl.h"
-# include "imageformatting.h"
-# include "../segmentation/segmentation.h"
-
-struct text
-{
-  struct letter* **text;
-  int lines_nb;
-  int nb_letters;
-}
-
-struct letter
-{
-  int coord_x [2];
-  int coord_y [2];
-  int height; //int coord_topleft
-  int width; //int coord_botright
-  double **mat; //Contains the binarized height*width letter in 0 and 1s
-}
-
-struct letter* init_letter(int topleft_x, int topleft_y,
-                          int botright_x, int botright_y, SDL_Surface* img)
+struct letter* init_letter(int topleft_x, int topleft_y, int botright_x, int botright_y, SDL_Surface* img)
 {
   struct letter* l = malloc(sizeof(struct letter));
   l->coord_x[0] = topleft_x;
