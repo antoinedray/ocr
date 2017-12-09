@@ -173,12 +173,12 @@ SDL_Surface* DisplayLines (SDL_Surface* img, int y[], int nb_elts)
 SDL_Surface* Display_Character_Boxes(SDL_Surface* img, int startlines[],
     int columns[])
   /*
-  **   Display the lines and the columns at the same time, using the two lists
-  **   Reminder: lines is filled with -1 (nothing),
-  **   1 (top char line), 2 (end char line)
-  **   columns is filled with the index (in pxl)
-  **   of the leftmost/rightmost pxl of a letter, and -1
-  */
+   **   Display the lines and the columns at the same time, using the two lists
+   **   Reminder: lines is filled with -1 (nothing),
+   **   1 (top char line), 2 (end char line)
+   **   columns is filled with the index (in pxl)
+   **   of the leftmost/rightmost pxl of a letter, and -1
+   */
 {
   for (int l = 0; l < img->h; l++)
     if (startlines[l] == 1 || startlines[l] == 2)
@@ -211,36 +211,91 @@ SDL_Surface* Display_Character_Boxes(SDL_Surface* img, int startlines[],
 
 /*
 
-SDL_Surface* text_blocks(SDL_Surface* img, int scale, int lines[], int cols[])
-  *
-   ** Displays text blocks, depending on scale.
-   ** 1: boxes around each letter
-   ** 2: boxes around each word
-   ** 3: boxes around each paragraph
-   *
-{
-  if (scale == 1)
-    return box_letters(img, lines, cols);
-  else
-    return img;
-}
-*/
+   SDL_Surface* text_blocks(SDL_Surface* img, int scale, int lines[], int cols[])
+ *
+ ** Displays text blocks, depending on scale.
+ ** 1: boxes around each letter
+ ** 2: boxes around each word
+ ** 3: boxes around each paragraph
+ *
+ {
+ if (scale == 1)
+ return box_letters(img, lines, cols);
+ else
+ return img;
+ }
+ */
 
-SDL_Surface* box_letters(SDL_Surface* img, int lines[], int cols[]) {
+SDL_Surface* box_letters(SDL_Surface* img, int lines[], int cols[])
+{ //Boxes every letter of the text
+  int y;
+  int tmp;
+  int index = 0;
+  Uint8 pxlcolor;
+  Uint32 pxl;
 
+  for (y = 0; y < img->h; y++)
+  {
+    if (lines[y] == 1)
+    {
+      tmp = index;
+      for (; cols[tmp] < cols[tmp + 2];)
+      {
+        int keep_checking = 1;
+        for (int tmp_y = y; keep_checking; tmp_y++)
+        {
+          for (int check_x = cols[tmp]; check_x < cols[tmp + 1]; check_x++)
+          {
+            pxl = getpixel(img, check_x, tmp_y);
+            SDL_GetRGB(pxl, img->format, &pxlcolor, &pxlcolor, &pxlcolor);
+            if (pxlcolor == 0)
+            {
+              draw_line(img, cols[tmp], cols[tmp + 1], tmp_y - 1);
+              keep_checking = 0;
+              tmp += 2;
+              break;
+            }
+          }
+        }
+      }
+    }
+    if (lines[y] == 2)
+    {
+      for (;cols[index] < cols[index + 2];)
+      {
+        int stop_checking = 0;
+        for (int tmp_y = y; stop_checking != 1; tmp_y--)
+        {
+          for (int check_x = cols[index]; check_x < cols[index + 1]; check_x++)
+          {
+            pxl = getpixel(img, check_x, tmp_y);
+            SDL_GetRGB(pxl, img->format, &pxlcolor, &pxlcolor, &pxlcolor);
+            if (pxlcolor == 0)
+            {
+              draw_line(img, cols[index], cols[index+1], tmp_y + 1);
+              stop_checking = 1;
+              index += 2;
+              break;
+            }
+          }
+        }
+      }
+    }
+  }
+  return (img);
 }
 
 /*
-**  name: box_fit
-**  description: take the box containing the letter and fit it in a optimal box
-*/
+ **  name: box_fit
+ **  description: take the box containing the letter and fit it in a optimal box
+ */
 SDL_Surface* box_fit(SDL_Surface* img) {
     // Remove bottom
     for(int h = 0; h < img->h; h++) {
         //
     }
-  }
-  return (img);
+}
+return (img);
 }
 
 SDL_Surface* draw_line(SDL_Surface* img, int start_x, int end_x, int y)
