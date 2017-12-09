@@ -1,5 +1,18 @@
 #include "structs.h"
 
+struct letter* init_letter(int topleft_x, int topleft_y, int botright_x, int botright_y, SDL_Surface* img)
+{
+  struct letter* l = malloc(sizeof(struct letter));
+  l->coord_x[0] = topleft_x;
+  l->coord_x[1] = botright_x;
+  l->coord_y[0] = topleft_y;
+  l->coord_y[1] = botright_y;
+  l->height = botright_x - topleft_x;
+  l->width = botright_y - topleft_y;
+  binarize_letter(img, l);
+  return l;
+}
+
 void binarize_letter(SDL_Surface* img, struct letter* l)
 {
   double **mat = calloc(sizeof(l->height * l->width));
