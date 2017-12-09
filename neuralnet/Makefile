@@ -4,7 +4,7 @@ CC= gcc
 CPPFLAGS= `pkg-config --cflags sdl` -MMD
 CFLAGS= -Wall -Werror -Wextra -std=c99 -O3
 LDFLAGS=
-LDLIBS= `pkg-config --libs sdl` -lSDL_image
+LDLIBS= `pkg-config --libs sdl` -lSDL_image -lm
 
 SRC= ../mysdl/mysdl.c neural.c loaderNN.c data_base.c trainning.c
 OBJ= ${SRC:.c=.o}
