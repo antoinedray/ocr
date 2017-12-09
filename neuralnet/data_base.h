@@ -7,6 +7,4 @@ struct letter_bin{
     double *inputs; //Black == 1 , White == 0
 };
 
-double **get_database_in(size_t nb_fonts, size_t nb_characters);
-
-double **get_database_out(size_t nb_characters);
+void train(struct NN *MyNet);

@@ -4,7 +4,7 @@
 #include <math.h>
 #include <assert.h>
 
-#include "neural.h"
+//#include "neural.h"
 #include "loaderNN.h"
 #include "data_base.h"
 
@@ -26,20 +26,15 @@ void XOR_NN(struct NN *MyNet,size_t iter, double learning_rate){
 	}
 }
 
-void OCR_NN(struct NN *MyNet, size_t iter, double learning_rate, size_t nb_fonts){
+void OCR_NN(struct NN *MyNet, size_t iter, double learning_rate){
 	set_learning_rate(learning_rate);
-	double **inputs = get_database_in(nb_fonts, 62);
-	double **outputs = get_database_out(62);
-	size_t size_DB = nb_fonts*62;
-	for(size_t i = 0; i < iter; i++){
-		for(size_t j = 0; j < size_DB; j++){
-			backprop(MyNet,inputs[j], outputs[j]);
-		}
+	for(size_t i = 0; i<iter; i++){
+		train(MyNet);
 	}
 }
 
-int main(int argc,char* argv){
-	if (argv == "XOR"){
+int main(){
+	/*if (argv == "XOR"){
 		size_t layers[3] = {2,2,1};
 		struct NN *MyNet = init_NN(layers,3);
 		XOR_NN(MyNet,10000000,0.01);
@@ -65,5 +60,10 @@ int main(int argc,char* argv){
 	}
 	else
 		printf("Incorrect arguments");
+	*/
+	size_t layers[3] = {1024,512,62};
+	struct NN *MyNet = init_NN(layers,3);
+	OCR_NN(MyNet,10000,0.2); //get nb_fonts
+	save_NN(MyNet,"OCR_NN");
 	return 1;
 }

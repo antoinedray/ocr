@@ -4,11 +4,11 @@ CFLAGS = -Wall -Wextra -std=c99 -O2
 LDFLAGS =
 LDLIBS = -lm
 
-SRC = trainning.c neural.c loaderNN.c
+SRC = trainning.c neural.c loaderNN.c data_base.c
 OBJ = ${SRC:.c=.o}
 DEP = ${SRC:.c=.d}
 
-all: trainnning
+all: trainning
 
 trainning: ${OBJ}
 
