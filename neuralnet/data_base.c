@@ -38,13 +38,13 @@ the mat will have the following struct: nb_fonts*nb_characters(62 by default) = 
 order : same font -> maj / min / num
 */
 
-double *get_database_in(char *file) {
+static double *get_database_in(char *file) {
     SDL_Surface* letter_sdl = load_image(file);
     struct letter_bin *letter = IMGtoBIN(letter_sdl);
     return letter->inputs;
 }
 
-double **get_database_out(size_t nb_characters){
+static double **get_database_out(size_t nb_characters){
     double **outputs = malloc(sizeof(double*)*nb_characters);
     for(size_t i = 0; i < nb_characters;i++){
         outputs[i] = calloc(nb_characters, sizeof(double)); // Why ??????

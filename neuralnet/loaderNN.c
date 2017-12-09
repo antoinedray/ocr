@@ -1,4 +1,3 @@
-#include"neural.h"
 #include"loaderNN.h"
 
 void save_NN(struct NN *mynet, char * name)
@@ -10,7 +9,7 @@ void save_NN(struct NN *mynet, char * name)
 	{
 		fprintf(myfile,"%lu",mynet->layersize[i]);
 		if (i < mynet->size-1)
-			frprintf(myfile,",");
+			fprintf(myfile,",");
 	}
 	fprintf(myfile,"}\n");
 	for(size_t i = 0; i < mynet->size; i++)
@@ -30,7 +29,6 @@ void save_NN(struct NN *mynet, char * name)
 
 
 static size_t tosizet (char c, double pow)
-3
 {
 	return (size_t)c * (size_t)pow;
 }
@@ -166,42 +164,6 @@ struct NN * load_NN(char *name)
 	}
 	
 	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-
-
-
-
-
-
-
-
-
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
 	while ((c = fgetc(file)) != EOF)
 	{
 		if (c=="\n"||c="{"||c=="}"||c=="["||c=="]"||c=="b"||c=="#")
@@ -280,7 +242,6 @@ struct NN * load_NN(char *name)
 <<<<<<< HEAD
 struct NN *load_NN_base(char *filename){
 =======
-/*
 struct NN *load_NN(char *filename){
 >>>>>>> 5402d9839f12389c304bb8708d7c3f7ba615f973
 	FILE *f = fopen(filename,"r");
@@ -306,8 +267,8 @@ struct NN *load_NN(char *filename){
 	}
 	return MyNet;
 <<<<<<< HEAD
-}*/
+}
 =======
 }
-*/
 >>>>>>> 5402d9839f12389c304bb8708d7c3f7ba615f973
+*/
