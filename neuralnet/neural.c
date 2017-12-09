@@ -44,7 +44,7 @@ struct NN *init_NN(size_t *layersize,size_t size){
 		MyNet->mat[i] = malloc(sizeof(struct N*)*sizelayer);
 		if(i==0){
 			srand(time(NULL));
-			for(size_t j = 0; j < sizelayer; j++){ //layer inputs 
+			for(size_t j = 0; j < sizelayer; j++){ //layer inputs
 				struct N *Neu = init_N(NULL,0);
 				MyNet->mat[i][j] = Neu;
 			}
@@ -74,7 +74,7 @@ double* feedforward(struct NN *MyNet, double *inputs){
 			for(size_t k = 0; k <node->nb_inputs; k++){
 				node->value += (node->weights[k]) * (node->inputs[k]->value);
 			}
-			node->value = sigmoid(node->value + node->bias); 
+			node->value = sigmoid(node->value + node->bias);
 		}
 	}
 	//getting outputs
@@ -88,7 +88,7 @@ double* feedforward(struct NN *MyNet, double *inputs){
 void backprop(struct NN *MyNet, double *input_t, double *output_t){
 	//feedforward with training inputs
 	feedforward(MyNet,input_t);
-	//calculating the error at the outputs and changing following weights/biases 
+	//calculating the error at the outputs and changing following weights/biases
 	// deltak = (tk - ok)ok(1-ok)
 	// Dwjk = v*deltak*oj
 	// Dbk = v*deltak*1
@@ -96,7 +96,7 @@ void backprop(struct NN *MyNet, double *input_t, double *output_t){
 	// wjk = wjk + Dwjk
 	// bjk = bk + Dbk
 	//back proping errors
-	double *deltas = malloc(sizeof(double)*MyNet->layersize[MyNet->size-1]); //MyNet size >=2; 
+	double *deltas = malloc(sizeof(double)*MyNet->layersize[MyNet->size-1]); //MyNet size >=2;
 	for(size_t i = 0; i < MyNet->layersize[MyNet->size-1];i++){
 		struct N *node = MyNet->mat[MyNet->size-1][i];
 		double delta = (output_t[i] - node->value)*(node->value)*(1 - node->value);
@@ -122,7 +122,7 @@ void backprop(struct NN *MyNet, double *input_t, double *output_t){
 			struct N *node_cur = layer_cur[j];
 			for(size_t k = 0; k < MyNet->layersize[i+1]; k++){
 				struct N *node_prev = layer_prev[k];
-				act_v += delta_prev[k] * node_prev->weights[k]; 
+				act_v += delta_prev[k] * node_prev->weights[k];
 			}
 			delta = node_cur->value * (1 - node_cur->value) * (act_v);
 			delta_cur[j] = delta;
@@ -130,7 +130,7 @@ void backprop(struct NN *MyNet, double *input_t, double *output_t){
 				node_cur->weights[k] += v * delta * node_cur->inputs[k]->value;
 			}
 		}
-	}	
+	}
 }
 
 int *get_outputs(struct NN *MyNet, double *out){
