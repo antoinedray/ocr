@@ -69,7 +69,7 @@ struct NN * load_NN(char *name)
     double *myw = NULL;
     size_t lpos = 0;
     size_t posin = 0;
-    ssize_t linelen;
+    size_t linelen;
 
     linelen = getline(&line, &len, file);
     mynb = (size_t)atoi(line);

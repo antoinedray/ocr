@@ -61,7 +61,7 @@ void train(struct NN *MyNet) {
     }
     char *line = NULL;
     size_t linecap = 0;
-    ssize_t linelen;
+    size_t linelen;
     size_t i = 0;
     double **output_train = get_database_out(62);
     while((linelen = getline(&line, &linecap, fp)) > 0) {
