@@ -232,15 +232,6 @@ SDL_Surface* box_letters(SDL_Surface* img, int lines[], int cols[])
   return img;
 }
 
-/*
- **  name: box_fit
- **  desc: take the box containing the letter and fit it in an optimal box
- */
-struct letter* box_fit(struct letter* img)
-{
-  //FIXME
-}
-
 SDL_Surface* draw_line(SDL_Surface* img, int start_x, int end_x, int y)
 { //Draws a line on img, at height y, between points s_x and end_x
   for (; start_x < end_x; start_x++)
