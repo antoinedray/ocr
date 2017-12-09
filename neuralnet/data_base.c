@@ -1,5 +1,6 @@
 #include <stdio.h>
 #include "data_base.h"
+#include "neural.h"
 
 static struct letter_bin *IMGtoBIN(SDL_Surface* img)
 {
