@@ -4,19 +4,19 @@ CFLAGS = -Wall -Wextra -std=c99 -O2
 LDFLAGS =
 LDLIBS = -lm
 
-SRC = main.c neural.c loaderNN.c
+SRC = trainning.c neural.c loaderNN.c
 OBJ = ${SRC:.c=.o}
 DEP = ${SRC:.c=.d}
 
-all: main
+all: trainnning
 
-main: ${OBJ}
+trainning: ${OBJ}
 
 .PHONY: clean
 
 clean:
 		${RM} ${OBJ}
 		${RM} ${DEP}
-		${RM} main
+		${RM} trainning
 
 -include ${DEP}
