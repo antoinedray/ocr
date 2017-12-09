@@ -257,10 +257,6 @@ SDL_Surface* draw_column(SDL_Surface* img, int start_y, int end_y, int x)
 }
 
 
-
-
-
-
 struct text* image_to_struct_text(SDL_Surface* img, int lines[], int cols[])
 { //
   struct text *t = malloc(sizeof(struct text));
@@ -354,3 +350,20 @@ int get_number_lines(int lines[])
 }
 */
 //Compute width of an "n" 
+
+
+int space_threshold(int cols[])
+{
+  int max_sp = 0;
+  for (size_t i = 1; i < sizeof(cols)/sizeof(int); i++)
+    if (cols[i] - cols[i-1] > maxsp)
+      max_sp = cols[i] - cols[i-1];
+  return max_sp;
+}
+
+int is_space(int pos1, int pos2, int threshold)
+{
+  if (pos2 - pos1 < threshold)
+    return 0;
+  return 1;
+}

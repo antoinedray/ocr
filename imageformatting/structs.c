@@ -1,4 +1,5 @@
-#include "structs.h"
+# include "structs.h"
+# include "segmentation.h"
 
 struct letter* init_letter(int topleft_x, int topleft_y, int botright_x, int botright_y, SDL_Surface* img)
 {
@@ -36,9 +37,9 @@ void binarize_letter(SDL_Surface* img, struct letter* l)
 
 struct text* init_text(SDL_Surface* img)
 {
-  struct text* t = calloc(sizeof(struct text));
-  t->lines_nb = get_number_lines(img); //FIXME
-  t->nb_letters = get_number_letters(img); //FIXME
+  struct text* t = malloc(sizeof(struct text));
+  t->lines_nb = get_number_lines(img);
+  t->nb_letters = get_number_letters(img);
   //FIXME add letters in the mat
   int i;
   int j;
@@ -50,12 +51,3 @@ struct text* init_text(SDL_Surface* img)
     }
   }
 }
-
-int get_number_lines(SDL_Surface* img)
-{
-  int lines [img->h];
-  int cols [img->w];
-  //FIXME FIXME
-}
-
-//size of "n" for " " recognition
