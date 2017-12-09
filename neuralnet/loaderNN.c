@@ -1,7 +1,3 @@
-#include<stdlib.h>
-#include<stdio.h>
-#include<err.h>
-#include<string.h>
 #include"neural.h"
 #include"loaderNN.h"
 
