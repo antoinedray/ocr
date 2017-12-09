@@ -5,7 +5,8 @@
  *  process
  */
 
-#include"segmentation.h"
+#include "segmentation.h"
+#include "../imageformatting/structs.h"
 
 SDL_Surface* Line_Detection(SDL_Surface* img)
 {
@@ -214,64 +215,20 @@ SDL_Surface* text_blocks(SDL_Surface* img, int scale, int lines[], int cols[])
   else
     return img;
 }
+*/
 
 SDL_Surface* box_letters(SDL_Surface* img, int lines[], int cols[])
-{ //Boxes every letter of the text
-  int y;
-  int tmp;
-  int index = 0;
-  Uint8 pxlcolor;
-  Uint32 pxl;
-  
-  for (y = 0; y < img->h; y++)
-  {
-    if (lines[y] == 1)
-    {
-      tmp = index;
-      for (; cols[tmp] < cols[tmp + 2];)
-      {
-        int keep_checking = 1;
-        for (int tmp_y = y; keep_checking; tmp_y++)
-        {
-          for (int check_x = cols[tmp]; check_x < cols[tmp + 1]; check_x++)
-          {
-            pxl = getpixel(img, check_x, tmp_y);
-            SDL_GetRGB(pxl, img->format, &pxlcolor, &pxlcolor, &pxlcolor);
-            if (pxlcolor == 0)
-            {
-              draw_line(img, cols[tmp], cols[tmp + 1], tmp_y - 1);
-              keep_checking = 0;
-              tmp += 2;
-              break;
-            }
-          }
-        }
-      }
+}
+
+/*
+**  name: box_fit
+**  description: take the box containing the letter and fit it in a optimal box
+*/
+SDL_Surface* box_fit(SDL_Surface* img) {
+    // Remove bottom
+    for(int h = 0; h < img->h; h++) {
+        //
     }
-    if (lines[y] == 2)
-    {
-      for (;cols[index] < cols[index + 2];)
-      {
-        int stop_checking = 0;
-        for (int tmp_y = y; stop_checking != 1; tmp_y--)
-        {
-          for (int check_x = cols[index]; check_x < cols[index + 1]; check_x++)
-          {
-            pxl = getpixel(img, check_x, tmp_y);
-            SDL_GetRGB(pxl, img->format, &pxlcolor, &pxlcolor, &pxlcolor);
-            if (pxlcolor == 0)
-            {
-              draw_line(img, cols[index], cols[index+1], tmp_y + 1);
-              stop_checking = 1;
-              index += 2;
-              break;
-            }
-          }
-        }
-      }
-    }
-  }
-  return (img);
 }
 
 SDL_Surface* draw_line(SDL_Surface* img, int start_x, int end_x, int y)
@@ -287,5 +244,3 @@ SDL_Surface* draw_column(SDL_Surface* img, int start_y, int end_y, int x)
     putpixel(img, x, start_y, SDL_MapRGB(img->format, 255, 0, 0));
   return (img);
 }
-
-*/
