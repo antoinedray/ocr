@@ -8,26 +8,25 @@
 # include"segmentation.h"
 
 
-static SDL_Surface* whole_segmentation(SDL_Surface* img)
+SDL_Surface* whole_segmentation(SDL_Surface* img)
 {
   int lines[img->h];
   Line_Detection(img, lines);
   int height = img->h;
-  int lines[height];
-  checklines(list_lines, height, lines);
+  int lines_cleaned[height];
+  checklines(lines, height, lines_cleaned);
   int columns[(img->w)*3];
   for (int x = 0; x < img->w; x++)
     columns[x] = -1;
-  char_detection(img, lines, columns);
-  return(Display_Character_Boxes(img, lines,columns)/*text_blocks(img, 1, lines, columns)*/);
+  char_detection(img, lines_cleaned, columns);
+  return(Display_Character_Boxes(img, lines_cleaned,columns)/*text_blocks(img, 1, lines, columns)*/);
 }
 
 
-int  Line_Detection(SDL_Surface* img, int list_lines)
+int           Line_Detection(SDL_Surface* img, int list_lines[])
 {
   Uint32      pxl;
   Uint8       pxlcolor;
-  int         list_lines[img->h];
   for (int x = 0; x < img->h; x++)
     list_lines[x] = -1;
   int         i = 0; //list index

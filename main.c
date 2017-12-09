@@ -37,10 +37,11 @@ void run_convert(GtkButton* convert)
   image = blackAndWhite(image, 0);
 
   // For testing purposes
-  int lines[image->h];
-  lines[image->h] = line_detection(image);
+  whole_segmentation(image);
+  //int lines[image->h];
+  //lines[image->h] = line_detection(image);
   //lines = clean_lines(lines);
-  for (int i = 0; lines[i] != -42; i++)
+  //for (int i = 0; lines[i] != -42; i++)
     //draw_line(image, 0, image->w - 1, lines[i]);
   //image = Line_Detection(image);
   screen = display_image(image);
