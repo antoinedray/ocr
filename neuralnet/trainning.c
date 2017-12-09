@@ -5,7 +5,7 @@
 #include <assert.h>
 
 //#include "neural.h"
-#include "loaderNN.h"
+//#include "loaderNN.h"
 #include "data_base.h"
 
 void XOR_NN(struct NN *MyNet,size_t iter, double learning_rate){

@@ -1,6 +1,5 @@
 #include <stdio.h>
 #include "data_base.h"
-#include "neural.h"
 
 static struct letter_bin *IMGtoBIN(SDL_Surface* img)
 {
@@ -64,13 +63,12 @@ void train(struct NN *MyNet) {
     size_t linelen;
     size_t i = 0;
     double **output_train = get_database_out(62);
-    while((linelen = getline(&line, &linecap, fp)) > 0) {
-        train = get_database_in(line);
+    while((linelen = getline(&line, &linecap, fp)) > 0){
+        double *train = get_database_in(line);
         backprop(MyNet,train,output_train[i]);
         if (i == 61)
             i = 0;
         else
             i += 1 ;
     }
-    return;
 }
