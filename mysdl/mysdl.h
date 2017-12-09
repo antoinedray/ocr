@@ -1,8 +1,8 @@
 /*
- *  MYSDL
- *  file: mysdl.h
- *  description: header of mysdl
- */
+**  MYSDL
+**  file: mysdl.h
+**  description: header of mysdl
+*/
 
 #ifndef MYSDL_H_
 #define MYSDL_H_

@@ -1,12 +1,14 @@
-CPPFLAGS = -MMD
-CC = gcc
-CFLAGS = -Wall -Wextra -std=c99 -O2
-LDFLAGS =
-LDLIBS = -lm
+#   Trainning Makfile
 
-SRC = trainning.c neural.c loaderNN.c data_base.c
-OBJ = ${SRC:.c=.o}
-DEP = ${SRC:.c=.d}
+CC= gcc
+CPPFLAGS= `pkg-config --cflags sdl` -MMD
+CFLAGS= -Wall -Werror -Wextra -std=c99 -O3
+LDFLAGS=
+LDLIBS= `pkg-config --libs sdl` -lSDL_image
+
+SRC= ../mysdl/mysdl.c neural.c loaderNN.c data_base.c trainning.c
+OBJ= ${SRC:.c=.o}
+DEP= ${SRC:.c=.d}
 
 all: trainning
 

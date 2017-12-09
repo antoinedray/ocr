@@ -1,7 +1,6 @@
 # Simple OCR Makefile
 
 CC= gcc
-
 CPPFLAGS= `pkg-config --cflags gtk+-3.0` `pkg-config --cflags sdl` -MMD
 CFLAGS= -Wall -Werror -Wextra -std=c99 -O3
 LDFLAGS=
