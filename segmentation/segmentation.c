@@ -1,13 +1,12 @@
 /*
- *  SEGMENTATION
- *  file: segmentation.c
- *  description: file containing all that has to do with the segmentation
- *  process
- */
+**  SEGMENTATION
+**  file: segmentation.c
+**  description: file containing all that has to do with the segmentation
+**  process
+*/
 
 #include "segmentation.h"
 #include "../imageformatting/structs.h"
-
 
 SDL_Surface* whole_segmentation(SDL_Surface* img)
 {
@@ -24,7 +23,7 @@ SDL_Surface* whole_segmentation(SDL_Surface* img)
 }
 
 
-int           Line_Detection(SDL_Surface* img, int list_lines[])
+int Line_Detection(SDL_Surface* img, int list_lines[])
 {
   Uint32      pxl;
   Uint8       pxlcolor;
@@ -237,7 +236,7 @@ SDL_Surface* box_letters(SDL_Surface* img, int lines[], int cols[])
  **  name: box_fit
  **  desc: take the box containing the letter and fit it in an optimal box
  */
-struct letter* box_fit(struct letter* img) 
+struct letter* box_fit(struct letter* img)
 {
   //FIXME
 }
@@ -349,7 +348,7 @@ int get_number_lines(int lines[])
   return img;
 }
 */
-//Compute width of an "n" 
+//Compute width of an "n"
 
 
 int space_threshold(int cols[])
