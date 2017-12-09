@@ -59,11 +59,9 @@ void train(struct NN *MyNet) {
         return;
     }
     char *line = NULL;
-    size_t linecap = 0;
-    size_t linelen;
     size_t i = 0;
     double **output_train = get_database_out(62);
-    while((linelen = getline(&line, &linecap, fp)) > 0){
+    while(fscanf(fp, "%s", line) != EOF) {
         double *train = get_database_in(line);
         backprop(MyNet,train,output_train[i]);
         if (i == 61)

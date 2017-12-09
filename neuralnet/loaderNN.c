@@ -27,11 +27,12 @@ void save_NN(struct NN *mynet, char * name)
     fclose(myfile);
 }
 
-
+/*
 static size_t tosizet (char c, double pow)
 {
     return (size_t)c * (size_t)pow;
 }
+*/
 
 static double todouble(char*line, size_t len)
 {
@@ -56,12 +57,12 @@ static double todouble(char*line, size_t len)
     return res;
 }
 
-struct NN * load_NN(char *name)
+struct NN *load_NN(char *name)
 {
     FILE *file = fopen(name,"r");
     if (file == NULL) {
         printf("File does not exists");
-        return;
+        return NULL;
     }
     char * line = NULL;
     size_t len = 0;
