@@ -4,9 +4,6 @@
  * description: link all the parts together and run everything
  */
 
-#include <dirent.h>
-#include <unistd.h>
-
 #include <gtk/gtk.h>
 #include <err.h>
 #include <SDL/SDL.h>
