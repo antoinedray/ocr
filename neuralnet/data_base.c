@@ -25,16 +25,11 @@ static struct letter_bin *IMGtoBIN(SDL_Surface* img)
 }
 
 /*
-        *FOR STAN*
-
-    What is the use of the structure Bin matrix in your header ?
-
-     *FOR ANTOINE*
-
-size_letter = height*width
-before hand, DB must be 32*32.
-the mat will have the following struct: nb_fonts*nb_characters(62 by default) = lines,
-order : same font -> maj / min / num
+**  size_letter = height*width
+**  before hand, DB must be 32*32.
+**  the mat will have the following struct:
+**      nb_fonts*nb_characters(62 by default + 13 special chars) = lines,
+**  order : same font -> maj / min / num
 */
 
 static double *get_database_in(char *file) {
@@ -53,6 +48,7 @@ static double **get_database_out(size_t nb_characters){
 }
 
 void train(struct NN *MyNet) {
+    int nbChars = 75;
     FILE *fp = fopen("database/data.txt", "r");
     if (fp == NULL) {
         printf("Data file does not exists");
@@ -60,13 +56,13 @@ void train(struct NN *MyNet) {
     }
     char *line = NULL;
     size_t i = 0;
-    double **output_train = get_database_out(62);
+    double **output_train = get_database_out(nbChars);
     while(fscanf(fp, "%s", line) != EOF) {
         double *train = get_database_in(line);
         backprop(MyNet,train,output_train[i]);
-        if (i == 61)
+        if (i == nbChars - 1)
             i = 0;
         else
-            i += 1 ;
+            i++;
     }
 }
