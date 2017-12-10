@@ -4,8 +4,8 @@
 **  description: file containing all that has to do with the segmentation
 **  process
 */
-# include "segmentation.h"
-# include <err.h>
+#include "segmentation.h"
+#include <err.h>
 
 SDL_Surface* whole_segmentation(SDL_Surface* img)
 {
@@ -25,39 +25,41 @@ SDL_Surface* whole_segmentation(SDL_Surface* img)
   return(text_blocks(img, 1, lines_cleaned, columns));
 }
 
-void resize_image(int dim , int input[], int resized_inputs[], int width , int height) {
+struct letter_bin *resize_image(int inputs[], int width , int height) {
+    int dim = 32;
+    double resized_inputs[1024];
     double xscale = (float)(dim) / width;
     double yscale = (float)(dim) / height;
     double threshold = 0.5 / (xscale * yscale);
     double yend = 0.0;
-    for (int f = 0; f < dim; f++) // y on output
-    {
+    for (int f = 0; f < dim; f++) { // y on output
         double ystart = yend;
         yend = (f + 1) / yscale;
         if (yend >= height) yend = height - 0.000001;
         double xend = 0.0;
-        for (int g = 0; g < dim; g++) // x on output
-        {
+        for (int g = 0; g < dim; g++) { // x on output
             double xstart = xend;
             xend = (g + 1) / xscale;
             if (xend >= width) xend = width - 0.000001;
             double sum = 0.0;
-            for (int y = (int)ystart; y <= (int)yend; ++y)
-            {
+            for (int y = (int)ystart; y <= (int)yend; ++y) {
                 double yportion = 1.0;
                 if (y == (int)ystart) yportion -= ystart - y;
                 if (y == (int)yend) yportion -= y+1 - yend;
-                for (int x = (int)xstart; x <= (int)xend; ++x)
-                {
+                for (int x = (int)xstart; x <= (int)xend; ++x) {
                     double xportion = 1.0;
                     if (x == (int)xstart) xportion -= xstart - x;
                     if (x == (int)xend) xportion -= x+1 - xend;
                     sum += inputs[x + y*width] * yportion * xportion;
                 }
             }
-            resized_inputs[g + f*dim] = (sum > threshold) ? 1 : 0;
+            resized_inputs[g + f * dim] = (sum > threshold) ? 1 : 0;
         }
     }
+    struct letter_bin *bin = malloc(sizeof(struct letter_bin));
+    bin->inputs = resized_inputs;
+    bin->len = dim * dim;
+    return bin;
 }
 
 int Line_Detection(SDL_Surface* img, int list_lines[])
