@@ -6,9 +6,9 @@
 
 //#include "neural.h"
 //#include "loaderNN.h"
-#include "data_base.h"
+#include "neuraln.h"
 
-void XOR_NN(struct NN *MyNet,size_t iter, double learning_rate){
+/*void XOR_NN(struct NN *MyNet,size_t iter, double learning_rate){
   set_learning_rate(learning_rate);
   double input1[2] = {1,1};
   double input2[2] = {1,0};
@@ -34,7 +34,7 @@ void OCR_NN(struct NN *MyNet, size_t iter, double learning_rate){
   }
 }
 
-void try_OCR_img(struct NN *MyNet,/*char* filename*/ char* character,size_t char_index){
+void try_OCR_img(struct NN *MyNet,char* filename char* character,size_t char_index){
     //struct NN *MyNet = load_NN(filename);
     double *inputs = get_database_in(character);
     double *outputs = feedforward(MyNet,inputs);
@@ -47,7 +47,7 @@ void try_OCR_img(struct NN *MyNet,/*char* filename*/ char* character,size_t char
         }
     }
     printf("%lu %lu \n",char_index,ret);
-}
+}*/
 
 int main(){
   /*if (argv == "XOR"){
@@ -76,11 +76,23 @@ int main(){
   }
   else
     printf("Incorrect arguments");
-  */
     size_t layers[3] = {1024,512,75};
     struct NN *MyNet = init_NN(layers,3);
     OCR_NN(MyNet,15,); //get nb_fonts
     save_NN(MyNet,"OCR_NN");
     try_OCR_img(MyNet,"database/A_maj_AllerDisplay.jpg",0);
-    return 1;
+	*/
+	char *chars =
+"ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789,.!?:;'\"()$-&";
+	struct NN *MyNet = init_NN(67, chars);
+	for(size_t i = 0 ; i < 100; i++){
+		full_train(MyNet);
+		warn("%lu / 1000", i+1);
+	}
+	save(MyNet,"OCR_SHLAG_NATION");
+	
+	char output =
+full_feed(MyNet, get_in("database/y_min_Oswald-Medium.jpg"));
+	printf("%c \n",output);
+   	return 1;
 }

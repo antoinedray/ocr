@@ -39,7 +39,13 @@ double *get_database_in(char *file) {
     return letter->inputs;
 }
 
-static double **get_database_out(size_t nb_characters){
+struct letter_bin *get_in(char *file) {
+    SDL_Surface* letter_sdl = load_image(file);
+    struct letter_bin *letter = IMGtoBIN(letter_sdl);
+    return letter;
+}
+
+/*static double **get_database_out(size_t nb_characters){
     double **outputs = malloc(sizeof(double*)*nb_characters);
     for(size_t i = 0; i < nb_characters;i++){
         outputs[i] = calloc(nb_characters, sizeof(double)); // Why ??????
@@ -57,7 +63,7 @@ void train(struct NN *MyNet) {
     }
     char line[64];
     size_t i = 0;
-    double **output_train = get_database_out(nbChars);
+    nouble **output_train = get_database_out(nbChars);
     while(fscanf(fp, "%s", line) != EOF) {
 		char filename[100] = "";
 		char *location = "database/";
@@ -70,4 +76,4 @@ void train(struct NN *MyNet) {
         else
             i++;
     }
-}
+}*/
