@@ -9,3 +9,7 @@
 *.d
 main
 /neuralnet/main
+
+# Ignore database generated files
+/neuralnet/database/*.jpg
+/neuralnet/database/data.txt

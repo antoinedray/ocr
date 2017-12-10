@@ -133,8 +133,8 @@ void backprop(struct NN *MyNet, double *input_t, double *output_t){
 	}
 }
 
-int *get_outputs(struct NN *MyNet, double *out){
-	int *outputs = malloc(sizeof(int)*MyNet->layersize[MyNet->size-1]);
+int *get_outputs(size_t len, double *out){
+	int *outputs = malloc(sizeof(int)*len);
 	for(size_t i = 0; out[i] ;i++){
 		if(out[i] < 0.5)
 			outputs[i] = 0;

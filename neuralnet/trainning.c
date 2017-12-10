@@ -34,6 +34,17 @@ void OCR_NN(struct NN *MyNet, size_t iter, double learning_rate){
   }
 }
 
+void try_OCR_img(char* filename, char* character,size_t char_index){
+	struct NN *MyNet = load_NN(filename);
+	warn("1");
+	double *inputs = get_database_in(character);
+	double *outputs = feedforward(MyNet,inputs);
+	for(size_t i = 0; outputs[i];i++){
+		printf("%lf \n",outputs[i]);
+	}
+	printf("%lu",char_index);
+}
+
 int main(){
   /*if (argv == "XOR"){
     size_t layers[3] = {2,2,1};
@@ -61,10 +72,12 @@ int main(){
   }
   else
     printf("Incorrect arguments");
-  */
-  size_t layers[3] = {1024,512,62};
+  
+  size_t layers[3] = {1024,512,75};
   struct NN *MyNet = init_NN(layers,3);
-  OCR_NN(MyNet,10000,0.2); //get nb_fonts
+  OCR_NN(MyNet,5,0.2); //get nb_fonts
   save_NN(MyNet,"OCR_NN");
-  return 1;
+*/
+	try_OCR_img("OCR_NN","database/A_maj_AllerDisplay.jpg",0);
+  	return 1;
 }
