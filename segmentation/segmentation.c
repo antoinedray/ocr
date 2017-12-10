@@ -423,7 +423,7 @@ void binarize_letter(SDL_Surface* img, struct letter* l)
   {
     for (int j = 0; j < l->width; j++)
     {
-      printf("| %f ", mat[j + n * width]);
+      printf("| %f ", mat[j + n * max]);
     }
     printf("|\n");
   }
@@ -431,57 +431,3 @@ void binarize_letter(SDL_Surface* img, struct letter* l)
 
   l->mat = mat;
 }
-
-/*
-void binarize_letter(SDL_Surface* img, struct letter* l)
-{
-  printf("l->height = %i\n", l->height);
-  printf("l->width = %i\n", l->width);
-  printf("l->coord_x[0] = %i\n", l->coord_x[0]);
-  printf("l->coord_x[1] = %i\n", l->coord_x[1]);
-  printf("l->coord_y[0] = %i\n", l->coord_y[0]);
-  printf("l->coord_y[1] = %i\n", l->coord_y[1]);
-  double **mat = calloc(sizeof(*mat), l->height);
-  for (int i = 0; i < l->height; i++)
-    mat[i] = calloc(sizeof(**mat),l->width);
-  int x;
-  int mat_x = 0;
-  int y;
-  int mat_y;
-  Uint32 pxl;
-  Uint8 color;
-  for (x = l->coord_x[0]; x < l->coord_x[1]; x++, mat_x++)
-  {
-    warn("first loop");
-    for (y = l->coord_y[0], mat_y = 0; y < l->coord_y[1]; y++, mat_y++)
-    {
-      pxl = getpixel(img,x,y);
-      SDL_GetRGB(pxl, img->format, &color, &color, &color);
-      warn("second loop, color is %i", color);
-      if (color == 0)
-      {
-        mat[mat_y][mat_x] = 1.111111;
-        warn("m[%i][%i] = %f", mat_y, mat_x, mat[mat_y][mat_x]);
-        warn("x = %i, y = %i", x, y);
-      }
-      else
-      {
-        mat[mat_y][mat_x] = 0.0;
-        warn("m[%i][%i] = %f", mat_y, mat_x, mat[mat_y][mat_x]);
-        warn("x = %i, y = %i", x, y);
-      }
-    }
-    warn("finishing second loop");
-  }
-  for (int n =0; n < l->height; n++)
-  {
-    for (int j = 0; j < l->width; j++)
-    {
-      printf("| %f", mat[n][j]);
-    }
-    printf("|\n");
-  }
-  printf("\n");
-  warn("setting l->mat");
-  l->mat = mat;
-}*/
