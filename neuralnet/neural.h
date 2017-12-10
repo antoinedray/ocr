@@ -21,4 +21,4 @@ void set_learning_rate(double x);
 struct NN *init_NN(size_t *layersize, size_t size);
 double* feedforward(struct NN *MyNet, double *inputs);
 void backprop(struct NN *MyNet, double *input_t, double *output_t);
-int *get_outputs(struct NN *MyNet, double *out);
+int *get_outputs(size_t len, double *out);

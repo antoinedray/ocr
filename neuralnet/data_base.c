@@ -33,7 +33,7 @@ static struct letter_bin *IMGtoBIN(SDL_Surface* img)
 **  order : same font -> maj / min / num
 */
 
-static double *get_database_in(char *file) {
+double *get_database_in(char *file) {
     SDL_Surface* letter_sdl = load_image(file);
     struct letter_bin *letter = IMGtoBIN(letter_sdl);
     return letter->inputs;
