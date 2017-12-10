@@ -28,7 +28,7 @@ static struct letter_bin *IMGtoBIN(SDL_Surface* img)
 **  size_letter = height*width
 **  before hand, DB must be 32*32.
 **  the mat will have the following struct:
-**      nb_fonts*nb_characters(62 by default + 12 special chars) = lines,
+**      nb_fonts*nb_characters(62 by default + 13 special chars) = lines,
 **  order : same font -> maj / min / num
 */
 
@@ -48,7 +48,7 @@ static double **get_database_out(size_t nb_characters){
 }
 
 void train(struct NN *MyNet) {
-    int nbChars = 74;
+    int nbChars = 75;
     FILE *fp = fopen("database/data.txt", "r");
     if (fp == NULL) {
         printf("Data file does not exists");
