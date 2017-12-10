@@ -40,4 +40,5 @@ SDL_Surface* whole_segmentation(SDL_Surface* img);
 int get_number_letters(SDL_Surface* img, int cols[]);
 int get_number_lines(SDL_Surface* img, int lines[]);
 struct letter **create_letter_list(SDL_Surface* img, int lines[], int cols[]);
+void print_letter(struct letter *l);
 #endif

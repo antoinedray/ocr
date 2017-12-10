@@ -397,6 +397,7 @@ struct letter* init_letter(int topleft_x, int botright_x, int botright_y,
   l->height = botright_x - topleft_x;
   l->width = botright_y - topleft_y;
   binarize_letter(img, l);
+  print_letter(l);
   return l;
 }
 void binarize_letter(SDL_Surface* img, struct letter* l)
@@ -428,6 +429,15 @@ void binarize_letter(SDL_Surface* img, struct letter* l)
     printf("|\n");
   }
   printf("\n");
-
   l->mat = mat;
+}
+
+void print_letter(struct letter *l)
+{
+  printf("l->coord_x[0] = %i\n", l->coord_x[0]);
+  printf("l->coord_x[1] = %i\n", l->coord_x[1]);
+  printf("l->coord_y[0] = %i\n", l->coord_y[0]);
+  printf("l->coord_y[1] = %i\n", l->coord_y[1]);
+  printf("l->height = %i\n", l->height);
+  printf("l->width = %i\n", l->width);
 }
