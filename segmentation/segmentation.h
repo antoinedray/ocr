@@ -6,7 +6,6 @@
 
 #ifndef SEGMENTATION_H_
 #define SEGMENTATION_H_
-//# include "../imgformat/structs.h"
 # include "../mysdl/mysdl.h"
 
 struct letter
@@ -18,17 +17,9 @@ struct letter
   double **mat; //Contains the binarized height*width letter in 0 and 1s
 };
 
-struct text
-{
-  struct letter* **text;
-  int lines_nb;
-  int nb_letters;
-};
-
 struct letter* init_letter(int topleft_x, int botright_x, int botright_y,
     SDL_Surface* img);
 void binarize_letter(SDL_Surface* img, struct letter* l);
-struct text* init_text(SDL_Surface* img);
 void char_detection(SDL_Surface* img, int list[], int res[]);
 SDL_Surface* Display_Character_Boxes(SDL_Surface* img, int startlines[],
         int columns[]);
@@ -42,5 +33,5 @@ int checklines(int l[], int nb_elts, int res[]);
 SDL_Surface* whole_segmentation(SDL_Surface* img);
 int get_number_letters(SDL_Surface* img, int cols[]);
 int get_number_lines(SDL_Surface* img, int lines[]);
-
+struct letter **create_letter_list(SDL_Surface* img, int lines[], int cols[]);
 #endif
