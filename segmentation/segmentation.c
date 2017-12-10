@@ -25,6 +25,10 @@ SDL_Surface* whole_segmentation(SDL_Surface* img)
   printf("letter[0]->coord_x[1] = %i\n", l[0]->coord_x[1]);
   printf("letter[0]->coord_y[0] = %i\n", l[0]->coord_y[0]);
   printf("letter[0]->coord_y[1] = %i\n", l[0]->coord_y[1]);
+  printf("letter[last]->coord_x[0] = %i\n", l[686]->coord_x[0]);
+  printf("letter[last]->coord_x[1] = %i\n", l[686]->coord_x[1]);
+  printf("letter[last]->coord_y[0] = %i\n", l[686]->coord_y[0]);
+  printf("letter[last]->coord_y[1] = %i\n", l[686]->coord_y[1]);
   return(text_blocks(img, 1, lines_cleaned, columns));
 }
 
@@ -249,6 +253,7 @@ struct letter** create_letter_list(SDL_Surface* img, int lines[], int cols[])
   //            warn("~~~~~~~~~~~~~~~~~~~~~~~~~~~~");
               struct letter* l = init_letter(cols[index], cols[index+1], tmp_y,
                   img);
+              warn("Letter #%i\n\n", index_list_letter);
     //          warn("############################################");
               list[index_list_letter] = l;
               index_list_letter++;
@@ -406,7 +411,7 @@ void binarize_letter(SDL_Surface* img, struct letter* l)
   int height = l->height;
   int width = l->width;
   int max = height > width ? height : width;
-  double *mat = calloc(width * height, sizeof(double));
+  double *mat = calloc(max * max, sizeof(double));
   warn("malloced");
   for(int i = l->coord_y[0]; i < l->coord_y[1]; i++)
   {
