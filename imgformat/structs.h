@@ -17,6 +17,7 @@ struct letter
   double **mat; //Contains the binarized height*width letter in 0 and 1s
 };
 
-struct letter* init_letter(int topleft_x, int topleft_y, int botright_x, int botright_y, SDL_Surface* img);
+struct letter* init_letter(int topleft_x, int botright_x, int botright_y,
+    SDL_Surface* img);
 void binarize_letter(SDL_Surface* img, struct letter* l);
 struct text* init_text(SDL_Surface* img);
