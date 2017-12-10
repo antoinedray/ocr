@@ -12,7 +12,7 @@ void save_NN(struct NN *mynet, char * name)
         if (i < mynet->size-1)
             fprintf(myfile,",");
     }
-    fprintf(myfile,"}\n");
+    fprintf(myfile,",}\n");
     for(size_t i = 0; i < mynet->size; i++)
     {
         for (size_t j = 0; j < mynet->layersize[i]; j++)
@@ -60,7 +60,6 @@ static double todouble(char *line, size_t len)
 
 struct NN *load_NN(char *name)
 {
-	warn("1");
     FILE *file = fopen(name,"r");
     if (file == NULL) {
         printf("File does not exists");
@@ -77,16 +76,12 @@ struct NN *load_NN(char *name)
     debug =1;
     if(debug==1)
       debug=2;
-	warn("2");
     debug = fscanf(file, "%s", line);
     mynb = (size_t)atoi(line);
-	warn("3");
     debug = fscanf(file, "%s", line);
     size_t index = 0;
-	warn("4");
     //size_t s = 0;
-    size_t * layers = malloc(mynb * sizeof(size_t));
-	warn("5");
+    size_t *layers = malloc(mynb * sizeof(size_t));
     for (size_t i = 1; line[i] != '}';i++)
     {
         if (line[i] == ',')
@@ -95,14 +90,17 @@ struct NN *load_NN(char *name)
             posin = 0;
             lpos += 1;
         }
-        else
-            posin = 10 * posin + (size_t)line[i];
+        else{
+			char nb[5] = "";
+			char fu[1];
+			fu[0] = line[i];
+			strcat(nb,fu);
+            posin = 10 * posin + (size_t)atoi(nb);
+		}
     }
-	warn("6");
     posin = 0;
     lpos = 0;
     struct NN *mynet = init_NN(layers, mynb);
-
     myw = calloc(mynet->layersize[lpos],sizeof(double));
     //handling the weights
     while(fscanf(file, "%s", line) != EOF)
@@ -126,7 +124,7 @@ struct NN *load_NN(char *name)
             myw[index] = todouble(line,len);
             index += 1;
         }
-    }
+	}
     return mynet;
 }
 /*
