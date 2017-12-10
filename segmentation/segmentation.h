@@ -6,7 +6,7 @@
 
 #ifndef SEGMENTATION_H_
 #define SEGMENTATION_H_
-# include "../mysdl/mysdl.h"
+#include "../mysdl/mysdl.h"
 
 struct letter
 {
@@ -15,6 +15,12 @@ struct letter
   int height; //int coord_topleft
   int width; //int coord_botright
   double *mat; //Contains the binarized height*width letter in 0 and 1s
+};
+
+struct letter_bin
+{
+    size_t len; //height*width
+    double *inputs; //Black == 1 , White == 0
 };
 
 struct letter* init_letter(int topleft_x, int botright_x, int botright_y,

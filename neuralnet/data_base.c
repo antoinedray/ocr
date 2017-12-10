@@ -59,10 +59,10 @@ void train(struct NN *MyNet) {
     size_t i = 0;
     double **output_train = get_database_out(nbChars);
     while(fscanf(fp, "%s", line) != EOF) {
-		char filename[100] = "";
-		char *location = "database/";
-		strcat(filename,location);
-		strcat(filename,line);
+        char filename[100] = "";
+        char *location = "database/";
+        strcat(filename,location);
+        strcat(filename,line);
         double *train = get_database_in(filename);
         backprop(MyNet,train,output_train[i]);
         if (i == nbChars - 1)
