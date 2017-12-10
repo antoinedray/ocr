@@ -29,6 +29,7 @@ void XOR_NN(struct NN *MyNet,size_t iter, double learning_rate){
 void OCR_NN(struct NN *MyNet, size_t iter, double learning_rate){
   set_learning_rate(learning_rate);
   for(size_t i = 0; i<iter; i++){
+    printf("%zu / %zu\n", i, iter);
     train(MyNet);
   }
 }
