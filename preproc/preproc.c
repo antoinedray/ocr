@@ -1,9 +1,9 @@
 /*
- * PIXEL OPERATIONS
- * file: pixel_operations.c
- * description: In this file we'll put all the preprocessing of the image
- * & necessary fonctions for sdl
- */
+**  PIXEL OPERATIONS
+**  file: pixel_operations.c
+**  description: In this file we'll put all the preprocessing of the image
+**  & necessary fonctions for sdl
+*/
 
 #include "preproc.h"
 
@@ -109,15 +109,12 @@ SDL_Surface* otzu(SDL_Surface* img, int w_min, int w_max, int h_min, int h_max)
     }
   }
 
-  // auxiliary value for computing μ2
-  for(int i = 0; i <= max_intensity; i++)
-    sum += i * histogram[i];
-
   // update qi(t)
-  for(int t = 0; t <= max_intensity; t++) {
-    q1 += histogram[t];
+  for(int i = 0; i <= max_intensity; i++) {
+    sum += i * histogram[i]; // auxiliary value for computing μ2
+    q1 += histogram[i];
     q2 = N - q1;
-    sumB += t * histogram[t];
+    sumB += i * histogram[i];
 
     if(q1 != 0)
       m1 = sumB / q1;
