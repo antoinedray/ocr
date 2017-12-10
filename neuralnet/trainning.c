@@ -34,15 +34,19 @@ void OCR_NN(struct NN *MyNet, size_t iter, double learning_rate){
   }
 }
 
-void try_OCR_img(char* filename, char* character,size_t char_index){
-	struct NN *MyNet = load_NN(filename);
-	warn("1");
+void try_OCR_img(struct NN *MyNet,/*char* filename*/ char* character,size_t char_index){
+	//struct NN *MyNet = load_NN(filename);
 	double *inputs = get_database_in(character);
 	double *outputs = feedforward(MyNet,inputs);
+	double coef = 0;
+	size_t ret = 0; 
 	for(size_t i = 0; outputs[i];i++){
-		printf("%lf \n",outputs[i]);
+		if(coef < outputs[i]){
+			coef = outputs[i];
+			ret = i;
+		}
 	}
-	printf("%lu",char_index);
+	printf("%lu %lu \n",char_index,ret);
 }
 
 int main(){
@@ -72,12 +76,11 @@ int main(){
   }
   else
     printf("Incorrect arguments");
-  
-  size_t layers[3] = {1024,512,75};
-  struct NN *MyNet = init_NN(layers,3);
-  OCR_NN(MyNet,5,0.2); //get nb_fonts
-  save_NN(MyNet,"OCR_NN");
-*/
-	try_OCR_img("OCR_NN","database/A_maj_AllerDisplay.jpg",0);
+  */
+  	size_t layers[3] = {1024,512,75};
+  	struct NN *MyNet = init_NN(layers,3);
+  	OCR_NN(MyNet,15,); //get nb_fonts
+  	save_NN(MyNet,"OCR_NN");
+	try_OCR_img(MyNet,"database/A_maj_AllerDisplay.jpg",0);
   	return 1;
 }
