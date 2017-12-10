@@ -1,9 +1,9 @@
 /*
- * PIXEL OPERATIONS
- * file: pixel_operations.c
- * description: In this file we'll put all the preprocessing of the image
- * & necessary fonctions for sdl
- */
+**  PIXEL OPERATIONS
+**  file: pixel_operations.c
+**  description: In this file we'll put all the preprocessing of the image
+**  & necessary fonctions for sdl
+*/
 
 #include "preproc.h"
 
