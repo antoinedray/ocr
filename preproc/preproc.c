@@ -110,11 +110,11 @@ SDL_Surface* otzu(SDL_Surface* img, int w_min, int w_max, int h_min, int h_max)
   }
 
   // update qi(t)
-  for(int i = 0; i <= max_intensity; i++) {
-    sum += i * histogram[i]; // auxiliary value for computing μ2
-    q1 += histogram[i];
+  for(int t = 0; t <= max_intensity; t++) {
+    sum += t * histogram[t]; // auxiliary value for computing μ2
+    q1 += histogram[t];
     q2 = N - q1;
-    sumB += i * histogram[i];
+    sumB += t * histogram[t];
 
     if(q1 != 0)
       m1 = sumB / q1;
