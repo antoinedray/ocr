@@ -21,7 +21,10 @@ SDL_Surface* whole_segmentation(SDL_Surface* img)
   //int nb_letters = get_number_letters(img, columns);
   //int nb_lines = get_number_lines(img, lines_cleaned);
   struct letter **l = create_letter_list(img, lines_cleaned, columns);
-  warn("letter[0]->coord_x[0] = %i\n", l[0]->coord_x[0]);
+  printf("letter[0]->coord_x[0] = %i\n", l[0]->coord_x[0]);
+  printf("letter[0]->coord_x[1] = %i\n", l[0]->coord_x[1]);
+  printf("letter[0]->coord_y[0] = %i\n", l[0]->coord_y[0]);
+  printf("letter[0]->coord_y[1] = %i\n", l[0]->coord_y[1]);
   return(text_blocks(img, 1, lines_cleaned, columns));
 }
 
@@ -188,28 +191,6 @@ struct letter** create_letter_list(SDL_Surface* img, int lines[], int cols[])
   int index_list_letter = 0;
   for (y = 0; y < img->h; y++)
   {
-    /*if (lines[y] == 1)
-    {
-      tmp = index;
-      for (; cols[tmp] != -42; )
-      {
-        int keep_checking = 1;
-        for (int tmp_y = y; keep_checking; tmp_y++)
-        {
-          for (int check_x = cols[tmp]; check_x < cols[tmp + 1]; check_x++)
-          {
-            pxl = getpixel(img, check_x, tmp_y);
-            SDL_GetRGB(pxl, img->format, &pxlcolor, &pxlcolor, &pxlcolor);
-            if (pxlcolor == 0)
-            {
-              keep_checking = 0;
-              tmp += 2;
-              break;
-            }
-          }
-        }
-      }
-    }*/
     if (lines[y] == 2)
     {
       for (; cols[index] != -42; )
@@ -223,10 +204,10 @@ struct letter** create_letter_list(SDL_Surface* img, int lines[], int cols[])
             SDL_GetRGB(pxl, img->format, &pxlcolor, &pxlcolor, &pxlcolor);
             if (pxlcolor == 0)
             {
-              warn("~~~~~~~~~~~~~~~~~~~~~~~~~~~~");
+  //            warn("~~~~~~~~~~~~~~~~~~~~~~~~~~~~");
               struct letter* l = init_letter(cols[index], cols[index+1], tmp_y,
                   img);
-              warn("############################################");
+    //          warn("############################################");
               list[index_list_letter] = l;
               index_list_letter++;
               stop_checking = 1;
@@ -373,12 +354,43 @@ struct letter* init_letter(int topleft_x, int botright_x, int botright_y,
   l->coord_y[1] = botright_y;
   l->height = botright_x - topleft_x;
   l->width = botright_y - topleft_y;
-  warn("before bin");
   binarize_letter(img, l);
-  warn("after bin");
   return l;
 }
+void binarize_letter(SDL_Surface* img, struct letter* l)
+{
+  Uint8 r, g, b;
+  int height = l->height;
+  int width = l->width;
+  int max = height > width ? height : width;
+  double *mat = calloc(width * height, sizeof(double));
+  warn("malloced");
+  for(int i = l->coord_y[0]; i < l->coord_y[1]; i++)
+  {
+    for (int j = l->coord_x[0]; j < l->coord_x[1]; j++)
+    {
+      SDL_GetRGB(getpixel(img, j, i),img->format,&r,&g,&b);
+      if (r == 0)
+        mat[(j - l->coord_x[0]) + (i - l->coord_y[0]) * max] = 1.111111;
+      else
+        mat[(j - l->coord_x[0]) + (i - l->coord_y[0]) * max] = 0.0;
+    }
+  }
 
+  for (int n =0; n < l->height; n++)
+  {
+    for (int j = 0; j < l->width; j++)
+    {
+      printf("| %f ", mat[j + n * width]);
+    }
+    printf("|\n");
+  }
+  printf("\n");
+
+  l->mat = mat;
+}
+
+/*
 void binarize_letter(SDL_Surface* img, struct letter* l)
 {
   printf("l->height = %i\n", l->height);
@@ -430,4 +442,4 @@ void binarize_letter(SDL_Surface* img, struct letter* l)
   printf("\n");
   warn("setting l->mat");
   l->mat = mat;
-}
+}*/

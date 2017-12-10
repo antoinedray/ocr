@@ -14,7 +14,7 @@ struct letter
   int coord_y [2];
   int height; //int coord_topleft
   int width; //int coord_botright
-  double **mat; //Contains the binarized height*width letter in 0 and 1s
+  double *mat; //Contains the binarized height*width letter in 0 and 1s
 };
 
 struct letter* init_letter(int topleft_x, int botright_x, int botright_y,
