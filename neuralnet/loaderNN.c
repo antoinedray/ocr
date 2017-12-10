@@ -102,7 +102,7 @@ struct NN *load_NN(char *name)
     posin = 0;
     lpos = 0;
     struct NN *mynet = init_NN(layers, mynb);
-	
+
     myw = calloc(mynet->layersize[lpos],sizeof(double));
     //handling the weights
     while(fscanf(file, "%s", line) != EOF)

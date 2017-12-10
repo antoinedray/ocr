@@ -72,7 +72,7 @@ int main(){
   }
   else
     printf("Incorrect arguments");
-  
+
   size_t layers[3] = {1024,512,75};
   struct NN *MyNet = init_NN(layers,3);
   OCR_NN(MyNet,5,0.2); //get nb_fonts
