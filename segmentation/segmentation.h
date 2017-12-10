@@ -20,7 +20,8 @@ SDL_Surface* draw_line(SDL_Surface* img, int start_x, int end_x, int y);
 SDL_Surface* draw_column(SDL_Surface* img, int start_y, int end_y, int x);
 int checklines(int l[], int nb_elts, int res[]);
 SDL_Surface* whole_segmentation(SDL_Surface* img);
-int get_number_letters(int cols[]);
-int get_number_lines(int lines[]);
+int get_number_letters(SDL_Surface* img, int cols[]);
+int get_number_lines(SDL_Surface* img, int lines[]);
+struct letter* create_letter(SDL_Surface *img, int s_x, int e_x, int e_y)
 
 #endif

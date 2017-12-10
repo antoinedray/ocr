@@ -19,6 +19,8 @@ SDL_Surface* whole_segmentation(SDL_Surface* img)
   for (int x = 0; x < img->w; x++)
     columns[x] = -1;
   char_detection(img, lines_cleaned, columns);
+  printf("There are %i letters in this text\n", get_number_letters(img, columns));
+  printf("And there also are %i lines.\n", get_number_lines(img, lines_cleaned));
   return(text_blocks(img, 1, lines_cleaned, columns));
 }
 
@@ -175,11 +177,14 @@ SDL_Surface* text_blocks(SDL_Surface* img, int scale, int lines[], int cols[])
 
 SDL_Surface* box_letters(SDL_Surface* img, int lines[], int cols[])
 { //Boxes every letter of the text
+  struct letter **list = malloc(sizeof(struct letter)
+                                  * get_number_letters(img, cols));
   int y;
-  int tmp;
+  int tmp; //To not go to next line when we check for top of letters
   int index = 0;
   Uint8 pxlcolor;
   Uint32 pxl;
+  int index_list_letter = 0;
   for (y = 0; y < img->h; y++)
   {
     if (lines[y] == 1)
@@ -218,7 +223,11 @@ SDL_Surface* box_letters(SDL_Surface* img, int lines[], int cols[])
             SDL_GetRGB(pxl, img->format, &pxlcolor, &pxlcolor, &pxlcolor);
             if (pxlcolor == 0)
             {
-              draw_line(img, cols[index], cols[index+1], tmp_y);
+              draw_line(img, cols[index], cols[index + 1], tmp_y);
+              struct letter* l = init_letter(cols[index], cols[index+1], tmp_y,
+                  img);
+              list[index_list_letter] = l;
+              index_list_letter++;
               stop_checking = 1;
               index += 2;
               break;
@@ -246,24 +255,22 @@ SDL_Surface* draw_column(SDL_Surface* img, int start_y, int end_y, int x)
   return (img);
 }
 
+//struct letter* create_letter(SDL_Surface *img, int s_x, int e_x, int e_y)
+//{
+  
+//}
 
-/*struct text* image_to_struct_text(SDL_Surface* img, int lines[], int cols[])
-{ //FIXME
-  struct text *t = malloc(sizeof(struct text));
-}*/
 
-int get_number_letters(int cols[])
+int get_number_letters(SDL_Surface* img, int cols[])
 {
   int count_letters = 0;
-  size_t tmp;
-  int count_it;
-  for (tmp = 0, count_it = 1;
-      tmp < sizeof(*cols)/sizeof(int);
-      tmp++, count_it = !count_it)
+  int tmp;
+  int count_it = 1;
+  for (tmp = 0; tmp < img->w; tmp++)
   {
-    if (cols[tmp] == -1 || cols[tmp] == -42)
+    if (cols[tmp] < 0)
       continue;
-    if (count_it)
+    if (count_it == 1)
     {
       count_letters++;
       count_it = 0;
@@ -274,11 +281,11 @@ int get_number_letters(int cols[])
   return count_letters;
 }
 
-int get_number_lines(int lines[])
+int get_number_lines(SDL_Surface* img, int lines[])
 {
   int count_lines = 0;
-  size_t tmp;
-  for (tmp = 0; tmp < sizeof(*lines)/sizeof(int); tmp++)
+  int tmp;
+  for (tmp = 0; tmp < img->h; tmp++)
     if (lines[tmp] == 2)
       count_lines++;
   return count_lines;

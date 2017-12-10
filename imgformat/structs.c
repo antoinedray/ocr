@@ -1,9 +1,25 @@
 # include "structs.h"
-# include "segmentation.h"
+# include "../segmentation/segmentation.h"
 
-struct letter* init_letter(int topleft_x, int topleft_y, int botright_x, int botright_y, SDL_Surface* img)
+struct letter* init_letter(int topleft_x, int botright_x, int botright_y, SDL_Surface* img)
 {
   struct letter* l = malloc(sizeof(struct letter));
+  int line_has_black = 1;
+  Uint32 pxl;
+  Uint8 pxlcolor;
+  int going_up;
+  for (going_up = botright_y; line_has_black != 0; going_up--)
+  {
+    line_has_black = 0;
+    for (int tmp = topleft_x; tmp < botright_x; tmp++)
+    {
+      pxl = getpixel(img, tmp, going_up);
+      SDL_GetRGB(img, img->format, &pxlcolor, &pxlcolor, &pxlcolor);
+      if (pxlcolor == 0)
+        line_has_black = 1;
+    }
+  }
+  int topleft_y = going_up;
   l->coord_x[0] = topleft_x;
   l->coord_x[1] = botright_x;
   l->coord_y[0] = topleft_y;
@@ -37,9 +53,17 @@ void binarize_letter(SDL_Surface* img, struct letter* l)
 
 struct text* init_text(SDL_Surface* img)
 {
+  int lines[img->h];
+  int cols[img->w * 3];
+  for (int tmp = 0; x < img->w * 3; x++)
+    cols[tmp] = -1;
+  Line_Detection(img, lines); //fills "lines" with 1 and -1
+  int lines_final[img->h];
+  checklines(lines, img->h, lines_final);
+  char_detection(img, lines_final, cols);
   struct text* t = malloc(sizeof(struct text));
-  t->lines_nb = get_number_lines(img);
-  t->nb_letters = get_number_letters(img);
+  t->lines_nb = get_number_lines(img, lines_final);
+  t->nb_letters = get_number_letters(img, cols);
   //FIXME add letters in the mat
   int i;
   int j;
