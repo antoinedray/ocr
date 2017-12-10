@@ -35,21 +35,27 @@ struct letter_bin *resize_image(int inputs[], int width , int height) {
     for (int f = 0; f < dim; f++) { // y on output
         double ystart = yend;
         yend = (f + 1) / yscale;
-        if (yend >= height) yend = height - 0.000001;
+        if (yend >= height)
+            yend = height - 0.000001;
         double xend = 0.0;
         for (int g = 0; g < dim; g++) { // x on output
             double xstart = xend;
             xend = (g + 1) / xscale;
-            if (xend >= width) xend = width - 0.000001;
+            if (xend >= width)
+                xend = width - 0.000001;
             double sum = 0.0;
             for (int y = (int)ystart; y <= (int)yend; ++y) {
                 double yportion = 1.0;
-                if (y == (int)ystart) yportion -= ystart - y;
-                if (y == (int)yend) yportion -= y+1 - yend;
+                if (y == (int)ystart)
+                    yportion -= ystart - y;
+                if (y == (int)yend)
+                    yportion -= y+1 - yend;
                 for (int x = (int)xstart; x <= (int)xend; ++x) {
                     double xportion = 1.0;
-                    if (x == (int)xstart) xportion -= xstart - x;
-                    if (x == (int)xend) xportion -= x+1 - xend;
+                    if (x == (int)xstart)
+                        xportion -= xstart - x;
+                    if (x == (int)xend)
+                        xportion -= x+1 - xend;
                     sum += inputs[x + y*width] * yportion * xportion;
                 }
             }
