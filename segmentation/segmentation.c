@@ -4,9 +4,7 @@
 **  description: file containing all that has to do with the segmentation
 **  process
 */
-
-#include "segmentation.h"
-#include "../imgformat/structs.h"
+# include "segmentation.h"
 
 SDL_Surface* whole_segmentation(SDL_Surface* img)
 {
@@ -175,7 +173,7 @@ SDL_Surface* text_blocks(SDL_Surface* img, int scale, int lines[], int cols[])
     return img;
 }
 
-SDL_Surface* box_letters(SDL_Surface* img, int lines[], int cols[])
+struct letter** create_letter_list(SDL_Surface* img, int lines[], int cols[])
 { //Boxes every letter of the text
   struct letter **list = malloc(sizeof(struct letter)
                                   * get_number_letters(img, cols));
@@ -223,7 +221,6 @@ SDL_Surface* box_letters(SDL_Surface* img, int lines[], int cols[])
             SDL_GetRGB(pxl, img->format, &pxlcolor, &pxlcolor, &pxlcolor);
             if (pxlcolor == 0)
             {
-              draw_line(img, cols[index], cols[index + 1], tmp_y);
               struct letter* l = init_letter(cols[index], cols[index+1], tmp_y,
                   img);
               list[index_list_letter] = l;
@@ -238,66 +235,14 @@ SDL_Surface* box_letters(SDL_Surface* img, int lines[], int cols[])
       index++;
     }
   }
-  return img;
+  return list;
 }
 
-SDL_Surface* draw_line(SDL_Surface* img, int start_x, int end_x, int y)
-{ //Draws a line on img, at height y, between points s_x and end_x
-  for (; start_x < end_x; start_x++)
-    putpixel(img, start_x, y, SDL_MapRGB(img->format, 255, 0, 0));
-  return (img);
-}
 
-SDL_Surface* draw_column(SDL_Surface* img, int start_y, int end_y, int x)
-{ //Draws a column on img, at width x, between points s_y and end_y
-  for (; start_y < end_y; start_y++)
-    putpixel(img, x, start_y, SDL_MapRGB(img->format, 255, 0, 0));
-  return (img);
-}
-
-//struct letter* create_letter(SDL_Surface *img, int s_x, int e_x, int e_y)
-//{
-  
-//}
-
-
-int get_number_letters(SDL_Surface* img, int cols[])
-{
-  int count_letters = 0;
-  int tmp;
-  int count_it = 1;
-  for (tmp = 0; tmp < img->w; tmp++)
-  {
-    if (cols[tmp] < 0)
-      continue;
-    if (count_it == 1)
-    {
-      count_letters++;
-      count_it = 0;
-    }
-    else
-      count_it = 1;
-  }
-  return count_letters;
-}
-
-int get_number_lines(SDL_Surface* img, int lines[])
-{
-  int count_lines = 0;
-  int tmp;
-  for (tmp = 0; tmp < img->h; tmp++)
-    if (lines[tmp] == 2)
-      count_lines++;
-  return count_lines;
-}
-
-/*struct letter* box_to_letter(SDL_Surface* img, int lines[], int cols[])
-{
-//FIXME
-}*/
-/*
+SDL_Surface* box_letters(SDL_Surface* img, int lines[], int cols[])
+{ //Boxes every letter of the text
   int y;
-  int tmp;
+  int tmp; //To not go to next line when we check for top of letters
   int index = 0;
   Uint8 pxlcolor;
   Uint32 pxl;
@@ -339,7 +284,7 @@ int get_number_lines(SDL_Surface* img, int lines[])
             SDL_GetRGB(pxl, img->format, &pxlcolor, &pxlcolor, &pxlcolor);
             if (pxlcolor == 0)
             {
-              draw_line(img, cols[index], cols[index+1], tmp_y);
+              draw_line(img, cols[index], cols[index + 1], tmp_y);
               stop_checking = 1;
               index += 2;
               break;
@@ -352,22 +297,125 @@ int get_number_lines(SDL_Surface* img, int lines[])
   }
   return img;
 }
-*/
-//Compute width of an "n"
 
-/*
-int space_threshold(int cols[])
-{
-  int max_sp = 0;
-  for (size_t i = 1; i < sizeof(*cols)/sizeof(int); i++)
-    if (cols[i] - cols[i-1] > maxsp)
-      max_sp = cols[i] - cols[i-1];
-  return max_sp;
+SDL_Surface* draw_line(SDL_Surface* img, int start_x, int end_x, int y)
+{ //Draws a line on img, at height y, between points s_x and end_x
+  for (; start_x < end_x; start_x++)
+    putpixel(img, start_x, y, SDL_MapRGB(img->format, 255, 0, 0));
+  return (img);
 }
 
-int is_space(int pos1, int pos2, int threshold)
+SDL_Surface* draw_column(SDL_Surface* img, int start_y, int end_y, int x)
+{ //Draws a column on img, at width x, between points s_y and end_y
+  for (; start_y < end_y; start_y++)
+    putpixel(img, x, start_y, SDL_MapRGB(img->format, 255, 0, 0));
+  return (img);
+}
+
+
+int get_number_letters(SDL_Surface* img, int cols[])
 {
-  if (pos2 - pos1 < threshold)
-    return 0;
-  return 1;
+  int count_letters = 0;
+  int tmp;
+  int count_it = 1;
+  for (tmp = 0; tmp < img->w; tmp++)
+  {
+    if (cols[tmp] < 0)
+      continue;
+    if (count_it == 1)
+    {
+      count_letters++;
+      count_it = 0;
+    }
+    else
+      count_it = 1;
+  }
+  return count_letters;
+}
+
+int get_number_lines(SDL_Surface* img, int lines[])
+{
+  int count_lines = 0;
+  int tmp;
+  for (tmp = 0; tmp < img->h; tmp++)
+    if (lines[tmp] == 2)
+      count_lines++;
+  return count_lines;
+}
+
+struct letter* init_letter(int topleft_x, int botright_x, int botright_y,
+    SDL_Surface* img)
+{
+  struct letter* l = malloc(sizeof(struct letter));
+  int line_has_black = 1;
+  Uint32 pxl;
+  Uint8 pxlcolor;
+  int going_up;
+  for (going_up = botright_y; line_has_black != 0; going_up--)
+  {
+    line_has_black = 0;
+    for (int tmp = topleft_x; tmp < botright_x; tmp++)
+    {
+      pxl = getpixel(img, tmp, going_up);
+      SDL_GetRGB(pxl, img->format, &pxlcolor, &pxlcolor, &pxlcolor);
+      if (pxlcolor == 0)
+        line_has_black = 1;
+    }
+  }
+  int topleft_y = going_up;
+  l->coord_x[0] = topleft_x;
+  l->coord_x[1] = botright_x;
+  l->coord_y[0] = topleft_y;
+  l->coord_y[1] = botright_y;
+  l->height = botright_x - topleft_x;
+  l->width = botright_y - topleft_y;
+  binarize_letter(img, l);
+  return l;
+}
+
+void binarize_letter(SDL_Surface* img, struct letter* l)
+{
+  double **mat = malloc(sizeof(l->height * l->width));
+  int x;
+  int y;
+  Uint32 pxl;
+  Uint8 color;
+  for (x = l->coord_x[0]; x < l->coord_x[1]; x++)
+  {
+    for (y = l->coord_y[0]; y < l->coord_y[1]; y++)
+    {
+      pxl = getpixel(img,x,y);
+      SDL_GetRGB(pxl, img->format, &color, &color, &color);
+      if (color == 0)
+        mat[y][x] = 1.0;
+      else
+        mat[y][x] = 0.0;
+    }
+  }
+  l->mat = mat;
+}
+
+/*struct text* init_text(SDL_Surface* img, struct letter **list)
+{
+  int lines[img->h];
+  int cols[img->w * 3];
+  for (int tmp = 0; tmp < img->w * 3; tmp++)
+    cols[tmp] = -1;
+  Line_Detection(img, lines); //fills "lines" with 1 and -1
+  int lines_final[img->h];
+  checklines(lines, img->h, lines_final);
+  char_detection(img, lines_final, cols);
+  struct text* t = malloc(sizeof(struct text));
+  t->lines_nb = get_number_lines(img, lines_final);
+  t->nb_letters = get_number_letters(img, cols);
+  //FIXME add letters in the mat
+  int i;
+  int j;
+  for (i = 0; i < t->lines_nb; i++)
+  {
+    for (j = 0; j < t->nb_letters; j++)
+    {
+      
+    }
+  }
 }*/
