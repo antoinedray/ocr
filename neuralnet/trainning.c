@@ -62,9 +62,9 @@ int main(){
   else
     printf("Incorrect arguments");
   */
-  size_t layers[3] = {1024,512,62};
+  size_t layers[3] = {1024,512,75};
   struct NN *MyNet = init_NN(layers,3);
-  OCR_NN(MyNet,10000,0.2); //get nb_fonts
+  OCR_NN(MyNet,5,0.2); //get nb_fonts
   save_NN(MyNet,"OCR_NN");
   return 1;
 }
