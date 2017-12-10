@@ -1,4 +1,5 @@
 #include <stdio.h>
+#include <err.h>
 #include "data_base.h"
 
 static struct letter_bin *IMGtoBIN(SDL_Surface* img)
@@ -48,17 +49,21 @@ static double **get_database_out(size_t nb_characters){
 }
 
 void train(struct NN *MyNet) {
-    int nbChars = 75;
+    size_t nbChars = 75;
     FILE *fp = fopen("database/data.txt", "r");
     if (fp == NULL) {
         printf("Data file does not exists");
         return;
     }
-    char *line = NULL;
+    char line[64];
     size_t i = 0;
     double **output_train = get_database_out(nbChars);
     while(fscanf(fp, "%s", line) != EOF) {
-        double *train = get_database_in(line);
+		char filename[100] = "";
+		char *location = "database/";
+		strcat(filename,location);
+		strcat(filename,line);
+        double *train = get_database_in(filename);
         backprop(MyNet,train,output_train[i]);
         if (i == nbChars - 1)
             i = 0;
