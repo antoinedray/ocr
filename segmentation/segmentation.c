@@ -28,6 +28,7 @@ SDL_Surface* whole_segmentation(SDL_Surface* img)
   printf("letter[0]->coord_y[0] = %i\n", l[0]->coord_y[0]);
   printf("letter[0]->coord_y[1] = %i\n", l[0]->coord_y[1]);
   double resized_inputs[1024];
+  space_mng(l);
   struct letter_bin *l_b = resize_image(l[0]->mat, resized_inputs,
       l[0]->width, l[0]->height);
   int max = l[0]->height > l[0]->width ? l[0]->height : l[0]->width;
@@ -451,14 +452,13 @@ void binarize_letter(SDL_Surface* img, struct letter* l)
   l->mat = mat;
 }
 
-static int threshold(struct letter **list_let, size_t len)
+int threshold(struct letter **list_let, size_t len)
 {
-  <<<<<<< HEAD
-    int histo[50];
+  int histo[50];
   for (int i = 0; i < 50; i++)
     histo[i] = 0;
   for(size_t i = 1; i < len; i++)
-    histo[list_let[i]->coordx[0] - list_let[i-1]->coord_x[1]] += 1;
+    histo[list_let[i]->coord_x[0] - list_let[i-1]->coord_x[1]] += 1;
   int l_th = 0;
   int h_th = 49;
   int l = 1;
@@ -481,7 +481,7 @@ static int threshold(struct letter **list_let, size_t len)
       else
         h = 0;
     }
-    if (l && check2)
+    if (l && check1)
     {
       l_th += 1;
       nfo = 0;
@@ -497,7 +497,7 @@ static int threshold(struct letter **list_let, size_t len)
   return (l_th + (h_th - l_th)/2);
 }
 
-static void space_mng(struct letter **list_let)
+void space_mng(struct letter **list_let)
 {
   size_t len = sizeof(list_let)/ sizeof(struct letter);
   int th = threshold(list_let, len);
