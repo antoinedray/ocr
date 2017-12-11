@@ -68,10 +68,19 @@ int main(){
     output = feedforward(MyNet,input4);
     printf("0 XOR 0 : %lf \n",output[0]);
 */
-    size_t layers[3] = {1024,512,75};
+    size_t layers[3] = {1024,512,66};
     struct NN *MyNet = init_NN(layers,3);
     OCR_NN(MyNet,10000,0.2); //get nb_fonts
-    save_NN(MyNet,"OCR_NN");
-    try_OCR_img(MyNet,"database/A_maj_AllerDisplay.jpg",0);
+    save_NN(MyNet,"OCR_NN_1");
+	char line[50];
+	MyNet = load_NN("OCR_NN_1");
+    FILE *f = fopen("database/data.txt","r");
+	size_t i = 0;
+	while(fscanf(f,"%s", line) != EOF){
+		char loc[100] = "database/";
+		strcat(loc,line);
+		try_OCR_img(MyNet, loc, i);
+		i++;
+	} 
    	return 1;
 }

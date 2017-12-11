@@ -28,36 +28,6 @@ void save_NN(struct NN *mynet, char * name)
     fclose(myfile);
 }
 
-/*
-static size_t tosizet (char c, double pow)
-{
-    return (size_t)c * (size_t)pow;
-}
-*/
-
-static double todouble(char *line, size_t len)
-{
-    double pow = 1;
-    double res = 0;
-    int lo = 0;
-    for (size_t i = 0; i < len; i++)
-    {
-        if(line[i] == ',')
-            lo = 1;
-        else
-        {
-            if(!lo)
-                res = res * 10 + (double)line[i];
-            else
-            {
-                pow = pow /10;
-                res += (double)line[i] * pow;
-            }
-        }
-    }
-    return res;
-}
-
 struct NN *load_NN(char *name)
 {
     FILE *file = fopen(name,"r");
@@ -66,9 +36,9 @@ struct NN *load_NN(char *name)
         return NULL;
     }
     char line[100];
-    size_t len = 0;
+    //size_t len = 0;
     size_t mynb = 0;
-    double *myw = NULL;
+    //double *myw = NULL;
     size_t lpos = 0;
     size_t posin = 0;
     int debug;
@@ -78,7 +48,9 @@ struct NN *load_NN(char *name)
       debug=2;
     debug = fscanf(file, "%s", line);
     mynb = (size_t)atoi(line);
+	warn("%lu | %s",mynb,line);
     debug = fscanf(file, "%s", line);
+	warn("%s",line);
     size_t index = 0;
     //size_t s = 0;
     size_t *layers = malloc(mynb * sizeof(size_t));
@@ -87,6 +59,7 @@ struct NN *load_NN(char *name)
         if (line[i] == ',')
         {
             layers[lpos] = posin;
+			warn("%lu",posin);
             posin = 0;
             lpos += 1;
         }
@@ -98,230 +71,41 @@ struct NN *load_NN(char *name)
             posin = 10 * posin + (size_t)atoi(nb);
 		}
     }
-    posin = 0;
-    lpos = 0;
+	size_t layer_pos = 0;
+	size_t node_index = 0;
+	double num = 0;
     struct NN *mynet = init_NN(layers, mynb);
-    myw = calloc(mynet->layersize[lpos],sizeof(double));
+	warn("weights");
     //handling the weights
-    while(fscanf(file, "%s", line) != EOF)
-    {
+    while(fscanf(file, "%s", line) != EOF || mynb > layer_pos)
+    {	warn("%s",line);
         if(line[0] == '$')
         {
-            myw = calloc(mynet->layersize[lpos], sizeof(double));
-            lpos += 1;
-            posin = 0;
+			if(mynb <= layer_pos+1)
+				break;
+            layer_pos += 1;
+            node_index = 0;
+			warn("mat[%lu][%lu]",layer_pos,node_index);
         }
         else if(line[0]=='b')
-        {
-            mynet->mat[lpos][posin]->weights = myw;
-            debug = fscanf(file, "%s", line);
-            mynet->mat[lpos][posin]->bias = todouble(line,len);
-            posin += 1;
+		{
+            debug = fscanf(file, "%s",line);
+			//sscanf(line,"%lf", num);
+			warn("bias at mat[%lu][%lu], bias value %lf",layer_pos,node_index,atof(line));
+			warn("bias at mat[%lu][%lu], bias value %s",layer_pos,node_index,line);
+			//bias = atof(line);
+			mynet->mat[layer_pos][node_index]->bias = atof(line);
+            node_index += 1;
             index = 0;
         }
         else
         {
-            myw[index] = todouble(line,len);
+	
+			num = atof(line);
+            mynet->mat[layer_pos][node_index]->weights[index]= num;
             index += 1;
         }
 	}
 	fclose(file);
     return mynet;
 }
-/*
-    if (line[0] == "$")
-    {
-        mynet->mat
-    }
-    else
-    {
-        struct N **inp = malloc(sizeof(struct N*));
-        struct N ***mymat = malloc(sizeof(inp) * mynet->size);
-        struct N *myneu = malloc(sizeof(struct N));
-        size_t posx = 0;
-        size_t posy = 0;
-        size_t i = 0;
-                double pow = 1;
-                int nex = 0;
-                while(line[i] != "]" || line[i+1] == "[")
-                {
-                    if(line[i] == "]" || line[i] == "[")
-                    {
-                        nex = 1;
-                    }
-                    else
-                    {
-                        if (!nex)
-                            posx = 10 * posx + (size_t)line[i];
-                        else
-                            posy = 10 * posy + (size_t)line[i];
-                    }
-                    i++;
-                }
-                i+=2;
-                nex = 0;
-                while(line[i] != "\n")
-                {
-                    if (line[i] == ".")
-                    {
-                        nex = 1;
-                        pow = 1;
-                    }
-                    else
-                    {
-
-                    }
-                }
-            }
-        }
-    }
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-=======
-
-
->>>>>>> 7658566c76a3c0b2224ad85d25efbbbaaafebbef
-    while ((c = fgetc(file)) != EOF)
-    {
-        if (c=="\n"||c="{"||c=="}"||c=="["||c=="]"||c=="b"||c=="#")
-        {
-            prev = c;
-            c = "";
-        }
-        else
-        {
-            if(prev=="#"||prev=="b")
-            {
-                if(sec==".")
-                {
-                    pow = pow/10;
-                    w_b += pow * (double)c;
-                }
-                else
-                {
-                    pow = pow *10;
-                    w_b = w_b *pow + (double)c;
-                }
-            }
-        }
-    }
-
-
-
-
-
-    FILE * myfile;
-    myfile = fopen(name,"r");
-    char line = NULL
-    struct NN *mynet = malloc(sizeof(struct NN));
-    size_t mynet_size = 0;
-    mynet_size = (size_t)fgetc(file);
-    size_t s = 0;
-    char c = "";
-    struct
-    for (int i = 0; i < 2; i++)
-        fgetc(file);
-
-    size_t * mynet_layers = malloc(mynet_size);
-
-    for (size_t i =0; i < mynet_size; i++)
-    {
-        s = 0;
-        c = "";
-        while((c = fgetc(myfile) != "," && c != "]")
-            s = 10 * s + (size_t)c;
-        mynet_layers[i] = s;
-    }
-    fgetc(myfile);
-    fgetc(myfile);
-
-
-    for (size_t i = 0; i < mynet_size; i++)
-    {
-        size_t posx = 0;
-        size_t posy = 0;
-        double
-        for (size_t j = 0; j < mynet_layers[i]; j++)
-        {
-            struct N *mynn = malloc(sizeof(struct N));
-            s = 0;
-            c = "";
-            while((c = fgetc(myfile) != "]")
-                s = 10 * s + (size_t)s;
-            posx = s;
-            s = 0;
-            while((c = fgetc(myfile) != "]")
-                s =
-        }
-    }
-}
-
-<<<<<<< HEAD
-struct NN *load_NN_base(char *filename){
-=======
-struct NN *load_NN(char *filename){
->>>>>>> 5402d9839f12389c304bb8708d7c3f7ba615f973
-    FILE *f = fopen(filename,"r");
-    char *line = NULL;
-    size_t len =0;
-    size_t index = 0;
-    int loc = 0;
-    struct NN *MyNet = malloc(sizeof(struct NN));
-    while(!feof(f)){
-        getline(&line,&len,f);
-        if (loc == 0){
-            MyNet->size = atoi(line);
-            loc +=1;
-        }
-        if (loc == 1){
-            index = 1;
-            for(size_t i = 0 ; line[i]!='\n';i++){
-                if(line[i] == '|'){
-                    index +=1;
-                }
-            }
-        }
-    }
-    return MyNet;
-<<<<<<< HEAD
-}
-=======
-}
->>>>>>> 5402d9839f12389c304bb8708d7c3f7ba615f973
-*/
