@@ -453,6 +453,7 @@ void binarize_letter(SDL_Surface* img, struct letter* l)
 
 static int threshold(struct letter **list_let, size_t len)
 {
+<<<<<<< HEAD
 	int histo[50];
 	for (int i = 0; i < 50; i++)
 		histo[i] = 0;
