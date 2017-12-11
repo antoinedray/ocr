@@ -48,4 +48,5 @@ struct letter_bin *resize_image(double inputs[], double resized_inputs[],
 int threshold(struct letter **list_let, int len);
 void space_mng(struct letter **list_let, int nb_let);
 void resizePixels(double pixels[], double res[], int w1,int h1,int w2,int h2);
+void center_letter(struct letter *src, double dst[]);
 #endif
