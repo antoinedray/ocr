@@ -1,9 +1,9 @@
 /*
-**  SEGMENTATION
-**  file: segmentation.c
-**  description: file containing all that has to do with the segmentation
-**  process
-*/
+ **  SEGMENTATION
+ **  file: segmentation.c
+ **  description: file containing all that has to do with the segmentation
+ **  process
+ */
 #include "segmentation.h"
 #include <err.h>
 
@@ -41,7 +41,7 @@ SDL_Surface* whole_segmentation(SDL_Surface* img)
   }
   printf("\n");
 
-  
+
   for (int n = 0; n < 32; n++)
   {
     for (int j = 0; j < 32; j++)
@@ -239,12 +239,12 @@ void char_detection(SDL_Surface* img, int list[], int res[])
 }
 
 SDL_Surface* text_blocks(SDL_Surface* img, int scale, int lines[], int cols[])
-/*
- ** Displays text blocks, depending on scale.
- ** 1: boxes around each letter
- ** 2: boxes around each word
- ** 3: boxes around each paragraph
- */
+  /*
+   ** Displays text blocks, depending on scale.
+   ** 1: boxes around each letter
+   ** 2: boxes around each word
+   ** 3: boxes around each paragraph
+   */
 {
   if (scale == 1)
     return box_letters(img, lines, cols);
@@ -255,7 +255,7 @@ SDL_Surface* text_blocks(SDL_Surface* img, int scale, int lines[], int cols[])
 struct letter** create_letter_list(SDL_Surface* img, int lines[], int cols[])
 { //Boxes every letter of the text
   struct letter **list = malloc(sizeof(struct letter)
-                                  * get_number_letters(img, cols));
+      * get_number_letters(img, cols));
   int y;
   //int tmp; //To not go to next line when we check for top of letters
   int index = 0;
@@ -453,59 +453,59 @@ void binarize_letter(SDL_Surface* img, struct letter* l)
 
 static int threshold(struct letter **list_let, size_t len)
 {
-<<<<<<< HEAD
-	int histo[50];
-	for (int i = 0; i < 50; i++)
-		histo[i] = 0;
-	for(size_t i = 1; i < len; i++)
-		histo[list_let[i]->coordx[0] - list_let[i-1]->coord_x[1]] += 1;
-	int l_th = 0;
-	int h_th = 49;
-	int l = 1;
-	int fo= 1;
-	int nfo=1;
-	int h = 1;
-	for(size_t i = 1; i < 50; i++)
-	{
-		int check1 = histo[i] != 0;
-		int check2 = histo[50-i] != 0;
-		if (h && check2)
-		{
-			h_th -= 1;
-			fo = 0;
-		}
-		else
-		{
-			if (fo)
-				h_th -= 1;
-			else
-				h = 0;
-		}
-		if (l && check2)
-		{
-			l_th += 1;
-			nfo = 0;
-		}
-		else
-		{
-			if (nfo)
-				l_th += 1;
-			else
-				l = 0;
-		}
-	}
-	return l_th +(h_th - l_th)/2;
+  <<<<<<< HEAD
+    int histo[50];
+  for (int i = 0; i < 50; i++)
+    histo[i] = 0;
+  for(size_t i = 1; i < len; i++)
+    histo[list_let[i]->coordx[0] - list_let[i-1]->coord_x[1]] += 1;
+  int l_th = 0;
+  int h_th = 49;
+  int l = 1;
+  int fo= 1;
+  int nfo=1;
+  int h = 1;
+  for(size_t i = 1; i < 50; i++)
+  {
+    int check1 = histo[i] != 0;
+    int check2 = histo[50-i] != 0;
+    if (h && check2)
+    {
+      h_th -= 1;
+      fo = 0;
+    }
+    else
+    {
+      if (fo)
+        h_th -= 1;
+      else
+        h = 0;
+    }
+    if (l && check2)
+    {
+      l_th += 1;
+      nfo = 0;
+    }
+    else
+    {
+      if (nfo)
+        l_th += 1;
+      else
+        l = 0;
+    }
+  }
+  return (l_th + (h_th - l_th)/2);
 }
 
 static void space_mng(struct letter **list_let)
 {
-	size_t len = sizeof(list_let)/ sizeof(struct letter);
-	int th = threshold(list_let, len);
-	for (size_t i = 1; i < len; i++)
-	{
-		if(list_let[i]->coord_x[0] - list_let[i-1]->coord_x[1] >= th)
-			list_let[i]->space_before = 1;
-	}
+  size_t len = sizeof(list_let)/ sizeof(struct letter);
+  int th = threshold(list_let, len);
+  for (size_t i = 1; i < len; i++)
+  {
+    if(list_let[i]->coord_x[0] - list_let[i-1]->coord_x[1] >= th)
+      list_let[i]->space_before = 1;
+  }
 }
 
 void print_letter(struct letter *l)
