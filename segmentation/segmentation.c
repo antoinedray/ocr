@@ -70,10 +70,23 @@ void resizePixels(double pixels[], double res[], int w1,int h1,int w2,int h2)
   }
 }
 
-double* center_letter(struct letter *src) 
-{
-  int start_x = (32 - src->coord_x[0]) / 2;
-  int start_y = (32 - src->coord_y[0]) / 2;
+double* center_letter(struct letter *src) {
+  int bot_x=-1, top_x=-1, bot_y=-1, top_y=-1;
+  for(int k = 0; k < 32; k++) {
+    for(int l = 0; l < 32; l++) {
+      if((src[k + l * 32] == 0) && (bot_x == -1))
+        bot_x = k;
+      if((src[k + l * 32] == 1) && (bot_x != -1))
+        top_x = k;
+      if((src[l + k * 32] == 0) && (bot_y == -1))
+        bot_y = k;
+      if((src[l + k * 32] == 0) && (bot_y != -1))
+        top_y = k;
+      }
+    }
+  }
+  int start_x = (32 - bot_x) / 2;
+  int start_y = (32 - bot_y) / 2;
   double *dst = calloc(32 * 32,sizeof(double));
   for(int i = 0; i < src->width; i++) {
     for(int j = 0; j < src->height; j++) {
