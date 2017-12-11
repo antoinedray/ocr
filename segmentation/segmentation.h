@@ -10,6 +10,7 @@
 
 struct letter
 {
+  int new_line;
   int space_before;
   int coord_x [2];
   int coord_y [2];

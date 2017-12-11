@@ -423,6 +423,7 @@ struct letter* init_letter(int topleft_x, int botright_x, int botright_y,
   }
   int topleft_y = going_up;
   l->space_before = 0;
+  l->new_line = 0;
   l->coord_x[0] = topleft_x;
   l->coord_x[1] = botright_x;
   l->coord_y[0] = topleft_y;
