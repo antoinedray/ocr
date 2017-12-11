@@ -43,8 +43,7 @@ SDL_Surface* whole_segmentation(SDL_Surface* img)
     printf("|\n");
   }
   printf("\n");
-
-
+  
   for (int n = 0; n < 32; n++)
   {
     for (int j = 0; j < 32; j++)
@@ -290,8 +289,8 @@ struct letter** create_letter_list(SDL_Surface* img, int lines[], int cols[])
             }
           }
         }
-        list[index_list_letter - 1]->new_line = 1;
       }
+      list[index_list_letter - 1]->new_line = 1;
       index++;
     }
   }
