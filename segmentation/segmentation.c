@@ -23,15 +23,11 @@ SDL_Surface* whole_segmentation(SDL_Surface* img)
   int nb_lines = get_number_lines(img, lines_cleaned);
   printf("It also has %i lines, according to my great intellect.\n", nb_lines);
   struct letter **l = create_letter_list(img, lines_cleaned, columns);
-  printf("letter[0]->coord_x[0] = %i\n", l[0]->coord_x[0]);
-  printf("letter[0]->coord_x[1] = %i\n", l[0]->coord_x[1]);
-  printf("letter[0]->coord_y[0] = %i\n", l[0]->coord_y[0]);
-  printf("letter[0]->coord_y[1] = %i\n", l[0]->coord_y[1]);
-  //double resized_inputs[256];
+  double resized_inputs[1024];
   space_mng(l, nb_letters);
-  for (int i = 0; i < 20; i++)
-    print_letter(l[i]);
-  /*struct letter_bin *l_b = resize_image(l[0]->mat, resized_inputs,
+ //for (int i = 0; i < 20; i++)
+ //   print_letter(l[i]);
+  struct letter_bin *l_b = resize_image(l[0]->mat, resized_inputs,
       l[0]->width, l[0]->height);
   int max = l[0]->height > l[0]->width ? l[0]->height : l[0]->width;
   for (int n = 0; n < max; n++)
@@ -43,7 +39,7 @@ SDL_Surface* whole_segmentation(SDL_Surface* img)
     printf("|\n");
   }
   printf("\n");
-  
+
   for (int n = 0; n < 32; n++)
   {
     for (int j = 0; j < 32; j++)
@@ -52,7 +48,7 @@ SDL_Surface* whole_segmentation(SDL_Surface* img)
     }
     printf("|\n");
   }
-  printf("\n");*/
+  printf("\n");
   return(text_blocks(img, 1, lines_cleaned, columns));
 }
 
@@ -92,10 +88,10 @@ struct letter_bin *resize_image(double inputs[], double resized_inputs[],
             xportion -= xstart - x;
           if (x == (int)xend)
             xportion -= x+1 - xend;
-          sum += inputs[x + y*width] * yportion * xportion;
+          sum += inputs[x + y * width] * yportion * xportion;
         }
       }
-      resized_inputs[g + f * dim] = (sum > threshold) ? 1.111111 : 0;
+      resized_inputs[g + f * dim] = sum > threshold ? 1.111111 : 0;
     }
   }
   struct letter_bin *bin = malloc(sizeof(struct letter_bin));
@@ -279,8 +275,8 @@ struct letter** create_letter_list(SDL_Surface* img, int lines[], int cols[])
             SDL_GetRGB(pxl, img->format, &pxlcolor, &pxlcolor, &pxlcolor);
             if (pxlcolor == 0)
             {
-              struct letter* l = init_letter(cols[index], cols[index+1], tmp_y,
-                  img);
+              struct letter* l = init_letter(cols[index], cols[index+1],
+                  tmp_y + 1, img);
               list[index_list_letter] = l;
               index_list_letter++;
               stop_checking = 1;
@@ -410,7 +406,7 @@ struct letter* init_letter(int topleft_x, int botright_x, int botright_y,
   Uint32 pxl;
   Uint8 pxlcolor;
   int going_up;
-  for (going_up = botright_y; line_has_black != 0; going_up--)
+  for (going_up = botright_y - 1; line_has_black != 0; going_up--)
   {
     line_has_black = 0;
     for (int tmp = topleft_x; tmp < botright_x; tmp++)
@@ -418,16 +414,19 @@ struct letter* init_letter(int topleft_x, int botright_x, int botright_y,
       pxl = getpixel(img, tmp, going_up);
       SDL_GetRGB(pxl, img->format, &pxlcolor, &pxlcolor, &pxlcolor);
       if (pxlcolor == 0)
+      {
         line_has_black = 1;
+        break;
+      }
     }
   }
-  int topleft_y = going_up;
+  int topleft_y = going_up + 1;
   l->space_after = 0;
   l->new_line = 0;
   l->coord_x[0] = topleft_x;
   l->coord_x[1] = botright_x;
   l->coord_y[0] = topleft_y;
-  l->coord_y[1] = botright_y;
+  l->coord_y[1] = botright_y /*+ 1*/;
   l->height = botright_y - topleft_y;
   l->width = botright_x - topleft_x;
   binarize_letter(img, l);
@@ -520,5 +519,5 @@ void print_letter(struct letter *l)
   printf("l->coord_y[0] = %i\n", l->coord_y[0]);
   printf("l->coord_y[1] = %i\n", l->coord_y[1]);
   printf("l->height = %i\n", l->height);
-  printf("l->width = %i\n", l->width);
+  printf("l->width = %i\n\n", l->width);
 }
