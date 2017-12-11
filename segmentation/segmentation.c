@@ -465,8 +465,9 @@ static int threshold(struct letter **list_let)
   int h = 1;
   for(size_t i = 1; i < len; i++)
   {
-    int check1 = list_let[i]->coord_x[0] - list_let[i-1]->coord_x[1] !=0;
-    int check2=list_let[len-i]->coord_x0[0]-list_let[len-i-1]->coord_x[1]!=0;
+    int check1 = list_let[i]->coord_x[0] - list_let[i-1]->coord_x[1] != 0;
+    int check2 =
+      list_let[len - i]->coord_x[0] - list_let[len - i - 1]->coord_x[1] != 0;
     if(h && check2)
     {
       h_th -= 1;
