@@ -25,10 +25,10 @@ SDL_Surface* whole_segmentation(SDL_Surface* img)
   struct letter **l = create_letter_list(img, lines_cleaned, columns);
   double resized_inputs[1024];
   space_mng(l, nb_letters);
- //for (int i = 0; i < 20; i++)
- //   print_letter(l[i]);
-  struct letter_bin *l_b = resize_image(l[0]->mat, resized_inputs,
-      l[0]->width, l[0]->height);
+  //for (int i = 0; i < 20; i++)
+  //   print_letter(l[i]);
+  resizePixels(l[0]->mat, resized_inputs, l[0]->height,
+      l[0]->width, 32, 32);
   int max = l[0]->height > l[0]->width ? l[0]->height : l[0]->width;
   for (int n = 0; n < max; n++)
   {
@@ -39,12 +39,11 @@ SDL_Surface* whole_segmentation(SDL_Surface* img)
     printf("|\n");
   }
   printf("\n");
-
   for (int n = 0; n < 32; n++)
   {
     for (int j = 0; j < 32; j++)
     {
-      printf("| %f ", l_b->inputs[j + n * 32]);
+      printf("| %f ",resized_inputs[j + n * 32]);
     }
     printf("|\n");
   }
@@ -52,53 +51,26 @@ SDL_Surface* whole_segmentation(SDL_Surface* img)
   return(text_blocks(img, 1, lines_cleaned, columns));
 }
 
-struct letter_bin *resize_image(double inputs[], double resized_inputs[],
-    int width , int height)
+void resizePixels(double pixels[], double res[], int w1,int h1,int w2,int h2)
 {
-  int dim = 32;
-  double xscale = (float)(dim) / width;
-  double yscale = (float)(dim) / height;
-  double threshold = 0.5 / (xscale * yscale);
-  double yend = 0.0;
-  for (int f = 0; f < dim; f++)
-  { // y on output
-    double ystart = yend;
-    yend = (f + 1) / yscale;
-    if (yend >= height)
-      yend = height - 0.000001;
-    double xend = 0.0;
-    for (int g = 0; g < dim; g++)
-    { // x on output
-      double xstart = xend;
-      xend = (g + 1) / xscale;
-      if (xend >= width)
-        xend = width - 0.000001;
-      double sum = 0.0;
-      for (int y = (int)ystart; y <= (int)yend; ++y)
-      {
-        double yportion = 1.0;
-        if (y == (int)ystart)
-          yportion -= ystart - y;
-        if (y == (int)yend)
-          yportion -= y+1 - yend;
-        for (int x = (int)xstart; x <= (int)xend; ++x)
-        {
-          double xportion = 1.0;
-          if (x == (int)xstart)
-            xportion -= xstart - x;
-          if (x == (int)xend)
-            xportion -= x+1 - xend;
-          sum += inputs[x + y * width] * yportion * xportion;
-        }
-      }
-      resized_inputs[g + f * dim] = sum > threshold ? 1.111111 : 0;
+  // EDIT: added +1 to account for an early rounding problem
+  int x_ratio = (int)((w1<<16) / w2) + 1;
+  int y_ratio = (int)((h1<<16) / h2) + 1;
+  //int x_ratio = (int)((w1<<16)/w2) ;
+  //int y_ratio = (int)((h1<<16)/h2) ;
+  int x2;
+  int y2;
+  for (int i = 0; i < h2; i++)
+  {
+    for (int j = 0; j < w2; j++)
+    {
+      x2 = ((j * x_ratio)>>16);
+      y2 = ((i * y_ratio)>>16);
+      res[(i * w2) + j] = pixels[(y2 * w1) + x2] ;
     }
   }
-  struct letter_bin *bin = malloc(sizeof(struct letter_bin));
-  bin->inputs = resized_inputs;
-  bin->len = dim * dim;
-  return bin;
 }
+
 
 int Line_Detection(SDL_Surface* img, int list_lines[])
 {
