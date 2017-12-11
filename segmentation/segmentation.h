@@ -6,15 +6,23 @@
 
 #ifndef SEGMENTATION_H_
 #define SEGMENTATION_H_
-# include "../mysdl/mysdl.h"
+#include "../mysdl/mysdl.h"
 
 struct letter
 {
+  int new_line;
+  int space_after;
   int coord_x [2];
   int coord_y [2];
   int height; //int coord_topleft
   int width; //int coord_botright
-  double **mat; //Contains the binarized height*width letter in 0 and 1s
+  double *mat; //Contains the binarized height*width letter in 0 and 1s
+};
+
+struct letter_bin
+{
+    size_t len; //height*width
+    double *inputs; //Black == 1 , White == 0
 };
 
 struct letter* init_letter(int topleft_x, int botright_x, int botright_y,
@@ -34,4 +42,9 @@ SDL_Surface* whole_segmentation(SDL_Surface* img);
 int get_number_letters(SDL_Surface* img, int cols[]);
 int get_number_lines(SDL_Surface* img, int lines[]);
 struct letter **create_letter_list(SDL_Surface* img, int lines[], int cols[]);
+void print_letter(struct letter *l);
+struct letter_bin *resize_image(double inputs[], double resized_inputs[],
+    int width , int height);
+int threshold(struct letter **list_let, int len);
+void space_mng(struct letter **list_let, int nb_let);
 #endif

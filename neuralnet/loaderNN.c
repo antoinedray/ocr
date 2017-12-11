@@ -125,6 +125,7 @@ struct NN *load_NN(char *name)
             index += 1;
         }
 	}
+	fclose(file);
     return mynet;
 }
 /*
