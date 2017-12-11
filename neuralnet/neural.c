@@ -109,9 +109,10 @@ void backprop(struct NN *MyNet, double *input_t, double *output_t){
 	//backprop hidden layers
 	//deltaj = oj(1-oj)sum(deltak*wjk)
 	//here the algo is going backwards, e.g layerprev = output
-	double *delta_prev;
+	double *delta_prev = NULL;
 	double *delta_cur = deltas;
 	for(size_t i = MyNet->size - 2; i>=1 ; i-=1){
+		free(delta_prev);
 		delta_prev = delta_cur;
 		delta_cur = malloc(sizeof(double)*MyNet->layersize[i]);
 		struct N **layer_cur = MyNet->mat[i];
