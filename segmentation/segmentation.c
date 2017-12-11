@@ -27,9 +27,11 @@ SDL_Surface* whole_segmentation(SDL_Surface* img)
   printf("letter[0]->coord_x[1] = %i\n", l[0]->coord_x[1]);
   printf("letter[0]->coord_y[0] = %i\n", l[0]->coord_y[0]);
   printf("letter[0]->coord_y[1] = %i\n", l[0]->coord_y[1]);
-  double resized_inputs[1024];
+  //double resized_inputs[256];
   space_mng(l);
-  struct letter_bin *l_b = resize_image(l[0]->mat, resized_inputs,
+  for (int i = 0; i < 20; i++)
+    print_letter(l[i]);
+  /*struct letter_bin *l_b = resize_image(l[0]->mat, resized_inputs,
       l[0]->width, l[0]->height);
   int max = l[0]->height > l[0]->width ? l[0]->height : l[0]->width;
   for (int n = 0; n < max; n++)
@@ -51,14 +53,14 @@ SDL_Surface* whole_segmentation(SDL_Surface* img)
     }
     printf("|\n");
   }
-  printf("\n");
+  printf("\n");*/
   return(text_blocks(img, 1, lines_cleaned, columns));
 }
 
 struct letter_bin *resize_image(double inputs[], double resized_inputs[],
     int width , int height)
 {
-  int dim = 32;
+  int dim = 16;
   double xscale = (float)(dim) / width;
   double yscale = (float)(dim) / height;
   double threshold = 0.5 / (xscale * yscale);
@@ -510,6 +512,7 @@ void space_mng(struct letter **list_let)
 
 void print_letter(struct letter *l)
 {
+  printf("l->space_before = %i\n", l->space_before);
   printf("l->coord_x[0] = %i\n", l->coord_x[0]);
   printf("l->coord_x[1] = %i\n", l->coord_x[1]);
   printf("l->coord_y[0] = %i\n", l->coord_y[0]);
