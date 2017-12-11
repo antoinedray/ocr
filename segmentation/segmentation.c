@@ -1,14 +1,13 @@
 /*
- **  SEGMENTATION
- **  file: segmentation.c
- **  description: file containing all that has to do with the segmentation
- **  process
- */
+**  SEGMENTATION
+**  file: segmentation.c
+**  description: file containing all that has to do with the segmentation
+**  process
+*/
 #include "segmentation.h"
 #include <err.h>
 
-SDL_Surface* whole_segmentation(SDL_Surface* img)
-{
+SDL_Surface* whole_segmentation(SDL_Surface* img) {
   int lines[img->h];
   Line_Detection(img, lines);
   int height = img->h;
@@ -66,11 +65,24 @@ void resizePixels(double pixels[], double res[], int w1,int h1,int w2,int h2)
     {
       x2 = ((j * x_ratio)>>16);
       y2 = ((i * y_ratio)>>16);
-      res[(i * w2) + j] = pixels[(y2 * w1) + x2] ;
+      res[(i * w2) + j] = pixels[(y2 * w1) + x2];
     }
   }
 }
 
+double* center_letter(struct letter *src) 
+{
+  int start_x = (32 - src->coord_x[0]) / 2;
+  int start_y = (32 - src->coord_y[0]) / 2;
+  double *dst = calloc(32 * 32,sizeof(double));
+  for(int i = 0; i < src->width; i++) {
+    for(int j = 0; j < src->height; j++) {
+      dst[(start_x + i) + (start_y + j) * 32] = src[(src->coord_x[0] + i) +
+      (src->coord_y[0] + j) * 32];
+    }
+  }
+  return dst;
+}
 
 int Line_Detection(SDL_Surface* img, int list_lines[])
 {
