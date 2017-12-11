@@ -451,45 +451,46 @@ void binarize_letter(SDL_Surface* img, struct letter* l)
   l->mat = mat;
 }
 
-static int threshold(struct letter **list_let)
+static int threshold(struct letter **list_let, size_t len)
 {
 	int histo[50];
 	for (int i = 0; i < 50; i++)
 		histo[i] = 0;
-	size_t len = sizeof(list_let) / sizeof(struct letter);
+	for(size_t i = 1; i < len; i++)
+		histo[list_let[i]->coordx[0] - list_let[i-1]->coord_x[1]] += 1;
 	int l_th = 0;
-	int h_th = len -1;
+	int h_th = 49;
 	int l = 1;
 	int fo= 1;
 	int nfo=1;
 	int h = 1;
-	for(size_t i = 1; i < len; i++)
+	for(size_t i = 1; i < 50; i++)
 	{
-		int check1 = list_let[i]->coord_x[0] - list_let[i-1]->coord_x[1] !=0;
-		int check2=list_let[len-i]->coord_x[0]-list_let[len-i-1]->coord_x[1]!=0;
-		if(h && check2)
+		int check1 = histo[i] != 0;
+		int check2 = histo[50-i] != 0;
+		if (h && check2)
 		{
 			h_th -= 1;
 			fo = 0;
 		}
 		else
 		{
-			if(fo)
+			if (fo)
 				h_th -= 1;
 			else
 				h = 0;
 		}
-		if(l && check2)
+		if (l && check2)
 		{
-			l_th +=1;
-			nfo =0;
+			l_th += 1;
+			nfo = 0;
 		}
 		else
 		{
-			if(nfo)
-				l_th+=1;
+			if (nfo)
+				l_th += 1;
 			else
-				l=0;
+				l = 0;
 		}
 	}
 	return l_th +(h_th - l_th)/2;
@@ -498,7 +499,7 @@ static int threshold(struct letter **list_let)
 static void space_mng(struct letter **list_let)
 {
 	size_t len = sizeof(list_let)/ sizeof(struct letter);
-	int th = threshold(list_let);
+	int th = threshold(list_let, len);
 	for (size_t i = 1; i < len; i++)
 	{
 		if(list_let[i]->coord_x[0] - list_let[i-1]->coord_x[1] >= th)
