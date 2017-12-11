@@ -453,57 +453,57 @@ void binarize_letter(SDL_Surface* img, struct letter* l)
 
 int threshold(struct letter **list_let)
 {
-	int histo[50];
-	for (int i = 0; i < 50; i++)
-		histo[i] = 0;
-	size_t len = sizeof(list_let) / sizeof(struct letter);
-	int l_th = 0;
-	int h_th = len -1;
-	int l = 1;
-	int fo= 1;
-	int nfo=1;
-	int h = 1;
-	for(size_t i = 1; i < len; i++)
-	{
-		int check1 = list_let[i]->coord_x[0] - list_let[i-1]->coord_x[1] !=0;
-		int check2=list_let[len-i]->coord_x0[0]-list_let[len-i-1]->coord_x[1]!=0;
-		if(h && check2)
-		{
-			h_th -= 1;
-			fo = 0;
-		}
-		else
-		{
-			if(fo)
-				h_th -= 1;
-			else
-				h = 0;
-		}
-		if(l && check2)
-		{
-			l_th +=1;
-			nfo =0;
-		}
-		else
-		{
-			if(nfo)
-				l_th+=1;
-			else
-				l=0;
-		}
-	}
-	return l_th +(h_th - l_th)/2;
+  int histo[50];
+  for (int i = 0; i < 50; i++)
+    histo[i] = 0;
+  size_t len = sizeof(list_let) / sizeof(struct letter);
+  int l_th = 0;
+  int h_th = len -1;
+  int l = 1;
+  int fo= 1;
+  int nfo=1;
+  int h = 1;
+  for(size_t i = 1; i < len; i++)
+  {
+    int check1 = list_let[i]->coord_x[0] - list_let[i-1]->coord_x[1] !=0;
+    int check2=list_let[len-i]->coord_x0[0]-list_let[len-i-1]->coord_x[1]!=0;
+    if(h && check2)
+    {
+      h_th -= 1;
+      fo = 0;
+    }
+    else
+    {
+      if(fo)
+        h_th -= 1;
+      else
+        h = 0;
+    }
+    if(l && check2)
+    {
+      l_th +=1;
+      nfo =0;
+    }
+    else
+    {
+      if(nfo)
+        l_th+=1;
+      else
+        l=0;
+    }
+  }
+  return l_th +(h_th - l_th)/2;
 }
 
 void space_mng(struct letter **list_let)
 {
-	size_t len = sizeof(list_let)/ sizeof(struct letter);
-	int th = threshold(list_let);
-	for (size_t i = 1; i < len; i++)
-	{
-		if(list_let[i]->coord_x[0] - list_let[i-1] >= th)
-			list_let[i]->space_before = 1;
-	}
+  size_t len = sizeof(list_let)/ sizeof(struct letter);
+  int th = threshold(list_let);
+  for (size_t i = 1; i < len; i++)
+  {
+    if(list_let[i]->coord_x[0] - list_let[i-1] >= th)
+      list_let[i]->space_before = 1;
+  }
 }
 
 void print_letter(struct letter *l)
