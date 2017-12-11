@@ -1,6 +1,7 @@
 //#include <stdio.h>
 //#include <stdlib.h>
 #include "../mysdl/mysdl.h"
+#include "loaderNN.h"
 
 struct letter_bin
 {
@@ -10,5 +11,4 @@ struct letter_bin
 
 double *get_database_in(char *file);
 
-struct letter_bin *get_in(char *file);
-//void train(struct NN *MyNet);
+void train(struct NN *MyNet);
