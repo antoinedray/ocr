@@ -28,7 +28,7 @@ SDL_Surface* whole_segmentation(SDL_Surface* img)
   printf("letter[0]->coord_y[0] = %i\n", l[0]->coord_y[0]);
   printf("letter[0]->coord_y[1] = %i\n", l[0]->coord_y[1]);
   //double resized_inputs[256];
-  space_mng(l);
+  space_mng(l, nb_letters);
   for (int i = 0; i < 20; i++)
     print_letter(l[i]);
   /*struct letter_bin *l_b = resize_image(l[0]->mat, resized_inputs,
@@ -422,7 +422,7 @@ struct letter* init_letter(int topleft_x, int botright_x, int botright_y,
     }
   }
   int topleft_y = going_up;
-  l->space_before = 0;
+  l->space_after = 0;
   l->new_line = 0;
   l->coord_x[0] = topleft_x;
   l->coord_x[1] = botright_x;
@@ -455,24 +455,24 @@ void binarize_letter(SDL_Surface* img, struct letter* l)
   l->mat = mat;
 }
 
-int threshold(struct letter **list_let, size_t len)
+int threshold(struct letter **list_let, int len)
 {
   int histo[50];
   for (int i = 0; i < 50; i++)
     histo[i] = 0;
-  for(size_t i = 1; i < len; i++)
-    if (list_let[i]->coord_x[0] - list_let[i-1]->coord_x[1] >= 0)
-      histo[list_let[i]->coord_x[0] - list_let[i-1]->coord_x[1]] += 1;
+  for(int i = 1; i < len; i++)
+    if (list_let[i]->coord_x[0] - list_let[i - 1]->coord_x[1] >= 0)
+      histo[list_let[i]->coord_x[0] - list_let[i - 1]->coord_x[1]] += 1;
   int l_th = 0;
   int h_th = 49;
   int l = 1;
-  int fo= 1;
-  int nfo=1;
+  int fo = 1;
+  int nfo = 1;
   int h = 1;
   for(size_t i = 1; i < 50; i++)
   {
     int check1 = histo[i] != 0;
-    int check2 = histo[50-i] != 0;
+    int check2 = histo[50 -i] != 0;
     if (h && check2)
     {
       h_th -= 1;
@@ -501,21 +501,20 @@ int threshold(struct letter **list_let, size_t len)
   return (l_th + (h_th - l_th)/2);
 }
 
-void space_mng(struct letter **list_let)
+void space_mng(struct letter **list_let, int nb_let)
 {
-  size_t len = sizeof(list_let)/ sizeof(struct letter);
-  int th = threshold(list_let, len);
-  for (size_t i = 1; i < len; i++)
+  int th = threshold(list_let, nb_let);
+  for (int i = 1; i < nb_let; i++)
   {
     if(list_let[i]->coord_x[0] - list_let[i-1]->coord_x[1] >= th)
-      list_let[i]->space_before = 1;
+      list_let[i]->space_after = 1;
   }
 }
 
 void print_letter(struct letter *l)
 {
   printf("l->new_line = %i\n", l->new_line);
-  printf("l->space_before = %i\n", l->space_before);
+  printf("l->space_after = %i\n", l->space_after);
   printf("l->coord_x[0] = %i\n", l->coord_x[0]);
   printf("l->coord_x[1] = %i\n", l->coord_x[1]);
   printf("l->coord_y[0] = %i\n", l->coord_y[0]);
