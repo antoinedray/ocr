@@ -55,6 +55,7 @@ void train(struct NN *MyNet) {
         printf("Data file does not exists");
         return;
     }
+	//init_sdl();
     char line[64];
     size_t i = 0;
     double **output_train = get_database_out(nbChars);
@@ -71,4 +72,9 @@ void train(struct NN *MyNet) {
         else
             i++;
     }
+	//IMG_Quit();
+	//for(size_t j = 0; j < nbChars; j++)
+		//free(output_train[i]);
+	//free(output_train);
+	fclose(fp);
 }
