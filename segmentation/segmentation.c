@@ -461,7 +461,8 @@ int threshold(struct letter **list_let, size_t len)
   for (int i = 0; i < 50; i++)
     histo[i] = 0;
   for(size_t i = 1; i < len; i++)
-    histo[list_let[i]->coord_x[0] - list_let[i-1]->coord_x[1]] += 1;
+    if (list_let[i]->coord_x[0] - list_let[i-1]->coord_x[1] >= 0)
+      histo[list_let[i]->coord_x[0] - list_let[i-1]->coord_x[1]] += 1;
   int l_th = 0;
   int h_th = 49;
   int l = 1;
