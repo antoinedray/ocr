@@ -1,14 +1,13 @@
 /*
- **  SEGMENTATION
- **  file: segmentation.c
- **  description: file containing all that has to do with the segmentation
- **  process
- */
+**  SEGMENTATION
+**  file: segmentation.c
+**  description: file containing all that has to do with the segmentation
+**  process
+*/
 #include "segmentation.h"
 #include <err.h>
 
-SDL_Surface* whole_segmentation(SDL_Surface* img)
-{
+SDL_Surface* whole_segmentation(SDL_Surface* img) {
   int lines[img->h];
   Line_Detection(img, lines);
   int height = img->h;
@@ -23,16 +22,12 @@ SDL_Surface* whole_segmentation(SDL_Surface* img)
   int nb_lines = get_number_lines(img, lines_cleaned);
   printf("It also has %i lines, according to my great intellect.\n", nb_lines);
   struct letter **l = create_letter_list(img, lines_cleaned, columns);
-  printf("letter[0]->coord_x[0] = %i\n", l[0]->coord_x[0]);
-  printf("letter[0]->coord_x[1] = %i\n", l[0]->coord_x[1]);
-  printf("letter[0]->coord_y[0] = %i\n", l[0]->coord_y[0]);
-  printf("letter[0]->coord_y[1] = %i\n", l[0]->coord_y[1]);
-  //double resized_inputs[256];
+  double resized_inputs[1024];
   space_mng(l, nb_letters);
-  for (int i = 0; i < 20; i++)
-    print_letter(l[i]);
-  /*struct letter_bin *l_b = resize_image(l[0]->mat, resized_inputs,
-      l[0]->width, l[0]->height);
+  //for (int i = 0; i < 20; i++)
+  //   print_letter(l[i]);
+  resizePixels(l[0]->mat, resized_inputs, l[0]->height,
+      l[0]->width, 32, 32);
   int max = l[0]->height > l[0]->width ? l[0]->height : l[0]->width;
   for (int n = 0; n < max; n++)
   {
@@ -43,65 +38,50 @@ SDL_Surface* whole_segmentation(SDL_Surface* img)
     printf("|\n");
   }
   printf("\n");
-  
   for (int n = 0; n < 32; n++)
   {
     for (int j = 0; j < 32; j++)
     {
-      printf("| %f ", l_b->inputs[j + n * 32]);
+      printf("| %f ",resized_inputs[j + n * 32]);
     }
     printf("|\n");
   }
-  printf("\n");*/
+  printf("\n");
   return(text_blocks(img, 1, lines_cleaned, columns));
 }
 
-struct letter_bin *resize_image(double inputs[], double resized_inputs[],
-    int width , int height)
+void resizePixels(double pixels[], double res[], int w1,int h1,int w2,int h2)
 {
-  int dim = 32;
-  double xscale = (float)(dim) / width;
-  double yscale = (float)(dim) / height;
-  double threshold = 0.5 / (xscale * yscale);
-  double yend = 0.0;
-  for (int f = 0; f < dim; f++)
-  { // y on output
-    double ystart = yend;
-    yend = (f + 1) / yscale;
-    if (yend >= height)
-      yend = height - 0.000001;
-    double xend = 0.0;
-    for (int g = 0; g < dim; g++)
-    { // x on output
-      double xstart = xend;
-      xend = (g + 1) / xscale;
-      if (xend >= width)
-        xend = width - 0.000001;
-      double sum = 0.0;
-      for (int y = (int)ystart; y <= (int)yend; ++y)
-      {
-        double yportion = 1.0;
-        if (y == (int)ystart)
-          yportion -= ystart - y;
-        if (y == (int)yend)
-          yportion -= y+1 - yend;
-        for (int x = (int)xstart; x <= (int)xend; ++x)
-        {
-          double xportion = 1.0;
-          if (x == (int)xstart)
-            xportion -= xstart - x;
-          if (x == (int)xend)
-            xportion -= x+1 - xend;
-          sum += inputs[x + y*width] * yportion * xportion;
-        }
-      }
-      resized_inputs[g + f * dim] = (sum > threshold) ? 1.111111 : 0;
+  // EDIT: added +1 to account for an early rounding problem
+  int x_ratio = (int)((w1<<16) / w2) + 1;
+  int y_ratio = (int)((h1<<16) / h2) + 1;
+  //int x_ratio = (int)((w1<<16)/w2) ;
+  //int y_ratio = (int)((h1<<16)/h2) ;
+  int x2;
+  int y2;
+  for (int i = 0; i < h2; i++)
+  {
+    for (int j = 0; j < w2; j++)
+    {
+      x2 = ((j * x_ratio)>>16);
+      y2 = ((i * y_ratio)>>16);
+      res[(i * w2) + j] = pixels[(y2 * w1) + x2];
     }
   }
-  struct letter_bin *bin = malloc(sizeof(struct letter_bin));
-  bin->inputs = resized_inputs;
-  bin->len = dim * dim;
-  return bin;
+}
+
+double* center_letter(struct letter *src) 
+{
+  int start_x = (32 - src->coord_x[0]) / 2;
+  int start_y = (32 - src->coord_y[0]) / 2;
+  double *dst = calloc(32 * 32,sizeof(double));
+  for(int i = 0; i < src->width; i++) {
+    for(int j = 0; j < src->height; j++) {
+      dst[(start_x + i) + (start_y + j) * 32] = src[(src->coord_x[0] + i) +
+      (src->coord_y[0] + j) * 32];
+    }
+  }
+  return dst;
 }
 
 int Line_Detection(SDL_Surface* img, int list_lines[])
@@ -279,8 +259,8 @@ struct letter** create_letter_list(SDL_Surface* img, int lines[], int cols[])
             SDL_GetRGB(pxl, img->format, &pxlcolor, &pxlcolor, &pxlcolor);
             if (pxlcolor == 0)
             {
-              struct letter* l = init_letter(cols[index], cols[index+1], tmp_y,
-                  img);
+              struct letter* l = init_letter(cols[index], cols[index+1],
+                  tmp_y + 1, img);
               list[index_list_letter] = l;
               index_list_letter++;
               stop_checking = 1;
@@ -410,7 +390,7 @@ struct letter* init_letter(int topleft_x, int botright_x, int botright_y,
   Uint32 pxl;
   Uint8 pxlcolor;
   int going_up;
-  for (going_up = botright_y; line_has_black != 0; going_up--)
+  for (going_up = botright_y - 1; line_has_black != 0; going_up--)
   {
     line_has_black = 0;
     for (int tmp = topleft_x; tmp < botright_x; tmp++)
@@ -418,16 +398,19 @@ struct letter* init_letter(int topleft_x, int botright_x, int botright_y,
       pxl = getpixel(img, tmp, going_up);
       SDL_GetRGB(pxl, img->format, &pxlcolor, &pxlcolor, &pxlcolor);
       if (pxlcolor == 0)
+      {
         line_has_black = 1;
+        break;
+      }
     }
   }
-  int topleft_y = going_up;
+  int topleft_y = going_up + 1;
   l->space_after = 0;
   l->new_line = 0;
   l->coord_x[0] = topleft_x;
   l->coord_x[1] = botright_x;
   l->coord_y[0] = topleft_y;
-  l->coord_y[1] = botright_y;
+  l->coord_y[1] = botright_y /*+ 1*/;
   l->height = botright_y - topleft_y;
   l->width = botright_x - topleft_x;
   binarize_letter(img, l);
@@ -520,5 +503,5 @@ void print_letter(struct letter *l)
   printf("l->coord_y[0] = %i\n", l->coord_y[0]);
   printf("l->coord_y[1] = %i\n", l->coord_y[1]);
   printf("l->height = %i\n", l->height);
-  printf("l->width = %i\n", l->width);
+  printf("l->width = %i\n\n", l->width);
 }

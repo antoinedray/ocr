@@ -81,6 +81,5 @@ int main(){
 		strcat(loc,line);
 		try_OCR_img(MyNet, loc, i);
 		i++;
-	} 
-   	return 1;
+	}
 }
