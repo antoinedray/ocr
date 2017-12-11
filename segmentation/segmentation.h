@@ -10,6 +10,7 @@
 
 struct letter
 {
+  int new_line;
   int space_before;
   int coord_x [2];
   int coord_y [2];
@@ -42,5 +43,8 @@ int get_number_letters(SDL_Surface* img, int cols[]);
 int get_number_lines(SDL_Surface* img, int lines[]);
 struct letter **create_letter_list(SDL_Surface* img, int lines[], int cols[]);
 void print_letter(struct letter *l);
-struct letter_bin *resize_image(double inputs[], double resized_inputs[], int width , int height);
+struct letter_bin *resize_image(double inputs[], double resized_inputs[],
+    int width , int height);
+int threshold(struct letter **list_let, size_t len);
+void space_mng(struct letter **list_let);
 #endif
