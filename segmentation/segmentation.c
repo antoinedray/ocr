@@ -1,14 +1,13 @@
 /*
- **  SEGMENTATION
- **  file: segmentation.c
- **  description: file containing all that has to do with the segmentation
- **  process
- */
+**  SEGMENTATION
+**  file: segmentation.c
+**  description: file containing all that has to do with the segmentation
+**  process
+*/
 #include "segmentation.h"
 #include <err.h>
 
-SDL_Surface* whole_segmentation(SDL_Surface* img)
-{
+SDL_Surface* whole_segmentation(SDL_Surface* img) {
   int lines[img->h];
   Line_Detection(img, lines);
   int height = img->h;
@@ -43,7 +42,7 @@ SDL_Surface* whole_segmentation(SDL_Surface* img)
     printf("|\n");
   }
   printf("\n");
-  
+
   for (int n = 0; n < 32; n++)
   {
     for (int j = 0; j < 32; j++)
@@ -56,9 +55,24 @@ SDL_Surface* whole_segmentation(SDL_Surface* img)
   return(text_blocks(img, 1, lines_cleaned, columns));
 }
 
+double* center_letter(letter src) {
+  int width = src.coord_x[1] - src.coord_x[0];
+  int height = src.coord_y[1] - src.coord_y[0];
+  int start_x = 32 / 2 - src.coord_x[0] / 2;
+  int start_y = 32 / 2 - src.coord_y[0] / 2;
+
+  double *dst = calloc(32 * 32,sizeof(double));
+  for(int i = 0; i < width; i++) {
+    for(int j = 0; j < height; j++) {
+      dst[(start_x + i) + (start_y + j) * 32] = src[(src.coord_x[0] + i) +
+      (src.coord_y[0] + j) * 32];
+    }
+  }
+  return dst;
+}
+
 struct letter_bin *resize_image(double inputs[], double resized_inputs[],
-    int width , int height)
-{
+    int width , int height) {
   int dim = 32;
   double xscale = (float)(dim) / width;
   double yscale = (float)(dim) / height;

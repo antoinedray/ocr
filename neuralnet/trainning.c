@@ -73,5 +73,5 @@ int main(){
     OCR_NN(MyNet,10000,0.2); //get nb_fonts
     save_NN(MyNet,"OCR_NN");
     try_OCR_img(MyNet,"database/A_maj_AllerDisplay.jpg",0);
-   	return 1;
+    return 1;
 }
