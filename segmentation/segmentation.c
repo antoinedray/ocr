@@ -496,7 +496,7 @@ static int threshold(struct letter **list_let)
   return l_th +(h_th - l_th)/2;
 }
 
-void space_mng(struct letter **list_let)
+static void space_mng(struct letter **list_let)
 {
   size_t len = sizeof(list_let)/ sizeof(struct letter);
   int th = threshold(list_let);
