@@ -27,9 +27,21 @@ SDL_Surface* whole_segmentation(SDL_Surface* img)
   printf("letter[0]->coord_x[1] = %i\n", l[0]->coord_x[1]);
   printf("letter[0]->coord_y[0] = %i\n", l[0]->coord_y[0]);
   printf("letter[0]->coord_y[1] = %i\n", l[0]->coord_y[1]);
-  /*double resized_inputs[1024];
+  double resized_inputs[1024];
   struct letter_bin *l_b = resize_image(l[0]->mat, resized_inputs,
       l[0]->width, l[0]->height);
+  int max = l[0]->height > l[0]->width ? l[0]->height : l[0]->width;
+  for (int n = 0; n < max; n++)
+  {
+    for (int j = 0; j < max; j++)
+    {
+      printf("| %f ", l[0]->mat[j + n * max]);
+    }
+    printf("|\n");
+  }
+  printf("\n");
+
+  
   for (int n = 0; n < 32; n++)
   {
     for (int j = 0; j < 32; j++)
@@ -38,7 +50,7 @@ SDL_Surface* whole_segmentation(SDL_Surface* img)
     }
     printf("|\n");
   }
-  printf("\n");*/
+  printf("\n");
   return(text_blocks(img, 1, lines_cleaned, columns));
 }
 
@@ -46,7 +58,6 @@ struct letter_bin *resize_image(double inputs[], double resized_inputs[],
     int width , int height)
 {
   int dim = 32;
-  //double resized_inputs[1024];
   double xscale = (float)(dim) / width;
   double yscale = (float)(dim) / height;
   double threshold = 0.5 / (xscale * yscale);
@@ -82,7 +93,7 @@ struct letter_bin *resize_image(double inputs[], double resized_inputs[],
           sum += inputs[x + y*width] * yportion * xportion;
         }
       }
-      resized_inputs[g + f * dim] = (sum > threshold) ? 1 : 0;
+      resized_inputs[g + f * dim] = (sum > threshold) ? 1.111111 : 0;
     }
   }
   struct letter_bin *bin = malloc(sizeof(struct letter_bin));
@@ -432,7 +443,7 @@ void binarize_letter(SDL_Surface* img, struct letter* l)
     {
       SDL_GetRGB(getpixel(img, j, i),img->format,&r,&g,&b);
       if (r == 0)
-        mat[(j - l->coord_x[0]) + (i - l->coord_y[0]) * max] = 1.0;
+        mat[(j - l->coord_x[0]) + (i - l->coord_y[0]) * max] = 1.1111111;
       else
         mat[(j - l->coord_x[0]) + (i - l->coord_y[0]) * max] = 0.0;
     }
