@@ -290,6 +290,7 @@ struct letter** create_letter_list(SDL_Surface* img, int lines[], int cols[])
             }
           }
         }
+        list[index_list_letter - 1]->new_line = 1;
       }
       index++;
     }
