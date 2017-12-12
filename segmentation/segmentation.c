@@ -451,7 +451,7 @@ void binarize_letter(SDL_Surface* img, struct letter* l)
     {
       SDL_GetRGB(getpixel(img, j, i),img->format,&r,&g,&b);
       if (r == 0)
-        mat[(j - l->coord_x[0]) + (i - l->coord_y[0]) * max] = 1.1111111;
+        mat[(j - l->coord_x[0]) + (i - l->coord_y[0]) * max] = 1.0;
       else
         mat[(j - l->coord_x[0]) + (i - l->coord_y[0]) * max] = 0.0;
     }
