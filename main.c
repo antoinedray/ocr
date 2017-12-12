@@ -22,6 +22,33 @@ GtkWidget *window;
 **      on the gtk interface, it is the function that will run all the OCR
 **      functions.
 */
+
+void OCR(struct letter **l, int nb_letters)
+{
+  FILE *fp = fopen("Text.txt","w");
+  double resul_mat [16*16];
+  struct NN *mynet = load_NN("neuralnet/OCR_NN_4");
+  for (int i = 0; i < nb_letters; i++)
+  {
+    resizePixels(l[i]->mat, resul_mat, l[i]->width, l[i]->height, 16, 16);
+    double *output = feedforward(mynet, resul_mat);
+    char tmp = get_char(66, output);
+    fprintf(fp,"%c",tmp);
+    if (l[i]->space_after)
+      fprintf(fp,"%c",' ');
+    if (l[i]->new_line)
+      fprintf(fp,"%c",'\n');
+  }
+  for (int i = 0; i < 20; i++)
+    print_letter(l[i]);
+  fclose(fp);
+}
+
+/*
+**  PLEASE DO NOT MODIFY
+**  description: The main function only run the gtk+3 ui
+*/
+
 void run_convert(GtkButton* convert)
 {
   // We close the file-choser window
@@ -42,37 +69,29 @@ void run_convert(GtkButton* convert)
   //image = contrast(image);
   image = blackAndWhite(image, 0);
 
-  // For testing purposes
-  whole_segmentation(image);
+  //creating lists of lines and columns
+  int lines[image->h];
+  int lines_final[image->h];
+  int cols[image->w * 3];
+  for (int tmp = 0; tmp < image->w * 3; tmp++)
+    cols[tmp] = -1;
+  Line_Detection(image, lines);
+  checklines(lines, image->h, lines_final);
+  char_detection(image, lines_final, cols);
+
+  int nb_letters = get_number_letters(image, cols);
+  int nb_lines = get_number_lines(image, lines_final);
+  printf("Number of letters : %d \nNumber of lines : %d\n",nb_letters,nb_lines);
+  struct letter **list_letters = create_letter_list(image, lines_final, cols);
+  space_mng(list_letters, nb_letters);
+  OCR(list_letters, nb_letters);
+  /* For testing purposes
+  whole_segmentation(image);*/
   screen = display_image(image);
   SDL_FreeSurface(screen);
   SDL_Quit();
 }
 
-void OCR(struct letter **l, int nb_letters)
-{
-	FILE *fp = fopen("Text.txt","r");
-	double resul_mat [16*16];
-  	struct NN *mynet = loadNN("neuralnet/OCR_NN_4");
-  	for (int i = 0; i < nb_letters; i++)
-  	{
-    	resizePixels(l[i]->mat, resul_mat, l[i]->width, l[i]->height, 16, 16);
-    	//FIXME we have l[i]->space_after
-		fprintf(fp,"%c",' ');
-		//and l[i]->newline to play with.
-		fprintf(fp,"%c",'\n');
-    	double *output = feedforward(mynet, resul_mat);
-    	char *tmp = get_char(66, output);
-		fprintf(fp,"%c",tmp);
-    	//FIXME;
-  	}
-	fclose(fp);
-}
-
-/*
-**  PLEASE DO NOT MODIFY
-**  description: The main function only run the gtk+3 ui
-*/
 int main (int argc, char *argv[])
 {
   GdkPixbuf *icon;

@@ -7,7 +7,8 @@
 #include "segmentation.h"
 #include <err.h>
 
-SDL_Surface* whole_segmentation(SDL_Surface* img) {
+SDL_Surface* whole_segmentation(SDL_Surface* img)
+{
   int lines[img->h];
   Line_Detection(img, lines);
   int height = img->h;
@@ -28,7 +29,7 @@ SDL_Surface* whole_segmentation(SDL_Surface* img) {
   //   print_letter(l[i]);
   resizePixels(l[0]->mat, resized_inputs, l[0]->height,
       l[0]->width, 32, 32);
-  int max = l[0]->height > l[0]->width ? l[0]->height : l[0]->width;
+  /*int max = l[0]->height > l[0]->width ? l[0]->height : l[0]->width;
   for (int n = 0; n < max; n++)
   {
     for (int j = 0; j < max; j++)
@@ -57,7 +58,7 @@ SDL_Surface* whole_segmentation(SDL_Surface* img) {
     }
     printf("|\n");
   }
-  printf("\n");
+  printf("\n");*/
   return(text_blocks(img, 1, lines_cleaned, columns));
 }
 
