@@ -79,7 +79,7 @@ void run_convert(GtkButton* convert)
 
   int nb_letters = get_number_letters(image, cols);
   int nb_lines = get_number_lines(image, lines_final);
-  printf("Number of letters : %d \nNumber of lines : %d",nb_letters,nb_lines);
+  printf("Number of letters : %d \nNumber of lines : %d\n",nb_letters,nb_lines);
   struct letter **list_letters = create_letter_list(image, lines_final, cols);
   OCR(list_letters, nb_letters);
   /* For testing purposes
