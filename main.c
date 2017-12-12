@@ -25,18 +25,18 @@ GtkWidget *window;
 
 void OCR(struct letter **l, int nb_letters)
 {
-  FILE *fp = fopen("Text.txt","w");
-  double resul_mat [16*16];
-    struct NN *mynet = loadNN("neuralnet/OCR_NN_4");
+  	FILE *fp = fopen("Text.txt","w");
+  	double resul_mat [16*16];
+    struct NN *mynet = load_NN("neuralnet/OCR_NN_4");
     for (int i = 0; i < nb_letters; i++)
     {
       resizePixels(l[i]->mat, resul_mat, l[i]->width, l[i]->height, 16, 16);
       double *output = feedforward(mynet, resul_mat);
-      char *tmp = get_char(66, output);
+      char tmp = get_char(66, output);
       fprintf(fp,"%c",tmp);
       if (l[i]->space_after)
         fprintf(fp,"%c",' ');
-      if (l[i]->newline)
+      if (l[i]->new_line)
         fprintf(fp,"%c",'\n');
     }
   fclose(fp);
@@ -79,6 +79,7 @@ void run_convert(GtkButton* convert)
 
   int nb_letters = get_number_letters(image, cols);
   int nb_lines = get_number_lines(image, lines_final);
+  printf("Number of letters : %d \nNumber of lines : %d",nb_letters,nb_lines);
   struct letter **list_letters = create_letter_list(image, lines_final, cols);
   OCR(list_letters, nb_letters);
   /* For testing purposes
