@@ -57,13 +57,13 @@ void OCR(struct letter **l, int nb_letters)
     for (int i = 0; i < nb_letters; i++)
     {
       resizePixels(l[i]->mat, resul_mat, l[i]->width, l[i]->height, 16, 16);
+      double *output = feedforward(mynet, resul_mat);
+      char *tmp = get_char(66, output);
+      fprintf(fp,"%c",tmp);
       if (l[i]->space_after)
         fprintf(fp,"%c",' ');
       if (l[i]->newline)
         fprintf(fp,"%c",'\n');
-      double *output = feedforward(mynet, resul_mat);
-      char *tmp = get_char(66, output);
-      fprintf(fp,"%c",tmp);
     }
   fclose(fp);
 }
