@@ -12,6 +12,7 @@
 # include "mysdl/mysdl.h"
 # include "preproc/preproc.h"
 # include "segmentation/segmentation.h"
+# include "neuralnet/data_base.h"
 
 GtkWidget *window;
 
@@ -46,6 +47,20 @@ void run_convert(GtkButton* convert)
   screen = display_image(image);
   SDL_FreeSurface(screen);
   SDL_Quit();
+}
+
+void OCR(struct letter **l, int nb_letters)
+{
+  double resul_mat [16*16];
+  struct NN *mynet = loadNN("result");
+  for (int i = 0; i < nb_letters; i++)
+  {
+    resizePixels(l[i]->mat, resul_mat, l[i]->width, l[i]->height, 16, 16);
+    //FIXME we have l[i]->space_after and l[i]->newline to play with.
+    double *output = feedforward(mynet, resul_mat);
+    char *tmp = get_char(66, output);
+    //FIXME;
+  }
 }
 
 /*
