@@ -61,10 +61,10 @@ int main(){
     output = feedforward(MyNet,input4);
     printf("0 XOR 0 : %lf \n",output[0]);
 */
-    size_t layers[3] = {256,128,66};
+    /*size_t layers[3] = {256,128,66};
     struct NN *MyNet = init_NN(layers,3);
     OCR_NN(MyNet,1000000,0.01); //get nb_fonts
-    save_NN(MyNet,"OCR_NN_5");
+    save_NN(MyNet,"OCR_NN_5");*/
 	char line[50];
 	struct NN *Net = load_NN("OCR_NN_5");
     FILE *f = fopen("database/data.txt","r");

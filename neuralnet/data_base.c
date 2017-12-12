@@ -1,10 +1,12 @@
 #include <stdio.h>
 #include <err.h>
 #include "data_base.h"
+#include "../preproc/preproc.c"
 
 static struct letter_bin *IMGtoBIN(SDL_Surface* img)
 {
   Uint8 r, g, b;
+  img = blackAndWhite(img,1);	
   int height = img->h;
     int width = img->w;
     double *mat = calloc(width * height, sizeof(double));
@@ -13,10 +15,10 @@ static struct letter_bin *IMGtoBIN(SDL_Surface* img)
         for (int w = 0; width > w; w++)
         {
             SDL_GetRGB(getpixel(img,w,h),img->format,&r,&g,&b);
-            if (r == 255)
-                mat[w + h * width] = 0.0;
-            else
+            if (r == 0)
                 mat[w + h * width] = 1.0;
+            else
+                mat[w + h * width] = 0.0;
         }
     }
     struct letter_bin *bin = malloc(sizeof(struct letter_bin));
@@ -38,6 +40,18 @@ double *get_database_in(char *file) {
     struct letter_bin *letter = IMGtoBIN(letter_sdl);
 	double *out = calloc(256,sizeof(double));
 	resizePixels(letter->inputs,out,32,32,16,16);
+	for (int n = 0; n < 16; n++)
+ 	{
+    	for (int j = 0; j < 16; j++)
+    	{
+      		printf("%d",(int)out[j + n * 16]);
+    	}
+    printf("|\n");
+  	}
+  	printf("\n");
+	free(letter->inputs);
+	free(letter);
+	SDL_FreeSurface(letter_sdl);
     return out;
 }
 

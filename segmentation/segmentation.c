@@ -23,50 +23,51 @@ SDL_Surface* whole_segmentation(SDL_Surface* img)
   int nb_lines = get_number_lines(img, lines_cleaned);
   printf("It also has %i lines, according to my great intellect.\n", nb_lines);
   struct letter **l = create_letter_list(img, lines_cleaned, columns);
-  double resized_inputs[1024];
+  double resized_inputs[256];
   space_mng(l, nb_letters);
   //for (int i = 0; i < 20; i++)
   //   print_letter(l[i]);
-  resizePixels(l[0]->mat, resized_inputs, l[0]->height,
-      l[0]->width, 32, 32);
-  /*int max = l[0]->height > l[0]->width ? l[0]->height : l[0]->width;
+  resizePixels(l[1]->mat, resized_inputs, l[1]->height,
+      l[1]->width, 16, 16);
+  int max = l[1]->height > l[1]->width ? l[1]->height : l[1]->width;
   for (int n = 0; n < max; n++)
   {
     for (int j = 0; j < max; j++)
     {
-      printf("| %f ", l[0]->mat[j + n * max]);
+      printf("%d", (int)l[1]->mat[j + n * max]);
     }
     printf("|\n");
   }
   printf("\n");
-  for (int n = 0; n < 32; n++)
+  for (int n = 0; n < 16; n++)
   {
-    for (int j = 0; j < 32; j++)
+    for (int j = 0; j < 16; j++)
     {
-      printf("| %f ",resized_inputs[j + n * 32]);
+      printf("%d",(int)resized_inputs[j + n * 16]);
     }
     printf("|\n");
   }
   printf("\n");
-  double idek [1024];
-  center_letter(l[0], idek);
-  for (int n = 0; n < 32; n++)
+  double *idek = calloc(1024,sizeof(double));
+  center_letter(resized_inputs, idek);
+	resizePixels(idek,resized_inputs,32,32,16,16);
+  for (int n = 0; n < 16; n++)
   {
-    for (int j = 0; j < 32; j++)
+    for (int j = 0; j < 16; j++)
     {
-      printf("| %f ",idek[j + n * 32]);
+      printf("%d",(int)resized_inputs[j + n * 16]);
     }
     printf("|\n");
   }
-  printf("\n");*/
+  printf("\n");
   return(text_blocks(img, 1, lines_cleaned, columns));
 }
 
 void resizePixels(double pixels[], double res[], int w1,int h1,int w2,int h2)
 {
   // EDIT: added +1 to account for an early rounding problem
-  int x_ratio = (int)((w1<<16) / w2) + 1;
-  int y_ratio = (int)((h1<<16) / h2) + 1;
+  int x_ratio = (int)((w1<<16) / w2)+1 ;
+  int y_ratio = (int)((h1<<16) / h2)+1 ;
   //int x_ratio = (int)((w1<<16)/w2) ;
   //int y_ratio = (int)((h1<<16)/h2) ;
   int x2;
@@ -82,27 +83,32 @@ void resizePixels(double pixels[], double res[], int w1,int h1,int w2,int h2)
   }
 }
 
-void center_letter(struct letter *src, double dst[])
+void center_letter(double *src, double *dst)
 {
-  int bot_x = -1, bot_y = -1;
-  for(int k = 0; k < 32; k++) 
+  	for(size_t i = 0; i < 16; i++) {
+  		for(size_t j = 0; j < 16; j++) {
+			dst[j+8 + (i+8) * 32] = src[j + i * 16];			
+		}
+  	}
+  /*int bot_x = -1, bot_y = -1;
+  for(int k = 0; k < 16; k++) 
   {
-    for(int l = 0; l < 32; l++) 
+    for(int l = 0; l < 16; l++) 
     {
-      if((src->mat[k + l * 32] == 0) && (bot_x == -1))
+      if((src->mat[k + l * 16] == 0) && (bot_x == -1))
         bot_x = k;
-      if((src->mat[l + k * 32] == 0) && (bot_y == -1))
+      if((src->mat[l + k * 16] == 0) && (bot_y == -1))
         bot_y = k;
     }
   }
-  int start_x = (32 - bot_x) / 2;
-  int start_y = (32 - bot_y) / 2;
+  int start_x = (16 - bot_x) / 2;
+  int start_y = (16 - bot_y) / 2;
   for(int i = 0; i < src->width; i++) {
     for(int j = 0; j < src->height; j++) {
-      dst[(start_x + i) + (start_y + j) * 32] = src->mat[(bot_x + i)
-        + (bot_y + j) * 32];
+      dst[(start_x + i) + (start_y + j) * 16] = src->mat[(bot_x + i)
+        + (bot_y + j) * 16];
     }
-  }
+  }*/
 }
 
 int Line_Detection(SDL_Surface* img, int list_lines[])
