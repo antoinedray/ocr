@@ -39,8 +39,6 @@ void OCR(struct letter **l, int nb_letters)
     if (l[i]->new_line)
       fprintf(fp,"%c",'\n');
   }
-  for (int i = 0; i < 20; i++)
-    print_letter(l[i]);
   fclose(fp);
 }
 
