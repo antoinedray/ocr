@@ -7,7 +7,7 @@ set -e
 GREEN='\033[0;32m'
 NC='\033[0m' # No Color
 FONTS='fonts/*' # Path to font folder
-SIZE='16x16' # Size of the image
+SIZE='32x32' # Size of the image
 FORMAT='.jpg' # Image format
 DATAFILE='data.txt'
 

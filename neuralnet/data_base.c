@@ -36,7 +36,9 @@ static struct letter_bin *IMGtoBIN(SDL_Surface* img)
 double *get_database_in(char *file) {
     SDL_Surface* letter_sdl = load_image(file);
     struct letter_bin *letter = IMGtoBIN(letter_sdl);
-    return letter->inputs;
+	double *out = calloc(256,sizeof(double));
+	resizePixels(letter->inputs,out,32,32,16,16);
+    return out;
 }
 
 static double **get_database_out(size_t nb_characters){
