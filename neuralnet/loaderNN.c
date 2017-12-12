@@ -48,9 +48,7 @@ struct NN *load_NN(char *name)
       debug=2;
     debug = fscanf(file, "%s", line);
     mynb = (size_t)atoi(line);
-	warn("%lu | %s",mynb,line);
     debug = fscanf(file, "%s", line);
-	warn("%s",line);
     size_t index = 0;
     //size_t s = 0;
     size_t *layers = malloc(mynb * sizeof(size_t));
@@ -59,7 +57,6 @@ struct NN *load_NN(char *name)
         if (line[i] == ',')
         {
             layers[lpos] = posin;
-			warn("%lu",posin);
             posin = 0;
             lpos += 1;
         }
@@ -75,24 +72,20 @@ struct NN *load_NN(char *name)
 	size_t node_index = 0;
 	double num = 0;
     struct NN *mynet = init_NN(layers, mynb);
-	warn("weights");
     //handling the weights
     while(fscanf(file, "%s", line) != EOF || mynb > layer_pos)
-    {	warn("%s",line);
-        if(line[0] == '$')
+    {
+   	    if(line[0] == '$')
         {
 			if(mynb <= layer_pos+1)
 				break;
             layer_pos += 1;
             node_index = 0;
-			warn("mat[%lu][%lu]",layer_pos,node_index);
         }
         else if(line[0]=='b')
 		{
             debug = fscanf(file, "%s",line);
 			//sscanf(line,"%lf", num);
-			warn("bias at mat[%lu][%lu], bias value %lf",layer_pos,node_index,atof(line));
-			warn("bias at mat[%lu][%lu], bias value %s",layer_pos,node_index,line);
 			//bias = atof(line);
 			mynet->mat[layer_pos][node_index]->bias = atof(line);
             node_index += 1;

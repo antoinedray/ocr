@@ -73,8 +73,8 @@ void train(struct NN *MyNet) {
             i++;
     }
     //IMG_Quit();
-    //for(size_t j = 0; j < nbChars; j++)
-        //free(output_train[i]);
-    //free(output_train);
+    for(size_t j = 0; j < nbChars; j++)
+        free(output_train[j]);
+    free(output_train);
     fclose(fp);
 }
