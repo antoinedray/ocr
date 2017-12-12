@@ -87,7 +87,8 @@ double* feedforward(struct NN *MyNet, double *inputs){
 
 void backprop(struct NN *MyNet, double *input_t, double *output_t){
 	//feedforward with training inputs
-	feedforward(MyNet,input_t);
+	double *outs = feedforward(MyNet,input_t);
+	free(outs);
 	//calculating the error at the outputs and changing following weights/biases
 	// deltak = (tk - ok)ok(1-ok)
 	// Dwjk = v*deltak*oj
@@ -130,18 +131,22 @@ void backprop(struct NN *MyNet, double *input_t, double *output_t){
 			for(size_t k = 0; k< node_cur->nb_inputs; k++){
 				node_cur->weights[k] += v * delta * node_cur->inputs[k]->value;
 			}
-		}
+		}	
 	}
+	free(delta_prev);
+	free(delta_cur);
 }
 
-int *get_outputs(size_t len, double *out){
-	int *outputs = malloc(sizeof(int)*len);
-	for(size_t i = 0; out[i] ;i++){
-		if(out[i] < 0.5)
-			outputs[i] = 0;
-		else
-			outputs[i] = 1;
+char get_char(size_t len, double *out){
+	char *chars = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789,.!?";
+	size_t index = 0;
+	double coef = -10000000; 
+	for(size_t i = 0; i<len ;i++){
+		if(out[i] > coef){
+			coef = out[i];
+			index = i;
+		}
 	}
-	return outputs;
+	return chars[index];
 }
 
