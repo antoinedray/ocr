@@ -2,6 +2,7 @@
 //#include <stdlib.h>
 #include "../mysdl/mysdl.h"
 #include "loaderNN.h"
+#include "../segmentation/segmentation.h"
 
 struct letter_bin
 {
