@@ -22,46 +22,6 @@ GtkWidget *window;
 **      on the gtk interface, it is the function that will run all the OCR
 **      functions.
 */
-void run_convert(GtkButton* convert)
-{
-  // We close the file-choser window
-  gtk_button_set_label (convert, "CONVERTING...");
-  gtk_widget_destroy (window);
-
-  // We start SDL and load the image
-  init_sdl();
-  gchar* file = get_filename();
-  SDL_Surface* image = load_image(file);
-  SDL_Surface* screen = NULL;
-
-  /* Pre-processing
-   * The 2nd arg of BnW is the multiplier of the split
-   * If split set to 0 then img not splited
-   */
-  image = grayscale(image);
-  //image = contrast(image);
-  image = blackAndWhite(image, 0);
-
-  //creating lists of lines and columns
-  int lines[img->h];
-  int lines_final[img->h];
-  int cols[img->w * 3];
-  for (int tmp = 0; tmp < img->w * 3; tmp++)
-    cols[tmp] = -1;
-  Line_Detection(image, lines);
-  checklines(lines, img->h, lines_final);
-  char_detection(img, lines_final, cols);
-
-  int nb_letters = get_number_letters(image, cols);
-  int nb_lines = get_number_lines(image, lines_final);
-  struct letter **list_letters = create_letter_list(img, lines_final, cols);
-  OCR(list_letters, nb_letters);
-  /* For testing purposes
-  whole_segmentation(image);*/
-  screen = display_image(image);
-  SDL_FreeSurface(screen);
-  SDL_Quit();
-}
 
 void OCR(struct letter **l, int nb_letters)
 {
@@ -86,6 +46,48 @@ void OCR(struct letter **l, int nb_letters)
 **  PLEASE DO NOT MODIFY
 **  description: The main function only run the gtk+3 ui
 */
+
+void run_convert(GtkButton* convert)
+{
+  // We close the file-choser window
+  gtk_button_set_label (convert, "CONVERTING...");
+  gtk_widget_destroy (window);
+
+  // We start SDL and load the image
+  init_sdl();
+  gchar* file = get_filename();
+  SDL_Surface* image = load_image(file);
+  SDL_Surface* screen = NULL;
+
+  /* Pre-processing
+   * The 2nd arg of BnW is the multiplier of the split
+   * If split set to 0 then img not splited
+   */
+  image = grayscale(image);
+  //image = contrast(image);
+  image = blackAndWhite(image, 0);
+
+  //creating lists of lines and columns
+  int lines[image->h];
+  int lines_final[image->h];
+  int cols[image->w * 3];
+  for (int tmp = 0; tmp < image->w * 3; tmp++)
+    cols[tmp] = -1;
+  Line_Detection(image, lines);
+  checklines(lines, image->h, lines_final);
+  char_detection(image, lines_final, cols);
+
+  int nb_letters = get_number_letters(image, cols);
+  int nb_lines = get_number_lines(image, lines_final);
+  struct letter **list_letters = create_letter_list(image, lines_final, cols);
+  OCR(list_letters, nb_letters);
+  /* For testing purposes
+  whole_segmentation(image);*/
+  screen = display_image(image);
+  SDL_FreeSurface(screen);
+  SDL_Quit();
+}
+
 int main (int argc, char *argv[])
 {
   GdkPixbuf *icon;
