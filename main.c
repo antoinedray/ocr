@@ -42,8 +42,22 @@ void run_convert(GtkButton* convert)
   //image = contrast(image);
   image = blackAndWhite(image, 0);
 
-  // For testing purposes
-  whole_segmentation(image);
+  //creating lists of lines and columns
+  int lines[img->h];
+  int lines_final[img->h];
+  int cols[img->w * 3];
+  for (int tmp = 0; tmp < img->w * 3; tmp++)
+    cols[tmp] = -1;
+  Line_Detection(image, lines);
+  checklines(lines, img->h, lines_final);
+  char_detection(img, lines_final, cols);
+
+  int nb_letters = get_number_letters(image, cols);
+  int nb_lines = get_number_lines(image, lines_final);
+  struct letter **list_letters = create_letter_list(img, lines_final, cols);
+  OCR(list_letters, nb_letters);
+  /* For testing purposes
+  whole_segmentation(image);*/
   screen = display_image(image);
   SDL_FreeSurface(screen);
   SDL_Quit();
