@@ -51,22 +51,21 @@ void run_convert(GtkButton* convert)
 
 void OCR(struct letter **l, int nb_letters)
 {
-	FILE *fp = fopen("Text.txt","r");
-	double resul_mat [16*16];
-  	struct NN *mynet = loadNN("neuralnet/OCR_NN_4");
-  	for (int i = 0; i < nb_letters; i++)
-  	{
-    	resizePixels(l[i]->mat, resul_mat, l[i]->width, l[i]->height, 16, 16);
-    	//FIXME we have l[i]->space_after
-		fprintf(fp,"%c",' ');
-		//and l[i]->newline to play with.
-		fprintf(fp,"%c",'\n');
-    	double *output = feedforward(mynet, resul_mat);
-    	char *tmp = get_char(66, output);
-		fprintf(fp,"%c",tmp);
-    	//FIXME;
-  	}
-	fclose(fp);
+  FILE *fp = fopen("Text.txt","w");
+  double resul_mat [16*16];
+    struct NN *mynet = loadNN("neuralnet/OCR_NN_4");
+    for (int i = 0; i < nb_letters; i++)
+    {
+      resizePixels(l[i]->mat, resul_mat, l[i]->width, l[i]->height, 16, 16);
+      if (l[i]->space_after)
+        fprintf(fp,"%c",' ');
+      if (l[i]->newline)
+        fprintf(fp,"%c",'\n');
+      double *output = feedforward(mynet, resul_mat);
+      char *tmp = get_char(66, output);
+      fprintf(fp,"%c",tmp);
+    }
+  fclose(fp);
 }
 
 /*
