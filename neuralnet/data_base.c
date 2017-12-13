@@ -6,7 +6,7 @@
 static struct letter_bin *IMGtoBIN(SDL_Surface* img)
 {
   Uint8 r, g, b;
-  img = blackAndWhite(img,1);	
+  img = blackAndWhite(img,1);
   int height = img->h;
     int width = img->w;
     double *mat = calloc(width * height, sizeof(double));
@@ -38,20 +38,20 @@ static struct letter_bin *IMGtoBIN(SDL_Surface* img)
 double *get_database_in(char *file) {
     SDL_Surface* letter_sdl = load_image(file);
     struct letter_bin *letter = IMGtoBIN(letter_sdl);
-	double *out = calloc(256,sizeof(double));
-	resizePixels(letter->inputs,out,32,32,16,16);
-	for (int n = 0; n < 16; n++)
- 	{
-    	for (int j = 0; j < 16; j++)
-    	{
-      		printf("%d",(int)out[j + n * 16]);
-    	}
+  double *out = calloc(256,sizeof(double));
+  resizePixels(letter->inputs,out,32,32,16,16);
+  for (int n = 0; n < 16; n++)
+  {
+      for (int j = 0; j < 16; j++)
+      {
+          printf("%d",(int)out[j + n * 16]);
+      }
     printf("|\n");
-  	}
-  	printf("\n");
-	free(letter->inputs);
-	free(letter);
-	SDL_FreeSurface(letter_sdl);
+    }
+    printf("\n");
+  free(letter->inputs);
+  free(letter);
+  SDL_FreeSurface(letter_sdl);
     return out;
 }
 
