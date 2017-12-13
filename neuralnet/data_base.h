@@ -10,6 +10,8 @@ struct letter_bin
     double *inputs; //Black == 1 , White == 0
 };
 
-double *get_database_in(char *file);
+struct letter **init_database(char* filename);
 
-void train(struct NN *MyNet);
+//double *get_database_in(char *file);
+
+void train(struct NN *MyNet,struct letter **l,int nb_letters);

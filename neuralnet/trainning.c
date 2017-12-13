@@ -27,53 +27,17 @@ void XOR_NN(struct NN *MyNet,size_t iter, double learning_rate){
 }
 
 void OCR_NN(struct NN *MyNet, size_t iter, double learning_rate){
-  set_learning_rate(learning_rate);
-  for(size_t i = 0; i<iter; i++){
-    printf("%zu / %zu\n", i, iter);
-    train(MyNet);
-  }
-}
-
-void try_OCR_img(struct NN *MyNet, char* character,size_t char_index){
-    //struct NN *MyNet = load_NN(filename);
-    double *inputs = get_database_in(character);
-    double *outputs = feedforward(MyNet,inputs);
-    char ret = get_char(66,outputs);
-    printf("%lu %c \n",char_index,ret);
+  	set_learning_rate(learning_rate);
+	struct letter **l = init_database("../src/data.png");
+  	for(size_t i = 0; i<iter; i++){
+    	printf("%zu / %zu\n", i, iter);
+    	train(MyNet,l,66);
+  	}
 }
 
 int main(){
-/*
-    size_t layers[3] = {2,2,1};
-    struct NN *MyNet = init_NN(layers,3);
-    XOR_NN(MyNet,10000000,0.01);
-    save_NN(MyNet,"XOR_NN");
-    double input1[2] = {1,1};
-    double input2[2] = {1,0};
-    double input3[2] = {0,1};
-    double input4[2] = {0,0};
-    double *output = feedforward(MyNet,input1);
-    printf("1 XOR 1 : %lf \n",output[0]);
-    output = feedforward(MyNet,input2);
-    printf("1 XOR 0 : %lf \n",output[0]);
-    output = feedforward(MyNet,input3);
-    printf("0 XOR 1 : %lf \n",output[0]);
-    output = feedforward(MyNet,input4);
-    printf("0 XOR 0 : %lf \n",output[0]);
-*/
     size_t layers[3] = {256,128,66};
     struct NN *MyNet = init_NN(layers,3);
-    OCR_NN(MyNet,10000,0.2); //get nb_fonts
-    save_NN(MyNet,"database_NN/OCR_NN_16");
-    /*
-    char line[50];
-    struct NN *Net = load_NN("OCR_NN_5");
-    FILE *f = fopen("database/data.txt","r");
-    size_t i = 0;
-    while(fscanf(f,"%s", line) != EOF){
-    char loc[100] = "database/";
-    strcat(loc,line);
-    try_OCR_img(Net, loc, i);
-    i++;
-  }*/
+    OCR_NN(MyNet,NUMBER_ITER,LEARNING_RATE);
+    save_NN(MyNet,"NAME_OF_SAVE_FILE");
 }

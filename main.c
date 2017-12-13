@@ -25,24 +25,21 @@ GtkWidget *window;
 
 void OCR(struct letter **l, int nb_letters)
 {
-  	FILE *fp = fopen("Text.txt","w");
-  	double resul_mat [16*16];
-	double idek [32*32];
-  	struct NN *mynet = load_NN("neuralnet/OCR_NN_5");
-  	for (int i = 0; i < nb_letters; i++)
-  	{
-    	resizePixels(l[i]->mat, resul_mat, l[i]->width, l[i]->height, 16, 16);
-		center_letter(resul_mat,idek);
-		resizePixels(idek,resul_mat,32,32,16,16);	
-    	double *output = feedforward(mynet, resul_mat);
-    	char tmp = get_char(66, output);
-    	fprintf(fp,"%c",tmp);
-    	if (l[i]->space_after)
-      		fprintf(fp,"%c",' ');
-    	if (l[i]->new_line)
-      		fprintf(fp,"%c",'\n');
-  	}
-  	fclose(fp);
+  FILE *fp = fopen("Text.txt","w");
+  double resul_mat [16*16];
+  struct NN *mynet = load_NN("neuralnet/NN_savefiles/NAME_OF_SAVE_FILE");
+  for (int i = 0; i < nb_letters; i++)
+  {
+    resizePixels(l[i]->mat, resul_mat, l[i]->width, l[i]->height, 16, 16);
+    double *output = feedforward(mynet, resul_mat);
+    char tmp = get_char(66, output);
+    fprintf(fp,"%c",tmp);
+    if (l[i]->space_after)
+      fprintf(fp,"%c",' ');
+    if (l[i]->new_line)
+      fprintf(fp,"%c",'\n');
+  }
+  fclose(fp);
 }
 
 /*
@@ -86,8 +83,7 @@ void run_convert(GtkButton* convert)
   struct letter **list_letters = create_letter_list(image, lines_final, cols);
   space_mng(list_letters, nb_letters);
   OCR(list_letters, nb_letters);
-  //For testing purposes
-  whole_segmentation(image);
+  //whole_segmentation(image);
   screen = display_image(image);
   SDL_FreeSurface(screen);
   SDL_Quit();
