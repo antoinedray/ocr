@@ -63,8 +63,8 @@ int main(){
 */
     size_t layers[3] = {256,128,66};
     struct NN *MyNet = init_NN(layers,3);
-    OCR_NN(MyNet,10000,0.1); //get nb_fonts
-    save_NN(MyNet,"database_NN/OCR_NN_7");
+    OCR_NN(MyNet,10000,0.2); //get nb_fonts
+    save_NN(MyNet,"database_NN/OCR_NN_16");
     /*
     char line[50];
     struct NN *Net = load_NN("OCR_NN_5");

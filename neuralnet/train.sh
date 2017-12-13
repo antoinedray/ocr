@@ -1,12 +1,13 @@
 set -e
 
-START=7
-END=10
-PREV=6
+START=10
+END=20
 
-while [ $START <= $END ]
-  $PREV=$(expr $START - 1)
+while (( "$START" <= "$END" ))
+do
+  PREV=$(expr $START - 1)
   touch "database_NN/OCR_NN_${START}"
-  perl -p -i -e "s/database_NN/OCR_NN_${PREV}/database_NN_${START}/g" trainning.c
-  make && ./training
-end
+  perl -p -i -e "s/database_NN\/OCR_NN_${PREV}/database_NN\/OCR_NN_${START}/g" trainning.c
+  make && ./trainning
+  START=$(expr $START + 1)
+done
