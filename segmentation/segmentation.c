@@ -27,14 +27,15 @@ SDL_Surface* whole_segmentation(SDL_Surface* img)
   space_mng(l, nb_letters);
   //for (int i = 0; i < 20; i++)
   //   print_letter(l[i]);
-  resizePixels(l[0]->mat, resized_inputs, l[0]->width,
-      l[0]->height, 16, 16);
-  int max = l[0]->height > l[0]->width ? l[0]->height : l[0]->width;
+  size_t f = 49;
+  resizePixels(l[f]->mat, resized_inputs, l[f]->width,
+      l[f]->height, 16, 16);
+  int max = l[f]->height > l[f]->width ? l[f]->height : l[f]->width;
   for (int n = 0; n < max; n++)
   {
     for (int j = 0; j < max; j++)
     {
-      printf("%d", (int)l[0]->mat[j + n * max]);
+      printf("%d", (int)l[f]->mat[j + n * max]);
     }
     printf("|\n");
   }
@@ -49,8 +50,8 @@ SDL_Surface* whole_segmentation(SDL_Surface* img)
   }
   printf("\n");
   /*double idek [1024];
-	center_letter(l[0], idek);
-	for (int n = 0; n < 32; n++)
+  center_letter(l[0], idek);
+  for (int n = 0; n < 32; n++)
   {
     for (int j = 0; j < 32; j++)
     {
@@ -85,9 +86,9 @@ void resizePixels(double pixels[], double res[], int w1,int h1,int w2,int h2)
 void center_letter(struct letter *src, double dst[])
 {
   int bot_x = -1, bot_y = -1;
-  for(int k = 0; k < 32; k++) 
+  for(int k = 0; k < 32; k++)
   {
-    for(int l = 0; l < 32; l++) 
+    for(int l = 0; l < 32; l++)
     {
       if((src->mat[k + l * 32] == 0) && (bot_x == -1))
         bot_x = k;

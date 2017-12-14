@@ -61,44 +61,44 @@ struct NN *load_NN(char *name)
             lpos += 1;
         }
         else{
-			char nb[5] = "";
-			char fu[1];
-			fu[0] = line[i];
-			strcat(nb,fu);
+      char nb[5] = "";
+      char fu[1];
+      fu[0] = line[i];
+      strcat(nb,fu);
             posin = 10 * posin + (size_t)atoi(nb);
-		}
     }
-	size_t layer_pos = 0;
-	size_t node_index = 0;
-	double num = 0;
+    }
+  size_t layer_pos = 0;
+  size_t node_index = 0;
+  double num = 0;
     struct NN *mynet = init_NN(layers, mynb);
     //handling the weights
     while(fscanf(file, "%s", line) != EOF || mynb > layer_pos)
     {
-   	    if(line[0] == '$')
+        if(line[0] == '$')
         {
-			if(mynb <= layer_pos+1)
-				break;
+      if(mynb <= layer_pos+1)
+        break;
             layer_pos += 1;
             node_index = 0;
         }
         else if(line[0]=='b')
-		{
+    {
             debug = fscanf(file, "%s",line);
-			//sscanf(line,"%lf", num);
-			//bias = atof(line);
-			mynet->mat[layer_pos][node_index]->bias = atof(line);
+      //sscanf(line,"%lf", num);
+      //bias = atof(line);
+      mynet->mat[layer_pos][node_index]->bias = atof(line);
             node_index += 1;
             index = 0;
         }
         else
         {
-	
-			num = atof(line);
+
+      num = atof(line);
             mynet->mat[layer_pos][node_index]->weights[index]= num;
             index += 1;
         }
-	}
-	fclose(file);
+  }
+  fclose(file);
     return mynet;
 }

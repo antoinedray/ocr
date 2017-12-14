@@ -27,17 +27,18 @@ void XOR_NN(struct NN *MyNet,size_t iter, double learning_rate){
 }
 
 void OCR_NN(struct NN *MyNet, size_t iter, double learning_rate){
-  	set_learning_rate(learning_rate);
-	struct letter **l = init_database("../src/data.png");
-  	for(size_t i = 0; i<iter; i++){
-    	printf("%zu / %zu\n", i, iter);
-    	train(MyNet,l,66);
-  	}
+    set_learning_rate(learning_rate);
+  struct letter **l = init_database("../src/data.png");
+    for(size_t i = 0; i<iter; i++){
+      printf("%zu / %zu\n", i, iter);
+      train(MyNet,l,66);
+    }
 }
 
 int main(){
     size_t layers[3] = {256,128,66};
     struct NN *MyNet = init_NN(layers,3);
-    OCR_NN(MyNet,NUMBER_ITER,LEARNING_RATE);
-    save_NN(MyNet,"NAME_OF_SAVE_FILE");
+    OCR_NN(MyNet,3000000,0.005);
+    save_NN(MyNet,"NN_savefiles/OCR_NN_11");
+  return 1;
 }

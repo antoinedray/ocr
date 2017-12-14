@@ -27,17 +27,45 @@ void OCR(struct letter **l, int nb_letters)
 {
   FILE *fp = fopen("Text.txt","w");
   double resul_mat [16*16];
-  struct NN *mynet = load_NN("neuralnet/NN_savefiles/NAME_OF_SAVE_FILE");
+  struct NN *mynet = load_NN("neuralnet/NN_savefiles/OCR_NN_10");
+  save_NN(mynet,"DEBUG");
   for (int i = 0; i < nb_letters; i++)
   {
     resizePixels(l[i]->mat, resul_mat, l[i]->width, l[i]->height, 16, 16);
-    double *output = feedforward(mynet, resul_mat);
-    char tmp = get_char(66, output);
-    fprintf(fp,"%c",tmp);
+  int j = 0;
     if (l[i]->space_after)
-      fprintf(fp,"%c",' ');
-    if (l[i]->new_line)
-      fprintf(fp,"%c",'\n');
+        fprintf(fp,"%c",' ');
+  while(j<256 && resul_mat[j] == 1)
+    j++;
+  if(j == 256){
+    j = 0;
+    while(j<l[i]->width && l[i]->mat[(l[i]->height/2)+j*l[i]->width] == 1){
+    j++;
+    }
+    if(j==l[i]->width)
+      fprintf(fp, "%c", '.');
+    else
+      fprintf(fp,"%c", 'l');
+  }
+  else{
+      double *output = feedforward(mynet, resul_mat);
+      char tmp = get_char(66, output);
+    if (tmp == 'm'){
+      if(l[i]->height > l[i]->width)
+        tmp = 'j';
+    }
+    if (tmp == 'n'){
+      if(resul_mat[15 + 15 * 16] == 0)
+        tmp = 'p';
+    }
+    if (tmp == 'r'){
+      if(resul_mat[8 + 15*16] == 1)
+        tmp = 'g';
+    }
+      fprintf(fp,"%c",tmp);
+  }
+      if (l[i]->new_line)
+          fprintf(fp,"%c",'\n');
   }
   fclose(fp);
 }
