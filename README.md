@@ -2,9 +2,6 @@
 
 ### Projet S3 EPITA Promo 2021
 
-#### Presentation report
-Report must be 50 pages long. [Shared Latex](https://www.sharelatex.com/7144692721ntkmzppcsmnk)
-
 ## The structure of the project
 
 | Parts         | State        | Possible upgrades ?  |
@@ -95,64 +92,3 @@ void OCR(struct letter **l, int nb_letters)
   fclose(fp);
 }
 ```
-
-#### NN Needed to train
-##### Antoine
-
-###### I
-NUMBER_ITER : 1000000 (1M)
-LEARNING_RATE : 0.01
-NAME_OF_SAVE_FILE : OCR_NN_1
-###### II
-NUMBER_ITER : 1000000 (1M)
-LEARNING_RATE : 0.02
-NAME_OF_SAVE_FILE : OCR_NN_2
-###### III
-NUMBER_ITER : 5000000 (500k)
-LEARNING_RATE : 0.01
-NAME_OF_SAVE_FILE : OCR_NN_3
-
-##### Thibault
-
-###### I
-NUMBER_ITER : 100000 (100k)
-LEARNING_RATE : 0.5
-NAME_OF_SAVE_FILE : OCR_NN_4
-###### II
-NUMBER_ITER : 1000000 (1M)
-LEARNING_RATE : 0.02
-NAME_OF_SAVE_FILE : OCR_NN_5
-###### III
-NUMBER_ITER : 1000000 (1M)
-LEARNING_RATE : 0.05
-NAME_OF_SAVE_FILE : OCR_NN_6
-
-##### Celian
-
-###### I
-NUMBER_ITER : 100000 (100k)
-LEARNING_RATE : 0.01
-NAME_OF_SAVE_FILE : OCR_NN_7
-###### II
-NUMBER_ITER : 1000000 (1M)
-LEARNING_RATE : 0.02
-NAME_OF_SAVE_FILE : OCR_NN_8
-###### III
-NUMBER_ITER : 500000 (500k)
-LEARNING_RATE : 0.01
-NAME_OF_SAVE_FILE : OCR_NN_9
-
-##### Stan
-
-###### I
-NUMBER_ITER : 100000 (100k)
-LEARNING_RATE : 0.1
-NAME_OF_SAVE_FILE : OCR_NN_10
-###### II
-NUMBER_ITER : 1000000 (1M)
-LEARNING_RATE : 0.02
-NAME_OF_SAVE_FILE : OCR_NN_11
-###### III
-NUMBER_ITER : 1000000 (1M)
-LEARNING_RATE : 0.01
-NAME_OF_SAVE_FILE : OCR_NN_12
